@@ -24,7 +24,7 @@ public:
                         int windowWidth, int windowHeight);
     void fit(const BoundingBox& bBox);
     void reset();
-private:
+    
     void mapTrackball(int mouseX, int mouseY, 
                       int windowWidth, int windowHeight);
     Frustum frustum;

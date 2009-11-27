@@ -3,11 +3,12 @@
 
 #include <list>
 #include "Mesh.h"
+#include "BoundingBox.h"
 
 class Scene {
 public:
     //TODO função pra limpar a cena
-
+    Scene();
     void render();
 
     bool isEmpty();
@@ -35,6 +36,8 @@ public:
     static int numMeshes;
     static int numFaces;
     static int numVertices;
+
+    BoundingBox bbox;
 };
 
 

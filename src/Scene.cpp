@@ -5,6 +5,10 @@ int Scene::numMeshes = 0;
 int Scene::numFaces = 0;
 int Scene::numVertices = 0;
 
+Scene::Scene() {
+    bbox = BoundingBox(Vec3(-5, -5, -5), Vec3(5, 5, 5));
+}
+
 void Scene::render() {
     std::list<Mesh*>::iterator mIter;
     for(mIter = meshes.begin(); mIter != meshes.end(); mIter++){

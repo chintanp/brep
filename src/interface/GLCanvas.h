@@ -24,7 +24,7 @@ public:
 
     void clear();
 
-    int select1, select2;
+    void addCube(float minX, float minY, float minZ, float size);
 
 private:
     void onPaint(wxPaintEvent& event);

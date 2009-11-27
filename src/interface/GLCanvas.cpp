@@ -25,22 +25,51 @@ GLCanvas::~GLCanvas()
     glContext = NULL;
 }
 
-void GLCanvas::init()
+void GLCanvas::addCube(float minX, float minY, float minZ, float size)
 {
     //v0, f0, s0
-    scene.mvfs(-0.5, -0.5, -0.3);
+    scene.mvfs(minX, minY, minZ);
     //v1
-    scene.smev(0, 0, 0, 0.5, -0.5, -0.3);
+    scene.smev(Scene::numMeshes - 1, 0, 0, minX+size, minY, minZ);
     //v2
-    scene.smev(0, 0, 1, 0.5, 0.5, -0.3);
+    scene.smev(Scene::numMeshes - 1, 0, 1, minX+size, minY+size, minZ);
     //v3
-    scene.smev(0, 0, 2, -0.5, 0.5, -0.3);
+    scene.smev(Scene::numMeshes - 1, 0, 2, minX, minY+size, minZ);
     //f1 -> front
-    scene.smef(0, 0, 3, 0);
-    scene.smev(0, 0, 1, 0.5, -0.5, -0.4);
-    scene.smev(0, 0, 2, 0.5, 0.5, -0.4);
-    scene.smef(0, 0, 4, 5);
-    //scene.mef(0, 1, 1, 4, 2, 3);
+    scene.smef(Scene::numMeshes - 1, 0, 3, 0);
+
+    //v4
+    scene.smev(Scene::numMeshes - 1, 0, 1, minX+size, minY, minZ-size);
+    //v5
+    scene.smev(Scene::numMeshes - 1, 0, 2, minX+size, minY+size, minZ-size);
+    //f1 -> right
+    scene.smef(Scene::numMeshes - 1, 0, 4, 5);
+
+    //v6
+    scene.smev(Scene::numMeshes - 1, 0, 3, minX, minY+size, minZ-size);
+    //f1 -> up
+    scene.smef(Scene::numMeshes - 1, 0, 5, 6);
+
+    //v7
+    scene.smev(Scene::numMeshes - 1, 0, 0, minX, minY, minZ-size);
+    //f1 -> left
+    scene.smef(Scene::numMeshes - 1, 0, 6, 7);
+
+    //f1 -> bottom
+    scene.smef(Scene::numMeshes - 1, 0, 7, 4);
+
+    return;
+}
+
+
+void GLCanvas::init()
+{
+    addCube(-0.5, -0.5, -0.5, 0.5);
+    addCube(-0.7, -0.7, -0.1, 0.3);
+/*
+    //f1 -> back
+    scene.smef(0, 0, 7, 4);
+*/
     //scene.smef(0, 1, 1, 3);
     //v4
     //scene.smev(0, 1, 0, -0.5, -0.5, -0.5);
@@ -54,7 +83,7 @@ void GLCanvas::init()
     //scene.smef(0, 1, 6, 5);
     //f3 -> right
     //scene.smef(0, 2, 5, 6);
-    //f4 -> 
+    //f4 ->
     //scene.smef(0, 3, 6, 7);
     std::cout << "numero de faces: " << Scene::numFaces << std::endl;
 
@@ -73,7 +102,7 @@ void GLCanvas::init()
     glEnable(GL_LIGHTING);
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
     glEnable(GL_COLOR_MATERIAL);
-    
+
     glFrontFace(GL_CW);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
@@ -102,7 +131,7 @@ void GLCanvas::init()
     glViewport(0, 0, (GLint) w , (GLint) h );
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(-1, 1, -1, 1, 0, 1);
+    glFrustum(-1, 1, -1, 1, 0, 5);
 }
 
 void GLCanvas::render()
@@ -113,13 +142,11 @@ void GLCanvas::render()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glLoadMatrixf(camera.setupViewMatrix()); 
+    glLoadMatrixf(camera.setupViewMatrix());
 
-    renderBackground(); 
-    
-    glTranslatef(-0.5, 0, 0);
+    renderBackground();
+
     if(!scene.isEmpty()) {
-        glRotatef(-45, 0, 1, 0);
         scene.render();
     }
 

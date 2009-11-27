@@ -12,15 +12,25 @@ void Scene::render() {
         int i = 0;
         for(fIter = (*mIter)->faces.begin(); fIter != (*mIter)->faces.end(); fIter++) {
             std::cout << "face: " << (*fIter)->getId();
-            if (i == 0)
+            if (i == 0) {
                 glColor3f(0.0, 0.0, 0.0);
+                //i++;
+                //continue;
+            }
             else if (i == 1)
                 glColor3f(1.0, 0.0, 0.0);
-            else
+            else if (i == 2)
                 glColor3f(0.0, 1.0, 0.0);
+            else if (i == 3)
+                glColor3f(0.0, 0.0, 1.0);
+            else if (i  == 4)
+                glColor3f(1.0, 1.0, 0.0);
+            else
+                glColor3f(1.0, 0.5, 0.5);
+
             i++;
             std::list<Loop*>::iterator lIter;
-            
+
             for (lIter = (*fIter)->loops.begin(); lIter != (*fIter)->loops.end(); lIter++) {
                 std::cout << "  loop: " << std::endl;
                 HalfEdge *he = (*lIter)->hed;
@@ -70,7 +80,7 @@ HalfEdge* Scene::getHEd(Face *f, int idVertex1, int idVertex2) {
     {
         h = (*iter)->hed;
         do {
-            if(h->origin->getId() == idVertex1 && 
+            if(h->origin->getId() == idVertex1 &&
                h->next->origin->getId() == idVertex2)
                 return h;
         }while((h = h->next) != (*iter)->hed);
@@ -98,7 +108,7 @@ void Scene::mvfs(float x, float y, float z) {
     Loop *l;
     Vertex *v;
     HalfEdge *he;
-    
+
 
     m = new Mesh(Scene::numMeshes++);
     std::cout << "criado mesh: " << m->id << std::endl;
@@ -120,9 +130,9 @@ void Scene::mvfs(float x, float y, float z) {
     meshes.push_back(m);
 }
 
-void Scene::lmev(HalfEdge *he1, HalfEdge *he2, float x, 
-                float y, float z) 
-{    
+void Scene::lmev(HalfEdge *he1, HalfEdge *he2, float x,
+                float y, float z)
+{
     HalfEdge *he;
     Vertex *v = new Vertex(x, y, z, he1->loop->face->solid, Scene::numVertices++);
     Edge *e = new Edge(he1->loop->face->solid);
@@ -196,14 +206,14 @@ bool Scene::smev(int idSolid, int idFace, int idVertex1, float x, float y, float
     Mesh *s;
     Face *f;
     HalfEdge *he;
-    
+
     if((s = getSolid(idSolid)) == NULL)
         return false;
     if((f = getFace(s, idFace)) == NULL)
         return false;
     if((he = getHEd(f, idVertex1)) == NULL)
         return false;
-    
+
     lmev(he, he, x, y, z);
     return true;
 }
@@ -221,7 +231,7 @@ bool Scene::mef(int idSolid, int idFace, int idVertex1, int idVertex2, int idVer
         return false;
     if((he2 = getHEd(f, idVertex3, idVertex4)) == NULL)
         return false;
-    
+
     lmef(he1, he2);
     return true;
 }
@@ -247,7 +257,7 @@ bool Scene::smef(int idSolid, int idFace, int idVertex1, int idVertex2) {
             if (he2 == he1)
                 return false;
         } while(he2->origin->getId() != idVertex2);
-    
+
     lmef(he1, he2);
     return true;
 }

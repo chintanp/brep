@@ -61,11 +61,54 @@ void GLCanvas::addCube(float minX, float minY, float minZ, float size)
     return;
 }
 
+void GLCanvas::addCorner(float minX, float minY, float minZ,
+                float midX, float midY, float midZ,
+                float maxX, float maxY, float maxZ)
+{
+    //v0
+    scene.mvfs(minX, minY, minZ);
+    //v1
+    scene.smev(Scene::numMeshes - 1, 0, 0, maxX, minY, minZ);
+    //v2
+    scene.smev(Scene::numMeshes - 1, 0, 1, maxX, maxY, minZ);
+    //v3
+    scene.smev(Scene::numMeshes - 1, 0, 2, midX, maxY, minZ);
+    //v4
+    scene.smev(Scene::numMeshes - 1, 0, 3, minX, maxY, minZ);
+    //f1 -> front
+    scene.smef(Scene::numMeshes - 1, 0, 4, 0);
+
+    //v5
+    scene.smev(Scene::numMeshes - 1, 0, 1, maxX, minY, maxZ);
+    //v6
+    scene.smev(Scene::numMeshes - 1, 0, 2, maxX, maxY, maxZ);
+    //f1 -> right
+    scene.smef(Scene::numMeshes - 1, 0, 5, 6);
+
+    //v7
+    scene.smev(Scene::numMeshes - 1, 0, 3, midX, maxY, midZ);
+    //f1 -> up1
+    scene.smef(Scene::numMeshes - 1, 0, 6, 7);
+
+    //v8
+    scene.smev(Scene::numMeshes - 1, 0, 4, minX, maxY, midZ);
+    //f1 -> up2
+    scene.smef(Scene::numMeshes - 1, 0, 7, 8);
+
+    //v9
+    scene.smev(Scene::numMeshes - 1, 0, 0, minX, minY, maxZ);
+    //f1 -> left
+    scene.smef(Scene::numMeshes - 1, 0, 8, 9);
+
+    return;
+}
 
 void GLCanvas::init()
 {
-    addCube(-2, -2, 2, 4);
-    //addCube(-0.7, -0.7, -0.1, 0.3);
+    //addCube(-2, -2, 2, 4);
+    addCorner  (-0.2, -0.2, -0.2,
+                -0.5, 0.5, -0.5,
+                -0.8, 0.1, -0.5);
 
 
 
@@ -123,10 +166,10 @@ void GLCanvas::init()
     float t = camera.frustum.top;
     float n = camera.frustum.near;
     float f = camera.frustum.far;
-    glFrustum(camera.frustum.left, camera.frustum.right, camera.frustum.bottom, camera.frustum.top, 
+    glFrustum(camera.frustum.left, camera.frustum.right, camera.frustum.bottom, camera.frustum.top,
               camera.frustum.near, camera.frustum.far);
     std::cout << "\t pos: " << camera.pos.x << "  " << camera.pos.y << "  " << camera.pos.z << std::endl;
-    std::cout << "\t frustum: " << l << "  " << r << "  " << b << "  " << t << "  " << n << "  " <<  f << std::endl; 
+    std::cout << "\t frustum: " << l << "  " << r << "  " << b << "  " << t << "  " << n << "  " <<  f << std::endl;
  }
 
 void GLCanvas::render()
@@ -137,11 +180,11 @@ void GLCanvas::render()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glTranslatef(-camera.pos.x, -camera.pos.y, -camera.pos.z);    
+    glTranslatef(-camera.pos.x, -camera.pos.y, -camera.pos.z);
     glLoadMatrixf(camera.setupViewMatrix());
 
     renderBackground();
-    
+
     if(!scene.isEmpty()) {
         scene.render();
     }

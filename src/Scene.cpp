@@ -6,7 +6,6 @@ int Scene::numFaces = 0;
 int Scene::numVertices = 0;
 
 Scene::Scene() {
-    bbox = BoundingBox(Vec3(-5, -5, -5), Vec3(5, 5, 5));
 }
 
 void Scene::render() {
@@ -131,8 +130,8 @@ void Scene::mvfs(float x, float y, float z) {
     he->origin = v;
     he->edge = NULL;
     //v->hed = he;
-
     meshes.push_back(m);
+    updateBoundingBox();
 }
 
 void Scene::lmev(HalfEdge *he1, HalfEdge *he2, float x,
@@ -152,7 +151,8 @@ void Scene::lmev(HalfEdge *he1, HalfEdge *he2, float x,
 
     v->hed = he2->prev;
     he2->origin->hed = he2;
-
+    
+    updateBoundingBox();
 }
 
 void Scene::lmef(HalfEdge *h1, HalfEdge *h2) {
@@ -265,4 +265,26 @@ bool Scene::smef(int idSolid, int idFace, int idVertex1, int idVertex2) {
 
     lmef(he1, he2);
     return true;
+}
+
+void Scene::updateBoundingBox() {
+    std::list<Mesh*>::iterator mIter = meshes.begin();
+    this->bbox = (*mIter)->bb;
+    mIter++;
+    for(; mIter != meshes.end(); mIter++) {
+        if((*mIter)->bb.pMin.x < this->bbox.pMin.x)
+            this->bbox.pMin.x = (*mIter)->bb.pMin.x;
+        if((*mIter)->bb.pMax.x > this->bbox.pMax.x)
+            this->bbox.pMax.x = (*mIter)->bb.pMax.x;
+
+        if((*mIter)->bb.pMin.y < this->bbox.pMin.y)
+            this->bbox.pMin.y = (*mIter)->bb.pMin.y;
+        if((*mIter)->bb.pMax.y > this->bbox.pMax.y)
+            this->bbox.pMax.y = (*mIter)->bb.pMax.y;
+
+        if((*mIter)->bb.pMin.y < this->bbox.pMin.y)
+            this->bbox.pMin.y = (*mIter)->bb.pMin.y;
+        if((*mIter)->bb.pMax.y > this->bbox.pMax.y)
+            this->bbox.pMax.y = (*mIter)->bb.pMax.y;
+    }
 }

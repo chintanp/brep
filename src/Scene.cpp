@@ -29,9 +29,10 @@ void Scene::render() {
                 glColor3f(0.0, 0.0, 1.0);
             else if (i  == 4)
                 glColor3f(1.0, 1.0, 0.0);
+            else if (i  == 5)
+                glColor3f(0.5, 1.0, 0.0);
             else
-                glColor3f(1.0, 0.5, 0.5);
-
+                glColor3f(1.0, 0.5, 0.0);
             i++;
             std::list<Loop*>::iterator lIter;
 

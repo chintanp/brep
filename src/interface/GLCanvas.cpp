@@ -65,6 +65,7 @@ void GLCanvas::addCorner(float minX, float minY, float minZ,
                 float midX, float midY, float midZ,
                 float maxX, float maxY, float maxZ)
 {
+// INICIO DA BASE
     //v0
     scene.mvfs(minX, minY, minZ);
     //v1
@@ -87,18 +88,45 @@ void GLCanvas::addCorner(float minX, float minY, float minZ,
 
     //v7
     scene.smev(Scene::numMeshes - 1, 0, 3, midX, maxY, midZ);
-    //f1 -> up1
+    //f1 -> up'
     scene.smef(Scene::numMeshes - 1, 0, 6, 7);
 
     //v8
-    scene.smev(Scene::numMeshes - 1, 0, 4, minX, maxY, midZ);
-    //f1 -> up2
-    scene.smef(Scene::numMeshes - 1, 0, 7, 8);
-
+    scene.smev(Scene::numMeshes - 1, 0, 4, minX, maxY, maxZ);
     //v9
     scene.smev(Scene::numMeshes - 1, 0, 0, minX, minY, maxZ);
     //f1 -> left
     scene.smef(Scene::numMeshes - 1, 0, 8, 9);
+
+    //f1 -> bottom
+    scene.smef(Scene::numMeshes - 1, 0, 9, 5);
+// FIM DA BASE
+
+// INICIO DO "CORPO"
+
+    //v10
+    scene.smev(Scene::numMeshes - 1, 0, 3, midX, midY, minZ);
+    //v11
+    scene.smev(Scene::numMeshes - 1, 0, 4, minX, midY, minZ);
+    //f1 -> front
+    scene.smef(Scene::numMeshes - 1, 0, 10, 11);
+
+    //v12
+    scene.smev(Scene::numMeshes - 1, 0, 7, midX, midY, midZ);
+    //f1 -> left
+    scene.smef(Scene::numMeshes - 1, 0, 12, 10);
+
+    //v13
+    scene.smev(Scene::numMeshes - 1, 0, 8, minX, midY, midZ);
+    //f1 -> right
+    scene.smef(Scene::numMeshes - 1, 0, 11, 13);
+
+
+    //f1 -> top
+    scene.smef(Scene::numMeshes - 1, 0, 12, 13);
+// FIM DO "CORPO"
+
+    scene.smef(Scene::numMeshes - 1, 0, 8, 7);
 
     return;
 }
@@ -106,9 +134,9 @@ void GLCanvas::addCorner(float minX, float minY, float minZ,
 void GLCanvas::init()
 {
     //addCube(-2, -2, 2, 4);
-    addCorner  (-0.2, -0.2, -0.2,
-                -0.5, 0.5, -0.5,
-                -0.8, 0.1, -0.5);
+    addCorner  (-2, -2, -2,
+                -5, 5, -5,
+                -8, 1, -5);
 
 
 
@@ -129,8 +157,10 @@ void GLCanvas::init()
     glEnable(GL_COLOR_MATERIAL);
 
     glFrontFace(GL_CW);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
+    //glEnable(GL_CULL_FACE);
+    //glCullFace(GL_BACK);
+    glPolygonMode(GL_BACK, GL_LINE);
+
 
     //Inicialização da luz
     GLfloat lambient_model[4] = { 0.4, 0.4, 0.4, 1.0};

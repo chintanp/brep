@@ -8,7 +8,6 @@ Camera::Camera() : initialized(false), lastPos(Vec3(0, 0, 0)), currPos(Vec3(0, 0
 
 float* Camera::setupViewMatrix() {
 	orientation.toMatrix(viewMatrix);
-    
     viewMatrix[12] = -pos.x;
     viewMatrix[13] = -pos.y;
     viewMatrix[14] = -pos.z;
@@ -22,6 +21,7 @@ void Camera::setProjection(float l, float r, float b,
     frustum.left = l;
     frustum.right = r;
     frustum.bottom = b;
+    frustum.top = t;
     frustum.near = n;
     frustum.far = f;
 }
@@ -53,18 +53,22 @@ void Camera::reset() {
 }
 
 void Camera::fit(const BoundingBox& bBox) {
-    float width2 = (bBox.right - bBox.left) * 0.5;
-    float height2 = (bBox.top - bBox.bottom) * 0.5;
+    float width2 = (bBox.pMax.x - bBox.pMin.x) * 0.5;
+    float height2 = (bBox.pMax.y - bBox.pMin.y) * 0.5;
     float near, far;
 
     (width2 >= height2) ? height2 = width2 * 0.75 : width2 = height2 * 1.333;
 
     near = height2;
-    far = 2*(bBox.front - bBox.back);
+    far = 2*(bBox.pMax.z - bBox.pMin.z);
     if (far < 1000)
         far = 1000.0;
 
-    moveAbsolute(0.0, 0.0, bBox.front + 2 * width2);
+    pos = Vec3(0.0, 0.0, bBox.pMax.z + 2 * width2);
+    std::cout << "\tantes de set projection: ";
+    std::cout << -width2 << " " << width2;
+    std::cout << " " << -height2 << "  " << height2;
+    std::cout << " " << near << "  " << far;
     setProjection(-width2, width2, -height2, height2, near, far);
 }
 

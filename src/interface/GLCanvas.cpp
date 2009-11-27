@@ -64,8 +64,8 @@ void GLCanvas::addCube(float minX, float minY, float minZ, float size)
 
 void GLCanvas::init()
 {
-    addCube(-0.5, -0.5, -0.5, 0.5);
-    addCube(-0.7, -0.7, -0.1, 0.3);
+    addCube(-2, -2, 2, 4);
+    //addCube(-0.7, -0.7, -0.1, 0.3);
 
 
 
@@ -114,7 +114,20 @@ void GLCanvas::init()
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glFrustum(-1, 1, -1, 1, 0, 5);
-}
+    camera.fit(scene.bbox);
+    std::cout << "inicializada a camera." << std::endl;
+    std::cout << "\t pos: " << camera.pos.x << "  " << camera.pos.y << "  " << camera.pos.z << std::endl;
+    float l = camera.frustum.left;
+    float r = camera.frustum.right;
+    float b = camera.frustum.bottom;
+    float t = camera.frustum.top;
+    float n = camera.frustum.near;
+    float f = camera.frustum.far;
+    glFrustum(camera.frustum.left, camera.frustum.right, camera.frustum.bottom, camera.frustum.top, 
+              camera.frustum.near, camera.frustum.far);
+    std::cout << "\t pos: " << camera.pos.x << "  " << camera.pos.y << "  " << camera.pos.z << std::endl;
+    std::cout << "\t frustum: " << l << "  " << r << "  " << b << "  " << t << "  " << n << "  " <<  f << std::endl; 
+ }
 
 void GLCanvas::render()
 {
@@ -124,10 +137,11 @@ void GLCanvas::render()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
+    glTranslatef(-camera.pos.x, -camera.pos.y, -camera.pos.z);    
     glLoadMatrixf(camera.setupViewMatrix());
 
     renderBackground();
-
+    
     if(!scene.isEmpty()) {
         scene.render();
     }

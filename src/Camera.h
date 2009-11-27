@@ -2,6 +2,7 @@
 #define CAMERA_H_
 
 #include "math/Movable.h"
+#include "BoundingBox.h"
 
 struct Frustum {
     float left;
@@ -21,6 +22,7 @@ public:
                        float t, float n, float f);
     void updateRotation(int mouseX, int mouseY, 
                         int windowWidth, int windowHeight);
+    void fit(const BoundingBox& bBox);
     void reset();
 private:
     void mapTrackball(int mouseX, int mouseY, 

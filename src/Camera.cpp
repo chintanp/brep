@@ -40,7 +40,7 @@ void Camera::updateRotation(int mouseX, int mouseY,
         mapTrackball( mouseX, mouseY, windowWidth, windowHeight );
         float ang = angle(currPos, lastPos);
         Vec3 axis = normalize(cross(currPos, lastPos));
-        this->rotateAxis(axis, ang/2.0);
+        this->rotateAxis(axis, ang*0.25);
         lastPos = currPos;
     }
 }
@@ -49,8 +49,23 @@ void Camera::reset() {
     initialized = false;
     lastPos = Vec3(0, 0, 0);
     currPos = Vec3(0, 0, 0);
-
     //setProjection(-1, 1, -1, 1, 0, 1);
+}
+
+void Camera::fit(const BoundingBox& bBox) {
+    float width2 = (bBox.right - bBox.left) * 0.5;
+    float height2 = (bBox.top - bBox.bottom) * 0.5;
+    float near, far;
+
+    (width2 >= height2) ? height2 = width2 * 0.75 : width2 = height2 * 1.333;
+
+    near = height2;
+    far = 2*(bBox.front - bBox.back);
+    if (far < 1000)
+        far = 1000.0;
+
+    moveAbsolute(0.0, 0.0, bBox.front + 2 * width2);
+    setProjection(-width2, width2, -height2, height2, near, far);
 }
 
 void Camera::mapTrackball(int mouseX, int mouseY, 

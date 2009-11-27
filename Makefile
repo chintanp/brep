@@ -85,13 +85,13 @@ OBJS		=
 LIBS		+= GL GLU
 
 # Additional locations for header files
-INCDIRS		+= src src/interface 
+INCDIRS		+= src src/interface src/math/
 
 # Additional locations for library files
 LIBDIRS		+= 
 
 # Additional locations for source files
-SRCDIRS		= src src/interface
+SRCDIRS		= src src/interface src/math/
 
 # Object files and the target will be placed in this directory with an
 # underscore and the buildname appended (e.g., for the "debug" build: objs_debug/)

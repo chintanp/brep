@@ -5,7 +5,8 @@
 #include "wx/glcanvas.h"
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include "Scene.h"
+#include "../Scene.h"
+#include "../Camera.h"
 
 class GLCanvas : public wxGLCanvas
 {
@@ -40,6 +41,7 @@ private:
 private:
     wxGLContext *glContext;
     Scene scene;
+    Camera camera;
     //Textura usada para desenhar a cena
     unsigned int texID;
 };

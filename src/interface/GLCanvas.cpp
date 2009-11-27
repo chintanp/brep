@@ -28,21 +28,18 @@ GLCanvas::~GLCanvas()
 void GLCanvas::init()
 {
     //v0, f0, s0
-    scene.mvfs(-0.5, -0.5, 0.5);
+    scene.mvfs(-0.5, -0.5, -0.3);
     //v1
-    scene.smev(0, 0, 0, 0.5, -0.5, 0.5);
+    scene.smev(0, 0, 0, 0.5, -0.5, -0.3);
     //v2
-    scene.smev(0, 0, 1, 0.5, 0.5, 0.5);
+    scene.smev(0, 0, 1, 0.5, 0.5, -0.3);
     //v3
-    scene.smev(0, 0, 2, -0.5, 0.5, 0.5);
+    scene.smev(0, 0, 2, -0.5, 0.5, -0.3);
     //f1 -> front
     scene.smef(0, 0, 3, 0);
-    if(!scene.smev(0, 0, 1, 0.5, -0.5, -0.5))
-        std::cout << "falhou em criar vertice 4" << std::endl;
-    if(!scene.smev(0, 0, 2, 0.5, 0.5, -0.5))
-       std::cout << "falhou em criar vertice 5" << std::endl;
-    if(!scene.smef(0, 0, 4, 5))
-        std::cout << "falhou em criar a face" << std::endl;
+    scene.smev(0, 0, 1, 0.5, -0.5, -0.4);
+    scene.smev(0, 0, 2, 0.5, 0.5, -0.4);
+    scene.smef(0, 0, 4, 5);
     //scene.mef(0, 1, 1, 4, 2, 3);
     //scene.smef(0, 1, 1, 3);
     //v4
@@ -60,20 +57,6 @@ void GLCanvas::init()
     //f4 -> 
     //scene.smef(0, 3, 6, 7);
     std::cout << "numero de faces: " << Scene::numFaces << std::endl;
-    
-/*
-    glClearColor(1.0, 1.0, 1.0, 1.0);
-    glEnable(GL_TEXTURE_2D);
-    //Inicialização do viewport
-    int w, h;
-    GetClientSize(&w, &h);
-
-    glViewport(0, 0, (GLint) w , (GLint) h );
-    //renderer.setImgSize(w, h);
-
-    glGenTextures(1, &texID);
-    glBindTexture(GL_TEXTURE_2D, texID);
-*/
 
     glClearColor(1.0, 1.0, 1.0, 1.0);
     glEnable( GL_DEPTH_TEST );
@@ -84,7 +67,6 @@ void GLCanvas::init()
     glEnable( GL_LINE_SMOOTH );
     glLineWidth( 2.0 );
     glEnable( GL_POLYGON_SMOOTH );
-    glColor3f( 0.75, 0.75, 0.75 );
     glEnable(GL_POLYGON_OFFSET_FILL);
 
     glShadeModel(GL_SMOOTH);
@@ -113,14 +95,14 @@ void GLCanvas::init()
     glEnable(GL_LIGHT_MODEL_AMBIENT);
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lambient_model);
 
-
-
     //Inicialização do viewport
     int w, h;
+    float ratio = (float) w/(float) h;
     GetClientSize(&w, &h);
-
     glViewport(0, 0, (GLint) w , (GLint) h );
-
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glFrustum(-1, 1, -1, 1, 0, 1);
 }
 
 void GLCanvas::render()
@@ -130,6 +112,9 @@ void GLCanvas::render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+
+    glLoadMatrixf(camera.setupViewMatrix()); 
+
     renderBackground(); 
     
     glTranslatef(-0.5, 0, 0);
@@ -140,7 +125,7 @@ void GLCanvas::render()
 
     //glFlush();
     SwapBuffers();
-    Refresh();
+    //Refresh();
 }
 
 void GLCanvas::renderBackground()
@@ -191,15 +176,11 @@ void GLCanvas::renderBackground()
 }
 
 void GLCanvas::clear() {
-
     Refresh();
 }
 
 void GLCanvas::onMouseLeftUp(wxMouseEvent &event) {
-    int w, h;
-    GetClientSize(&w, &h);
-    wxPoint mouse;
-    event.GetPosition(&mouse.x, &mouse.y);
+    camera.reset();
 }
 
 void GLCanvas::onMouseMove(wxMouseEvent &event)
@@ -209,21 +190,21 @@ void GLCanvas::onMouseMove(wxMouseEvent &event)
 
     wxPoint windowSize;
     GetClientSize( &windowSize.x, &windowSize.y );
-    //static wxString msg;
+    static wxString msg;
 
-    //if ( event.Dragging() )
-    //{
-        //camera.updateRotatation(mouse.x,mouse.y, windowSize.x, windowSize.y);
+    if ( event.Dragging() )
+    {
+        camera.updateRotation(mouse.x,mouse.y, windowSize.x, windowSize.y);
         //static std::string temp;
         //temp = manipulator->update( mouse.x, mouse.y, windowSize.x, windowSize.y );
         //msg = wxString::FromAscii( temp.c_str() );
         //parent->SetStatusText( msg, 1 );
-    //}
-    //else
-    //{
-    //    msg.Printf(_("Mouse Position: ( %d, %d )"), mouse.x, mouse.y );
-    //    parent->SetStatusText( msg, 1 );
-    //}
+    }
+    else
+    {
+        msg.Printf(_("Mouse Position: ( %d, %d )"), mouse.x, mouse.y );
+        //parent->SetStatusText( msg, 1 );
+    }
 
     Refresh();
     event.Skip();
@@ -254,25 +235,16 @@ void GLCanvas::onPaint( wxPaintEvent& event )
 
 void GLCanvas::onSize(wxSizeEvent& event)
 {
-    // Necessary to update the context in some plataforms
     wxGLCanvas::OnSize(event);
 
-    // Reset the viewport
     int w, h;
     GetClientSize(&w, &h);
 
     glViewport(0, 0, (GLint) w , (GLint) h );
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
-    //FIXME passando na ordem inversa, funcionou então
-    //não foi modificado
-    //renderer.setImgSize(h, w);
-    // Redraw window
     Refresh();
 }
 
 void GLCanvas::onEraseBackground(wxEraseEvent& event)
 {
-  // Just to get rid of flickering.
+  //só para se livrar do flicker
 }

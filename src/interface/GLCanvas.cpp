@@ -158,8 +158,8 @@ void GLCanvas::addCylinder(float pX, float pY, float pZ, float radius, float hei
 */
 void GLCanvas::init()
 {
-    //addCube(-2, -2, 2, 4);
-    addCorner  (-2, -2, -2, -5, 5, -5, -8, 1, -5);
+    addCube(-2, -2, 2, 4);
+    //addCorner(2, 2, 2, 5, 5, 5, 8, 1, 5);
     //addCylinder(-1.0, -1.0, -1.0, 2.0, 3.0, 10);
 
 
@@ -209,7 +209,6 @@ void GLCanvas::init()
     glViewport(0, 0, (GLint) w , (GLint) h );
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(-1, 1, -1, 1, 0, 5);
     camera.fit(scene.bbox);
     std::cout << "\nbounding box da cena: " << std::endl;
     std::cout << "\tpMin: " << scene.bbox.pMin.x << " " << scene.bbox.pMin.y << "  " << scene.bbox.pMin.z << std::endl;
@@ -235,12 +234,16 @@ void GLCanvas::render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-
-    //glTranslatef(-camera.pos.x, -camera.pos.y, -camera.pos.z);
+    
+    glTranslatef(-camera.pos.x, -camera.pos.y, -camera.pos.z);
     glLoadMatrixf(camera.setupViewMatrix());
-
+    
+    
     renderBackground();
-
+    Vec3 center((scene.bbox.pMin.x + scene.bbox.pMax.x),
+                (scene.bbox.pMin.y + scene.bbox.pMax.y),
+                (scene.bbox.pMin.z + scene.bbox.pMax.z));
+    glTranslatef(-center.x, -center.y, -center.z);
     if(!scene.isEmpty()) {
         scene.render();
     }

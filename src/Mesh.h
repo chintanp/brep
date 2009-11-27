@@ -5,6 +5,7 @@
 #include "Vertex.h"
 #include "Face.h"
 #include "Edge.h"
+#include "BoundingBox.h"
 
 class Mesh {
 public:
@@ -23,6 +24,8 @@ public:
     std::list<Edge*> edges;
 
     int id;
+    BoundingBox bb;
+    bool initialized;
 };
 
 #endif

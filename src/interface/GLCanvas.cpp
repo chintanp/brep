@@ -66,26 +66,8 @@ void GLCanvas::init()
 {
     addCube(-0.5, -0.5, -0.5, 0.5);
     addCube(-0.7, -0.7, -0.1, 0.3);
-/*
-    //f1 -> back
-    scene.smef(0, 0, 7, 4);
-*/
-    //scene.smef(0, 1, 1, 3);
-    //v4
-    //scene.smev(0, 1, 0, -0.5, -0.5, -0.5);
-    //v5
-    //scene.smev(0, 1, 1, 0.5,- 0.5, -0.5);
-    //v6
-    //scene.smev(0, 1, 2, 0.5, 0.5, -0.5);
-    //v7
-    //scene.smev(0, 1, 3, -0.5, 0.5, -0.5);
-    //f2 -> bot
-    //scene.smef(0, 1, 6, 5);
-    //f3 -> right
-    //scene.smef(0, 2, 5, 6);
-    //f4 ->
-    //scene.smef(0, 3, 6, 7);
-    std::cout << "numero de faces: " << Scene::numFaces << std::endl;
+
+
 
     glClearColor(1.0, 1.0, 1.0, 1.0);
     glEnable( GL_DEPTH_TEST );

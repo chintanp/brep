@@ -121,7 +121,6 @@ void GLCanvas::addCorner(float minX, float minY, float minZ,
     //f1 -> right
     scene.smef(Scene::numMeshes - 1, 0, 11, 13);
 
-
     //f1 -> top
     scene.smef(Scene::numMeshes - 1, 0, 12, 13);
 // FIM DO "CORPO"
@@ -130,14 +129,38 @@ void GLCanvas::addCorner(float minX, float minY, float minZ,
 
     return;
 }
+/*
+void GLCanvas::addCylinder(float pX, float pY, float pZ, float radius, float heigth, int disc)
+{
+    float posX = 0.0;
+    float posZ = 0.0;
+    bool flag = false;
 
+
+    for(float i = 0; i < 6.2830; i+= 6.2830/(float)disc)
+    {
+        if(flag == false) {
+            flag == true;
+            //v0
+            scene.mvfs(radius*cos(i), pY, radius*sin(i));
+        }
+        else {
+            if(i+ 6.2830/disc >= 6.2830)
+                scene.smef(Scene::numMeshes - 1, 0, Scene::numVertices - 1, 0);
+            else
+                scene.smev(Scene::numMeshes - 1, 0, Scene::numVertices - 1, radius*cos(i), pY, radius*sin(i));
+        }
+    }
+
+
+    return;
+}
+*/
 void GLCanvas::init()
 {
-    addCube(-2, -2, 2, 4);
-    //addCorner  (-2, -2, -2,
-                  -5, 5, -5,
-                  -8, 1, -5);
-
+    //addCube(-2, -2, 2, 4);
+    addCorner  (-2, -2, -2, -5, 5, -5, -8, 1, -5);
+    //addCylinder(-1.0, -1.0, -1.0, 2.0, 3.0, 10);
 
 
     glClearColor(1.0, 1.0, 1.0, 1.0);

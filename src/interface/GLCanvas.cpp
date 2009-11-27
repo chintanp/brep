@@ -133,10 +133,10 @@ void GLCanvas::addCorner(float minX, float minY, float minZ,
 
 void GLCanvas::init()
 {
-    //addCube(-2, -2, 2, 4);
-    addCorner  (-2, -2, -2,
-                -5, 5, -5,
-                -8, 1, -5);
+    addCube(-2, -2, 2, 4);
+    //addCorner  (-2, -2, -2,
+                  -5, 5, -5,
+                  -8, 1, -5);
 
 
 
@@ -188,6 +188,9 @@ void GLCanvas::init()
     glLoadIdentity();
     glFrustum(-1, 1, -1, 1, 0, 5);
     camera.fit(scene.bbox);
+    std::cout << "\nbounding box da cena: " << std::endl;
+    std::cout << "\tpMin: " << scene.bbox.pMin.x << " " << scene.bbox.pMin.y << "  " << scene.bbox.pMin.z << std::endl;
+    std::cout << "\tpMax " << scene.bbox.pMax.x << " " << scene.bbox.pMax.y << "  " << scene.bbox.pMax.z << std::endl;
     std::cout << "inicializada a camera." << std::endl;
     std::cout << "\t pos: " << camera.pos.x << "  " << camera.pos.y << "  " << camera.pos.z << std::endl;
     float l = camera.frustum.left;
@@ -210,7 +213,7 @@ void GLCanvas::render()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glTranslatef(-camera.pos.x, -camera.pos.y, -camera.pos.z);
+    //glTranslatef(-camera.pos.x, -camera.pos.y, -camera.pos.z);
     glLoadMatrixf(camera.setupViewMatrix());
 
     renderBackground();

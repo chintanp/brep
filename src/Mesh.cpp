@@ -1,7 +1,6 @@
 #include "Mesh.h"
 
-Mesh::Mesh(int id) : id(id) {
-
+Mesh::Mesh(int id) : id(id), initialized(false) {
 }
 
 int Mesh::getId() {
@@ -10,6 +9,28 @@ int Mesh::getId() {
 
 void Mesh::addVertex(Vertex *v) {
     vertices.push_back(v);
+    if(!initialized) {
+        bb.pMax.x = bb.pMin.x = v->x;
+        bb.pMax.y = bb.pMin.y = v->y;
+        bb.pMax.z = bb.pMin.z = v->z;
+        initialized = true;
+    }
+    else {
+        if (bb.pMax.x < v->x)
+            bb.pMax.x = v->x;
+        if (bb.pMin.x > v->x)
+            bb.pMin.x = v->x;
+
+        if (bb.pMax.y < v->y)
+            bb.pMax.y = v->y;
+        if (bb.pMin.y > v->y)
+            bb.pMin.y = v->y;
+
+        if (bb.pMax.z < v->z)
+            bb.pMax.z = v->z;
+        if (bb.pMin.z > v->z)
+            bb.pMin.z = v->z;       
+    }
 }
 
 void Mesh::addFace(Face *f) {

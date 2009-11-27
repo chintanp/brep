@@ -7,7 +7,7 @@ Camera::Camera() : initialized(false), lastPos(Vec3(0, 0, 0)), currPos(Vec3(0, 0
 }
 
 float* Camera::setupViewMatrix() {
-	orientation.toMatrix(viewMatrix);
+    orientation.toMatrix(viewMatrix);
     viewMatrix[12] = -pos.x;
     viewMatrix[13] = -pos.y;
     viewMatrix[14] = -pos.z;
@@ -29,15 +29,15 @@ void Camera::setProjection(float l, float r, float b,
 void Camera::updateRotation(int mouseX, int mouseY, 
                             int windowWidth, int windowHeight)
 {
-    if ( !initialized )
+    if (!initialized)
     {
-        mapTrackball( mouseX, mouseY, windowWidth, windowHeight );
+        mapTrackball(mouseX, mouseY, windowWidth, windowHeight);
         lastPos = currPos;
         initialized = true;
     }
     else
     {
-        mapTrackball( mouseX, mouseY, windowWidth, windowHeight );
+        mapTrackball(mouseX, mouseY, windowWidth, windowHeight);
         float ang = angle(currPos, lastPos);
         Vec3 axis = normalize(cross(currPos, lastPos));
         this->rotateAxis(axis, ang*0.25);

@@ -1,8 +1,9 @@
 #ifndef CAMERA_H_
 #define CAMERA_H_
 
-#include "math/Movable.h"
 #include "BoundingBox.h"
+#include "math/Vec3.h"
+#include "math/Quat.h"
 
 struct Frustum {
     float left;
@@ -13,7 +14,7 @@ struct Frustum {
     float far;
 };
 
-class Camera : public Movable {
+class Camera {
 public:
     Camera();
 
@@ -27,9 +28,18 @@ public:
     
     void mapTrackball(int mouseX, int mouseY, 
                       int windowWidth, int windowHeight);
+    void rotate(const Vec3 &axis, float angle);
+
+
     Frustum frustum;
     float viewMatrix[16];
-
+    
+    //Controla a posição e orientação da camera
+    Vec3 pos;
+    Quat orientation;
+    
+    //Usado para controlar a rotação feita pela interface.
+    //TODO: fazer isso somente pela interface
     bool initialized;
     Vec3 lastPos;
     Vec3 currPos;

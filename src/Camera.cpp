@@ -2,7 +2,8 @@
 #include <cmath>
 #include <iostream>
 
-Camera::Camera() : initialized(false), lastPos(Vec3(0, 0, 0)), currPos(Vec3(0, 0, 0)) {
+Camera::Camera() : initialized(false), lastPos(0, 0, 0), 
+                   currPos(0, 0, 0), orientation(0, 0, 0, 1) {
     setProjection(-1, 1, -1, 1, 0, 1);
 }
 
@@ -40,9 +41,15 @@ void Camera::updateRotation(int mouseX, int mouseY,
         mapTrackball(mouseX, mouseY, windowWidth, windowHeight);
         float ang = angle(currPos, lastPos);
         Vec3 axis = normalize(cross(currPos, lastPos));
-        this->rotateAxis(axis, ang);
+        rotate(axis, ang);
         lastPos = currPos;
     }
+}
+
+void Camera::rotate(const Vec3 &axis, float angle) {
+    Quat q;
+    q.fromAxisAngle(axis, angle);
+    orientation = orientation*q;
 }
 
 void Camera::reset() {

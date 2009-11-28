@@ -20,11 +20,11 @@ Quat::Quat(const Vec3& v, float s) {
 }
 
 void Quat::fromAxisAngle(const Vec3& v, float theta) {
-	//float angle = theta * 0.5;
-	w = std::cos(theta);
-	x = v.x * std::sin(theta);
-	y = v.y * std::sin(theta);
-	z = v.z * std::sin(theta);
+	float angle = theta * 0.5;
+	w = std::cos(angle);
+	x = v.x * std::sin(angle);
+	y = v.y * std::sin(angle);
+	z = v.z * std::sin(angle);
 	*this = normalize(*this);
 }
 

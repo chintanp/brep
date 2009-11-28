@@ -9,12 +9,6 @@ Vec3::Vec3(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {
 
 }
 
-Vec3::Vec3(const Vec3& v) {
-	x = v.x;
-	y = v.y;
-	z = v.z;
-}
-
 Vec3 Vec3::operator+(const Vec3& v) const {
 	return Vec3(x + v.x, y + v.y, z + v.z);
 }
@@ -82,8 +76,8 @@ float dot(const Vec3& v1, const Vec3& v2) {
 
 Vec3 cross(const Vec3& v1, const Vec3& v2) {
 	return Vec3(v1.y*v2.z - v2.y*v1.z,
-            v1.z*v2.x - v2.z*v1.x,
-            v1.x*v2.y - v2.x*v1.y);
+                v1.z*v2.x - v2.z*v1.x,
+                v1.x*v2.y - v2.x*v1.y);
 }
 
 Vec3 normalize(const Vec3& v) {
@@ -92,9 +86,5 @@ Vec3 normalize(const Vec3& v) {
 }
 
 float angle(const Vec3& v1, const Vec3& v2) {
-    Vec3 diff =v1 - v2;
-    if (!(diff.x || diff.y || diff.z))
-        return 0.0;
-
-    return 90.0 * diff.length(); 
+    return acos(dot(v1, v2)/(v1.length()*v2.length()));
 }

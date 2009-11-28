@@ -325,11 +325,11 @@ void GLCanvas::onMouseMove(wxMouseEvent &event)
         //msg = wxString::FromAscii( temp.c_str() );
         //parent->SetStatusText( msg, 1 );
     }
-    else
-    {
-        msg.Printf(_("Mouse Position: ( %d, %d )"), mouse.x, mouse.y );
+    //else
+    //{
+    //    msg.Printf(_("Mouse Position: ( %d, %d )"), mouse.x, mouse.y );
         //parent->SetStatusText( msg, 1 );
-    }
+    //}
 
     Refresh();
     event.Skip();

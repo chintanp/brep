@@ -55,26 +55,27 @@ void Movable::rotateAbsolute(float x, float y, float z, float w) {
 	orientation.w = w;
 }
 
-void Movable::rotateQuat(const Quat& dq) {
+/*(void Movable::rotateQuat(const Quat& dq) {
 	orientation = dq*orientation;
 }
 
 void Movable::rotateQuat(float dx, float dy, float dz, float dw) {
 	Quat q(dx, dy, dz, dw);
 	orientation = q*orientation;
-}
+}*/
 
 void Movable::rotateAxis(const Vec3& axis, float theta) {
 	Quat q;
+    theta *= 0.5;
 	q.fromAxisAngle(axis, theta);
-	orientation = q*orientation;
+	orientation = orientation*q;
 }
-
+/*
 void Movable::rotateAxis(float x, float y, float z, float theta) {
 	Quat q;
 	q.fromAxisAngle(x, y, z, theta);
 	orientation = q*orientation;
-}
+}*/
 
 const Vec3& Movable::getPosition() {
     return pos;

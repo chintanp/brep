@@ -13,7 +13,8 @@ public:
 	void fromAxisAngle(float _x, float _y, float _z, float angle);
 	void toMatrix(float* m);
 	float length() const;
-	
+    
+    Quat operator*(const Quat &q);
     float x, y, z, w;
 };
 

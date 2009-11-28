@@ -5,9 +5,8 @@ class Vec3 {
 public:
 	Vec3();
 	Vec3(float _x, float _y, float _z);
-	Vec3(const Vec3& v);
-
-	Vec3 operator+(const Vec3& v) const;
+	
+    Vec3 operator+(const Vec3& v) const;
 	Vec3& operator+=(const Vec3& v);
 
 	Vec3 operator-(const Vec3& v) const;
@@ -25,7 +24,6 @@ public:
 	float length() const;
 
 	float x, y, z;
-
 };
 
 float dot(const Vec3& v1, const Vec3& v2);

@@ -40,7 +40,7 @@ void Camera::updateRotation(int mouseX, int mouseY,
         mapTrackball(mouseX, mouseY, windowWidth, windowHeight);
         float ang = angle(currPos, lastPos);
         Vec3 axis = normalize(cross(currPos, lastPos));
-        this->rotateAxis(axis, ang*0.25);
+        this->rotateAxis(axis, ang);
         lastPos = currPos;
     }
 }

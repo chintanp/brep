@@ -20,24 +20,24 @@ Quat::Quat(const Vec3& v, float s) {
 }
 
 void Quat::fromAxisAngle(const Vec3& v, float theta) {
-	float angle = theta * 0.5;
-	w = std::cos(angle);
-	x = v.x * std::sin(angle);
-	y = v.y * std::sin(angle);
-	z = v.z * std::sin(angle);
-	normalize(*this);
+	//float angle = theta * 0.5;
+	w = std::cos(theta);
+	x = v.x * std::sin(theta);
+	y = v.y * std::sin(theta);
+	z = v.z * std::sin(theta);
+	*this = normalize(*this);
 }
 
 
 void Quat::fromAxisAngle(float _x, float _y, float _z, float theta) {
-	float angle = (theta/180.0)*PI*0.5;
-	//float angle = theta*0.5;
+	//float angle = (theta/180.0)*PI*0.5;
+	float angle = theta*0.5;
 	float result = sin(angle);
 	w = std::cos(angle);
 	x = _x * result;
 	y = _y * result;
 	z = _z * result;
-	normalize(*this);
+	*this = normalize(*this);
 }
 
 /**transforma um quaternion em uma matriz do OpenGL (row major)
@@ -59,22 +59,30 @@ void Quat::toMatrix(float* m) {
 	yy = y*ys;	yz = y*zs;	zz = z*zs;*/
 
 	m[0] = 1.0 - yy - zz;
-	m[1] = xy + wz;
-	m[2] = xz - wy;
+	m[1] = xy - wz;
+	m[2] = xz + wy;
 
-	m[4] = xy - wz;
+	m[4] = xy + wz;
 	m[5] = 1.0 - xx - zz;
-	m[6] = yz + wx;
+	m[6] = yz - wx;
 
-	m[8] = xz + wy;
-	m[9] = yz - wx;
+	m[8] = xz - wy;
+	m[9] = yz + wx;
 	m[10] = 1.0 - xx - yy;
 
 	m[3] = m[7] = m[11] =  m[12] = m[13] = m[14] = 0.0;
 	m[15] = 1.0;
 }
 
-Quat operator*(const Quat& q2, const Quat& q1){
+Quat Quat::operator*(const Quat& q) {
+   return Quat(w * q.x + x * q.w + y * q.z - z * q.y,
+               w * q.y - x * q.z + y * q.w + z * q.x,
+               w * q.z + x * q.y - y * q.x + z * q.w,
+               w * q.w - x * q.x - y * q.y - z * q.z); 
+}
+
+
+/*Quat operator*(const Quat& q2, const Quat& q1){
 	float _x, _y, _z, _w;
 
 	_x = q2.y*q1.z - q2.z*q1.y + q2.w*q1.x + q2.x*q1.w;
@@ -83,7 +91,7 @@ Quat operator*(const Quat& q2, const Quat& q1){
 	_w = q2.w*q1.w - q2.x*q1.x - q2.y*q1.y - q2.z*q1.z;
 
 	return Quat(_x, _y, _z, _w);
-}
+}*/
 
 float Quat::length() const {
 	return sqrt(x*x + y*y + z*z + w*w);
@@ -99,17 +107,17 @@ Quat conjugate(const Quat& q) {
 	return Quat(-q.x, -q.y, -q.z, q.w);
 }
 
-Vec3 rotateVec(Vec3& v, const Quat& q) {
+/*Vec3 rotateVec(Vec3& v, const Quat& q) {*/
     /*float pMult = 1.0 - (q.w)*(q.w);
     float vMult = 2.0*(q.x*v.x + q.y*v.y+q.z*v.z);
     float crossMult = 2.0*q.w;
     return Vec3(pMult*v.x + vMult*q.x + crossMult*(q.y*v.z - q.z*v.y),
                 pMult*v.y + vMult*q.y + crossMult*(q.z*v.x - q.x*v.z),
                 pMult*v.z + vMult*q.z + crossMult*(q.x*v.y - q.y*v.x));*/
-    Quat fromVec(v.x, v.y, v.z, 0);
+/*    Quat fromVec(v.x, v.y, v.z, 0);
     Quat result;
 
     result = q*fromVec*conjugate(q);
 
     return Vec3(result.x, result.y, result.z);
-}
+}*/

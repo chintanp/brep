@@ -7,20 +7,17 @@ class Quat {
 public:
 	Quat();
 	Quat(float _x, float _y, float _z, float _w);
-	Quat(const Vec3& v, float s = 0);
+	Quat(const Vec3& v, float s);
 
 	void fromAxisAngle(const Vec3& v, float angle);
-	void fromAxisAngle(float _x, float _y, float _z, float angle);
 	void toMatrix(float* m);
 	float length() const;
     
-    Quat operator*(const Quat &q);
     float x, y, z, w;
 };
 
 Quat operator*(const Quat& q2, const Quat& q1);
 Quat normalize(const Quat& q);
 Quat conjugate(const Quat& q);
-Vec3 rotateVec(Vec3& v, const Quat& q);
 
 #endif

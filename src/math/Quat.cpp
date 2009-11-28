@@ -15,7 +15,6 @@ Quat::Quat(const Vec3& v, float s) {
 	x = v.x;
 	y = v.y;
 	z = v.z;
-
 	w = s;
 }
 
@@ -25,18 +24,6 @@ void Quat::fromAxisAngle(const Vec3& v, float theta) {
 	x = v.x * std::sin(angle);
 	y = v.y * std::sin(angle);
 	z = v.z * std::sin(angle);
-	*this = normalize(*this);
-}
-
-
-void Quat::fromAxisAngle(float _x, float _y, float _z, float theta) {
-	//float angle = (theta/180.0)*PI*0.5;
-	float angle = theta*0.5;
-	float result = sin(angle);
-	w = std::cos(angle);
-	x = _x * result;
-	y = _y * result;
-	z = _z * result;
 	*this = normalize(*this);
 }
 
@@ -74,15 +61,7 @@ void Quat::toMatrix(float* m) {
 	m[15] = 1.0;
 }
 
-Quat Quat::operator*(const Quat& q) {
-   return Quat(w * q.x + x * q.w + y * q.z - z * q.y,
-               w * q.y - x * q.z + y * q.w + z * q.x,
-               w * q.z + x * q.y - y * q.x + z * q.w,
-               w * q.w - x * q.x - y * q.y - z * q.z); 
-}
-
-
-/*Quat operator*(const Quat& q2, const Quat& q1){
+Quat operator*(const Quat& q2, const Quat& q1){
 	float _x, _y, _z, _w;
 
 	_x = q2.y*q1.z - q2.z*q1.y + q2.w*q1.x + q2.x*q1.w;
@@ -91,7 +70,7 @@ Quat Quat::operator*(const Quat& q) {
 	_w = q2.w*q1.w - q2.x*q1.x - q2.y*q1.y - q2.z*q1.z;
 
 	return Quat(_x, _y, _z, _w);
-}*/
+}
 
 float Quat::length() const {
 	return sqrt(x*x + y*y + z*z + w*w);
@@ -106,18 +85,3 @@ Quat normalize(const Quat& q) {
 Quat conjugate(const Quat& q) {
 	return Quat(-q.x, -q.y, -q.z, q.w);
 }
-
-/*Vec3 rotateVec(Vec3& v, const Quat& q) {*/
-    /*float pMult = 1.0 - (q.w)*(q.w);
-    float vMult = 2.0*(q.x*v.x + q.y*v.y+q.z*v.z);
-    float crossMult = 2.0*q.w;
-    return Vec3(pMult*v.x + vMult*q.x + crossMult*(q.y*v.z - q.z*v.y),
-                pMult*v.y + vMult*q.y + crossMult*(q.z*v.x - q.x*v.z),
-                pMult*v.z + vMult*q.z + crossMult*(q.x*v.y - q.y*v.x));*/
-/*    Quat fromVec(v.x, v.y, v.z, 0);
-    Quat result;
-
-    result = q*fromVec*conjugate(q);
-
-    return Vec3(result.x, result.y, result.z);
-}*/

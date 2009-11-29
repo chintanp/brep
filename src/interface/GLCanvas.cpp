@@ -234,12 +234,15 @@ void GLCanvas::render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+    renderBackground(); 
     
+    float m[16];
+    camera.setupViewMatrix(m);
     glTranslatef(-camera.pos.x, -camera.pos.y, -camera.pos.z);
-    glLoadMatrixf(camera.setupViewMatrix());
+    glMultMatrixf(m);
     
     
-    renderBackground();
+    
     Vec3 center((scene.bbox.pMin.x + scene.bbox.pMax.x),
                 (scene.bbox.pMin.y + scene.bbox.pMax.y),
                 (scene.bbox.pMin.z + scene.bbox.pMax.z));
@@ -337,14 +340,20 @@ void GLCanvas::onMouseMove(wxMouseEvent &event)
 
 void GLCanvas::onMouseWheel(wxMouseEvent& event)
 {
-    //if ( event.ControlDown() )
-    //{
-    //    int wheel = event.GetWheelRotation();
-    //    if ( wheel > 0 )
-    //        camera.zoom( 0.8 );
-    //    else
-    //        camera.zoom( 1.2 );
-    //}
+    if ( event.ControlDown() )
+    {
+        int wheel = event.GetWheelRotation();
+        if ( wheel > 0 )
+            camera.zoom( 0.8 );
+        else
+            camera.zoom( 1.2 );
+        //Atualiza o frustum
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glFrustum(camera.frustum.left, camera.frustum.right, camera.frustum.bottom, camera.frustum.top,
+                  camera.frustum.near, camera.frustum.far);
+        Refresh();
+    }
 }
 
 void GLCanvas::onEnterWindow(wxMouseEvent& event)

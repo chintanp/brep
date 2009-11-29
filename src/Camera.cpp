@@ -7,13 +7,11 @@ Camera::Camera() : initialized(false), lastPos(0, 0, 0),
     setProjection(-1, 1, -1, 1, 0, 1);
 }
 
-float* Camera::setupViewMatrix() {
-    orientation.toMatrix(viewMatrix);
-    viewMatrix[12] = -pos.x;
-    viewMatrix[13] = -pos.y;
-    viewMatrix[14] = -pos.z;
-
-    return viewMatrix;
+void Camera::setupViewMatrix(float *m) {
+    orientation.toMatrix(m);
+    m[12] = -pos.x;
+    m[13] = -pos.y;
+    m[14] = -pos.z;
 }
 
 void Camera::setProjection(float l, float r, float b,
@@ -40,6 +38,7 @@ void Camera::updateRotation(int mouseX, int mouseY,
     {
         mapTrackball(mouseX, mouseY, windowWidth, windowHeight);
         float ang = angle(currPos, lastPos);
+        std::cout << "angle: " << ang << std::endl;
         Vec3 axis = normalize(cross(currPos, lastPos));
         rotate(axis, ang);
         lastPos = currPos;
@@ -50,6 +49,13 @@ void Camera::rotate(const Vec3 &axis, float angle) {
     Quat q;
     q.fromAxisAngle(axis, angle);
     orientation = orientation*q;
+}
+
+void Camera::zoom(float zoomFactor) {
+    frustum.left *= zoomFactor;
+    frustum.right*= zoomFactor;
+    frustum.bottom *= zoomFactor;
+    frustum.top *= zoomFactor;
 }
 
 void Camera::reset() {
@@ -72,10 +78,6 @@ void Camera::fit(const BoundingBox& bBox) {
         far = 1000.0;
 
     pos = Vec3(0.0, 0.0, bBox.pMax.z + 2 * width2);
-    std::cout << "\tantes de set projection: ";
-    std::cout << -width2 << " " << width2;
-    std::cout << " " << -height2 << "  " << height2;
-    std::cout << " " << near << "  " << far;
     setProjection(-width2, width2, -height2, height2, near, far);
 }
 

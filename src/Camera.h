@@ -18,7 +18,7 @@ class Camera {
 public:
     Camera();
 
-    float* setupViewMatrix();
+    void setupViewMatrix(float *m);
     void setProjection(float l, float r, float b,
                        float t, float n, float f);
     void updateRotation(int mouseX, int mouseY, 
@@ -29,10 +29,9 @@ public:
     void mapTrackball(int mouseX, int mouseY, 
                       int windowWidth, int windowHeight);
     void rotate(const Vec3 &axis, float angle);
-
+    void zoom(float zoomFactor);
 
     Frustum frustum;
-    float viewMatrix[16];
     
     //Controla a posição e orientação da camera
     Vec3 pos;

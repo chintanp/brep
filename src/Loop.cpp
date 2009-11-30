@@ -3,8 +3,9 @@
 
 Loop::Loop(Face *f) {
     face = f;
-    
     face->addLoop(this);
+
+    r = g = b= 0.6;
 }
 
 void Loop::setNormal() {

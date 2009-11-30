@@ -8,11 +8,11 @@ Scene::Scene() {
 }
 
 void Scene::render() {
-    glColor3f(0.6, 0.6, 0.6);
     std::list<Mesh*>::iterator mIter;
+    int i = 0;
     for(mIter = meshes.begin(); mIter != meshes.end(); mIter++){
         std::list<Face*>::iterator fIter;
-        int i = 0;
+        //int i = 0;
         for(fIter = (*mIter)->faces.begin(); fIter != (*mIter)->faces.end(); fIter++) {
             std::cout << "face: " << (*fIter)->getId();
             /*if (i == 0) {
@@ -34,10 +34,14 @@ void Scene::render() {
                 glColor3f(1.0, 0.5, 0.0);
             i++;*/
             std::list<Loop*>::iterator lIter;
-
+            
             for (lIter = (*fIter)->loops.begin(); lIter != (*fIter)->loops.end(); lIter++) {
                 std::cout << "  loop: " << std::endl;
                 HalfEdge *he = (*lIter)->hed;
+
+                (*lIter)->id = i;
+                glLoadName(i);
+                glColor3f((*lIter)->r, (*lIter)->g, (*lIter)->b);
                 glNormal3f((*lIter)->normal.x, (*lIter)->normal.y, (*lIter)->normal.z);
                 glBegin(GL_POLYGON);
                 do {
@@ -47,6 +51,7 @@ void Scene::render() {
                 }while((he = he->next) != (*lIter)->hed);
                 glEnd();
                 std::cout << std::endl;
+                i++;
             }
         }
     }
@@ -91,6 +96,19 @@ HalfEdge* Scene::getHEd(Face *f, int idVertex1, int idVertex2) {
         }while((h = h->next) != (*iter)->hed);
     }
     return NULL;
+}
+
+Loop* Scene::getLoop(int id) {
+    std::list<Mesh*>::iterator mIter;
+    for(mIter = meshes.begin(); mIter != meshes.end(); mIter++){
+        std::list<Face*>::iterator fIter;
+        for(fIter = (*mIter)->faces.begin(); fIter != (*mIter)->faces.end(); fIter++) {
+            std::list<Loop*>::iterator lIter;
+            for (lIter = (*fIter)->loops.begin(); lIter != (*fIter)->loops.end(); lIter++) 
+                if((*lIter)->id == id) 
+                    return *lIter;
+        }
+    }
 }
 
 HalfEdge* Scene::getHEd(Face *f, int idVertex1) {
@@ -147,8 +165,8 @@ void Scene::lmev(HalfEdge *he1, HalfEdge *he2, float x,
         he->origin = v;
         he = he->mate()->next;
     }
-    addhe(e, he2->origin, he1, MINUS);
-    addhe(e, v, he2, PLUS);
+    addhe(e, he2->origin, he1, PLUS);
+    addhe(e, v, he2, MINUS);
 
     v->hed = he2->prev;
     he2->origin->hed = he2;
@@ -173,8 +191,8 @@ void Scene::lmef(HalfEdge *h1, HalfEdge *h2) {
         he = he->next;
     }
 
-    nhe1 = addhe(e, h2->origin, h1, MINUS);
-    nhe2 = addhe(e, h1->origin, h2, PLUS);
+    nhe1 = addhe(e, h2->origin, h1, PLUS);
+    nhe2 = addhe(e, h1->origin, h2, MINUS);
 
     nhe1->prev->next = nhe2;
     nhe2->prev->next = nhe1;

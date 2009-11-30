@@ -14,6 +14,10 @@ public:
 
     Vec3 normal;
     
+    //ID para o picking
+    int id;
+    //Cor
+    float r, g, b;
     //void setFace(Face *f);
     HalfEdge *hed;
     Face *face;

@@ -50,8 +50,6 @@
 		<Unit filename="src/interface/PrincipalFrame.cpp" />
 		<Unit filename="src/interface/PrincipalFrame.h" />
 		<Unit filename="src/main.cpp" />
-		<Unit filename="src/math/Movable.cpp" />
-		<Unit filename="src/math/Movable.h" />
 		<Unit filename="src/math/Quat.cpp" />
 		<Unit filename="src/math/Quat.h" />
 		<Unit filename="src/math/Vec3.cpp" />

@@ -129,39 +129,58 @@ void GLCanvas::addCorner(float minX, float minY, float minZ,
 
     return;
 }
-/*
+
 void GLCanvas::addCylinder(float pX, float pY, float pZ, float radius, float heigth, int disc)
 {
-    float posX = 0.0;
-    float posZ = 0.0;
-    bool flag = false;
+    scene.mvfs(radius*cos(0) + pX, pY, radius*sin(0) + pZ);
 
-
-    for(float i = 0; i < 6.2830; i+= 6.2830/(float)disc)
+    for(float i = 2.0*M_PI/(float)disc; i <= 2.0*M_PI; i+= 2.0*M_PI/(float)disc)
     {
-        if(flag == false) {
-            flag == true;
-            //v0
-            scene.mvfs(radius*cos(i), pY, radius*sin(i));
+        if(i+ 2.0*M_PI/(float)disc >= 2.0*M_PI)
+        {
+            scene.smev(Scene::numMeshes - 1, 0, Scene::numVertices - 1, radius*cos(i) + pX, pY, radius*sin(i) + pZ);
+            scene.smef(Scene::numMeshes - 1, 0, Scene::numVertices - 1, 0);
         }
-        else {
-            if(i+ 6.2830/disc >= 6.2830)
-                scene.smef(Scene::numMeshes - 1, 0, Scene::numVertices - 1, 0);
-            else
-                scene.smev(Scene::numMeshes - 1, 0, Scene::numVertices - 1, radius*cos(i), pY, radius*sin(i));
+        else
+            scene.smev(Scene::numMeshes - 1, 0, Scene::numVertices - 1, radius*cos(i) + pX, pY, radius*sin(i) + pZ);
+    }
+
+    int ult = Scene::numVertices - 1;
+    int aux = 0;
+
+    scene.smev(Scene::numMeshes - 1, 0, aux, radius*cos(0) + pX, pY + heigth, radius*sin(0) + pZ);
+    aux++;
+
+    for(float i = 2.0*M_PI/(float)disc; i <= 2.0*M_PI; i+= 2.0*M_PI/(float)disc)
+    {
+        if(i+ 2.0*M_PI/(float)disc >= 2.0*M_PI)
+        {
+            scene.smev(Scene::numMeshes - 1, 0, Scene::numVertices - 1, radius*cos(i) + pX, pY + heigth, radius*sin(i) + pZ);
+            scene.smef(Scene::numMeshes - 1, 0, Scene::numVertices - 1, aux);
+
+            scene.smef(Scene::numMeshes - 1, 0, Scene::numVertices - 1, ult+1);
+        }
+        else
+        {
+            scene.smev(Scene::numMeshes - 1, 0, Scene::numVertices - 1, radius*cos(i) + pX, pY + heigth, radius*sin(i) + pZ);
+            scene.smef(Scene::numMeshes - 1, 0, Scene::numVertices - 1, aux);
+            aux++;
         }
     }
 
-
     return;
 }
-*/
+
 void GLCanvas::init()
 {
-    addCube(-2, -2, 2, 4);
-    addCube(3, -2, 2, 4);
+    //addCube(-2, -2, 2, 4);
     //addCorner(2, 2, 2, 5, 5, 5, 8, 1, 5);
-    //addCylinder(-1.0, -1.0, -1.0, 2.0, 3.0, 10);
+
+    addCylinder(0.0, 0.0, 0.0, 2.0, 3.0, 7);
+
+    //addCylinder(-1.0, -1.0, -1.0, 2.0, 3.0, 5);
+
+
 
 
     glClearColor(1.0, 1.0, 1.0, 1.0);
@@ -183,7 +202,9 @@ void GLCanvas::init()
     glFrontFace(GL_CW);
     //glEnable(GL_CULL_FACE);
     //glCullFace(GL_BACK);
-    glPolygonMode(GL_BACK, GL_LINE);
+
+    glPolygonMode(GL_BACK, GL_LINE);          //FILL
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);  //WIRE
 
 
     //Inicialização da luz
@@ -235,15 +256,15 @@ void GLCanvas::render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    renderBackground(); 
-    
+    renderBackground();
+
     float m[16];
     camera.setupViewMatrix(m);
     glTranslatef(-camera.pos.x, -camera.pos.y, -camera.pos.z);
     glMultMatrixf(m);
-    
-    
-    
+
+
+
     Vec3 center((scene.bbox.pMin.x + scene.bbox.pMax.x),
                 (scene.bbox.pMin.y + scene.bbox.pMax.y),
                 (scene.bbox.pMin.z + scene.bbox.pMax.z));

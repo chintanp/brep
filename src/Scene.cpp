@@ -8,13 +8,14 @@ Scene::Scene() {
 }
 
 void Scene::render() {
+    glColor3f(0.6, 0.6, 0.6);
     std::list<Mesh*>::iterator mIter;
     for(mIter = meshes.begin(); mIter != meshes.end(); mIter++){
         std::list<Face*>::iterator fIter;
         int i = 0;
         for(fIter = (*mIter)->faces.begin(); fIter != (*mIter)->faces.end(); fIter++) {
             std::cout << "face: " << (*fIter)->getId();
-            if (i == 0) {
+            /*if (i == 0) {
                 glColor3f(0.0, 0.0, 0.0);
                 //i++;
                 //continue;
@@ -31,12 +32,13 @@ void Scene::render() {
                 glColor3f(0.5, 1.0, 0.0);
             else
                 glColor3f(1.0, 0.5, 0.0);
-            i++;
+            i++;*/
             std::list<Loop*>::iterator lIter;
 
             for (lIter = (*fIter)->loops.begin(); lIter != (*fIter)->loops.end(); lIter++) {
                 std::cout << "  loop: " << std::endl;
                 HalfEdge *he = (*lIter)->hed;
+                glNormal3f((*lIter)->normal.x, (*lIter)->normal.y, (*lIter)->normal.z);
                 glBegin(GL_POLYGON);
                 do {
                     Vertex *vert = he->origin;
@@ -182,6 +184,8 @@ void Scene::lmef(HalfEdge *h1, HalfEdge *h2) {
 
     l->hed = nhe1;
     h2->loop->hed = nhe2;
+
+    l->setNormal();
 }
 
 bool Scene::mev(int idSolid, int idFace1, int idFace2, int idVertex1,

@@ -159,6 +159,7 @@ void GLCanvas::addCylinder(float pX, float pY, float pZ, float radius, float hei
 void GLCanvas::init()
 {
     addCube(-2, -2, 2, 4);
+    addCube(3, -2, 2, 4);
     //addCorner(2, 2, 2, 5, 5, 5, 8, 1, 5);
     //addCylinder(-1.0, -1.0, -1.0, 2.0, 3.0, 10);
 

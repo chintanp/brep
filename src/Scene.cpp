@@ -2,7 +2,6 @@
 #include <GL/gl.h>
 #include <iostream>
 int Scene::numMeshes = 0;
-int Scene::numFaces = 0;
 int Scene::numVertices = 0;
 
 Scene::Scene() {
@@ -116,7 +115,7 @@ void Scene::mvfs(float x, float y, float z) {
 
     m = new Mesh(Scene::numMeshes++);
     std::cout << "criado mesh: " << m->id << std::endl;
-    f = new Face(m, Scene::numFaces++);
+    f = new Face(m);
     std::cout << "criada face: " << f->id << std::endl;
     l = new Loop(f);
     v = new Vertex(x, y, z, m, Scene::numVertices++);
@@ -161,7 +160,7 @@ void Scene::lmef(HalfEdge *h1, HalfEdge *h2) {
     Edge *e;
     HalfEdge *he, *nhe1, *nhe2, *temp;
 
-    f = new Face(h1->loop->face->solid, Scene::numFaces++);
+    f = new Face(h1->loop->face->solid);
     l = new Loop(f);
     e = new Edge(h1->loop->face->solid);
     f->outter = l;

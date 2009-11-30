@@ -1,6 +1,7 @@
 #include "Mesh.h"
 
 Mesh::Mesh(int id) : id(id), initialized(false) {
+    numFaces = 0;
 }
 
 int Mesh::getId() {
@@ -35,6 +36,7 @@ void Mesh::addVertex(Vertex *v) {
 
 void Mesh::addFace(Face *f) {
     faces.push_back(f);
+    numFaces++;
 }
 
 void Mesh::addEdge(Edge *e) {

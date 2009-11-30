@@ -1,7 +1,7 @@
 #include "Face.h"
 #include "Mesh.h"
 
-Face::Face(Mesh *m, int id) : solid(m), id(id)  {
+Face::Face(Mesh *m) : solid(m), id(m->numFaces)  {
     solid->addFace(this);
 }
 

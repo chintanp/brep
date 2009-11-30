@@ -36,7 +36,6 @@ public:
     std::list<Mesh*> meshes;
 
     static int numMeshes;
-    static int numFaces;
     static int numVertices;
 
     BoundingBox bbox;

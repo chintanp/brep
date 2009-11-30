@@ -7,7 +7,7 @@ class Mesh;
 
 class Face {
 public:
-    Face(Mesh *m, int id);
+    Face(Mesh *m);
     
     void addLoop(Loop *l);
     

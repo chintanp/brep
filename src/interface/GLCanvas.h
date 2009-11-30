@@ -39,8 +39,9 @@ private:
     void onMouseLeftUp(wxMouseEvent& event);
     void onMouseMove(wxMouseEvent& event);
     void onMouseWheel(wxMouseEvent& event);
-
     DECLARE_EVENT_TABLE()
+
+    void selectPicking(int x, int y);
 
 
 private:

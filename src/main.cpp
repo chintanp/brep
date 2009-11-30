@@ -1,16 +1,3 @@
-#include <iostream>
-#include "Scene.h"
-
-#include "Vertex.h"
-#include "HalfEdge.h"
-#include "Loop.h"
-#include "Face.h"
-#include "Mesh.h"
-#include "Edge.h"
-
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glut.h>
 /*
 void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

@@ -173,15 +173,10 @@ void GLCanvas::addCylinder(float pX, float pY, float pZ, float radius, float hei
 
 void GLCanvas::init()
 {
-    //addCube(-2, -2, 2, 4);
+    addCube(-2, -2, 2, 4);
     //addCorner(2, 2, 2, 5, 5, 5, 8, 1, 5);
-
-    addCylinder(0.0, 0.0, 0.0, 2.0, 3.0, 7);
-
+    //addCylinder(0.0, 0.0, 0.0, 2.0, 3.0, 7);
     //addCylinder(-1.0, -1.0, -1.0, 2.0, 3.0, 5);
-
-
-
 
     glClearColor(1.0, 1.0, 1.0, 1.0);
     glEnable( GL_DEPTH_TEST );
@@ -331,6 +326,43 @@ void GLCanvas::clear() {
 
 void GLCanvas::onMouseLeftUp(wxMouseEvent &event) {
     camera.reset();
+    wxPoint mouse;
+    event.GetPosition( &mouse.x, &mouse.y );
+
+    wxPoint windowSize;
+    GetClientSize( &windowSize.x, &windowSize.y );
+    selectPicking(mouse.x, windowSize.y - mouse.y);
+}
+
+void GLCanvas::selectPicking(int x, int y) {
+    int buff[64] = {0};
+    int hits, view[4];
+
+    glSelectBuffer(64, buff);
+    glGetIntegerv(GL_VIEWPORT, view);
+
+    glRenderMode(GL_SELECT);
+    glInitNames();
+    glPushName(0);
+
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    gluPickMatrix(x, y, 1.0, 1.0, view);
+    glFrustum(camera.frustum.left, camera.frustum.right, camera.frustum.bottom, 
+              camera.frustum.top, camera.frustum.near, camera.frustum.far);
+    glMatrixMode(GL_MODELVIEW);
+    render();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+
+    hits = glRenderMode(GL_RENDER);
+    
+    Loop *l = scene.getLoop(buff[3]);
+    l->r = 1.0;
+    l->g = 0.0;
+    l->b = 0.0;
+    glMatrixMode(GL_MODELVIEW);
 }
 
 void GLCanvas::onMouseMove(wxMouseEvent &event)

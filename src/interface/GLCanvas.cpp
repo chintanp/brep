@@ -346,7 +346,7 @@ void GLCanvas::selectPicking(int x, int y) {
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
-    gluPickMatrix(x, y, 0.000001, 0.00001, view);
+    gluPickMatrix(x, y, 1.0, 1.0, view);
     //gluPerspective(60, 1.0, 0.0001, 1000.0);
     glFrustum(camera.frustum.left, camera.frustum.right, camera.frustum.bottom, camera.frustum.top,
                   camera.frustum.near, camera.frustum.far);

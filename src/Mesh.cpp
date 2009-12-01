@@ -1,6 +1,7 @@
 #include "Mesh.h"
 
 Mesh::Mesh(int id) : id(id), initialized(false) {
+    r = g = b = 0.6;
     numFaces = 0;
 }
 

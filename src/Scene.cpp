@@ -9,12 +9,13 @@ Scene::Scene() {
 
 void Scene::render() {
     std::list<Mesh*>::iterator mIter;
-    int i = 0;
     for(mIter = meshes.begin(); mIter != meshes.end(); mIter++){
         std::list<Face*>::iterator fIter;
-        //int i = 0;
+        //glLoadName((*mIter)->id);
+        int i = 1;
+        glColor3f((*mIter)->r,(*mIter)->g, (*mIter)->b);
         for(fIter = (*mIter)->faces.begin(); fIter != (*mIter)->faces.end(); fIter++) {
-            std::cout << "face: " << (*fIter)->getId();
+            //std::cout << "face: " << (*fIter)->getId();
             /*if (i == 0) {
                 glColor3f(0.0, 0.0, 0.0);
                 //i++;
@@ -36,22 +37,22 @@ void Scene::render() {
             std::list<Loop*>::iterator lIter;
             
             for (lIter = (*fIter)->loops.begin(); lIter != (*fIter)->loops.end(); lIter++) {
-                std::cout << "  loop: " << std::endl;
+                //std::cout << "  loop: " << std::endl;
                 HalfEdge *he = (*lIter)->hed;
 
                 (*lIter)->id = i;
                 glLoadName(i);
+                i++;
                 glColor3f((*lIter)->r, (*lIter)->g, (*lIter)->b);
                 glNormal3f((*lIter)->normal.x, (*lIter)->normal.y, (*lIter)->normal.z);
                 glBegin(GL_POLYGON);
                 do {
                     Vertex *vert = he->origin;
-                    std::cout << "\t vertice " << vert->getId() << ": " << vert->x << ", " << vert->y << ", " << vert->z << std::endl;
+                    //std::cout << "\t vertice " << vert->getId() << ": " << vert->x << ", " << vert->y << ", " << vert->z << std::endl;
                     glVertex3f(vert->x, vert->y, vert->z);
                 }while((he = he->next) != (*lIter)->hed);
                 glEnd();
-                std::cout << std::endl;
-                i++;
+                //std::cout << std::endl;
             }
         }
     }
@@ -109,6 +110,7 @@ Loop* Scene::getLoop(int id) {
                     return *lIter;
         }
     }
+    return NULL;
 }
 
 HalfEdge* Scene::getHEd(Face *f, int idVertex1) {

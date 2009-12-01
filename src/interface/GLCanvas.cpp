@@ -173,9 +173,9 @@ void GLCanvas::addCylinder(float pX, float pY, float pZ, float radius, float hei
 
 void GLCanvas::init()
 {
-    addCube(-2, -2, 2, 4);
+    //addCube(-2, -2, 2, 4);
     //addCorner(2, 2, 2, 5, 5, 5, 8, 1, 5);
-    //addCylinder(0.0, 0.0, 0.0, 2.0, 3.0, 7);
+    addCylinder(0.0, 0.0, 0.0, 2.0, 3.0, 7);
     //addCylinder(-1.0, -1.0, -1.0, 2.0, 3.0, 5);
 
     glClearColor(1.0, 1.0, 1.0, 1.0);
@@ -251,14 +251,12 @@ void GLCanvas::render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    renderBackground();
+    //renderBackground();
 
     float m[16];
     camera.setupViewMatrix(m);
     glTranslatef(-camera.pos.x, -camera.pos.y, -camera.pos.z);
     glMultMatrixf(m);
-
-
 
     Vec3 center((scene.bbox.pMin.x + scene.bbox.pMax.x),
                 (scene.bbox.pMin.y + scene.bbox.pMax.y),
@@ -348,21 +346,46 @@ void GLCanvas::selectPicking(int x, int y) {
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
-    gluPickMatrix(x, y, 1.0, 1.0, view);
-    glFrustum(camera.frustum.left, camera.frustum.right, camera.frustum.bottom, 
-              camera.frustum.top, camera.frustum.near, camera.frustum.far);
+    gluPickMatrix(x, y, 0.000001, 0.00001, view);
+    //gluPerspective(60, 1.0, 0.0001, 1000.0);
+    glFrustum(camera.frustum.left, camera.frustum.right, camera.frustum.bottom, camera.frustum.top,
+                  camera.frustum.near, camera.frustum.far);
     glMatrixMode(GL_MODELVIEW);
-    render();
+    SwapBuffers();
+    scene.render();
+
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
 
     hits = glRenderMode(GL_RENDER);
     
-    Loop *l = scene.getLoop(buff[3]);
+    std::cout << "hits: "  << hits << std::endl;
+    int nearest = buff[3];
+    int nearestZ = buff[1];
+    for (int i = 1; i < hits; i++) {
+        if (nearestZ > buff[4*i + 1]) {
+            nearestZ = buff[4*i + 1];
+            nearest = buff[4*i + 3];
+        }
+    }
+
+    for (int i = 0; i < hits; i++) {
+        std::cout << "Number: " << buff[i*4] << std::endl;
+        std::cout << "Min z: " << buff[i*4 + 1] << std::endl;
+        std::cout << "Max z: " << buff[i*4 + 2] << std::endl;
+        std::cout << "Name: " << buff[i*4+3] << std::endl;
+    }
+
+    std::cout << "face escolhida: " << nearest << std::endl;
+    glMatrixMode(GL_MODELVIEW);
+    Loop *l = scene.getLoop(nearest);
+    if (!l)
+        return;
     l->r = 1.0;
     l->g = 0.0;
     l->b = 0.0;
-    glMatrixMode(GL_MODELVIEW);
+    
+    Refresh();
 }
 
 void GLCanvas::onMouseMove(wxMouseEvent &event)
@@ -377,6 +400,8 @@ void GLCanvas::onMouseMove(wxMouseEvent &event)
     if ( event.Dragging() )
     {
         camera.updateRotation(mouse.x,mouse.y, windowSize.x, windowSize.y);
+        Refresh();
+        event.Skip();
         //static std::string temp;
         //temp = manipulator->update( mouse.x, mouse.y, windowSize.x, windowSize.y );
         //msg = wxString::FromAscii( temp.c_str() );
@@ -387,9 +412,6 @@ void GLCanvas::onMouseMove(wxMouseEvent &event)
     //    msg.Printf(_("Mouse Position: ( %d, %d )"), mouse.x, mouse.y );
         //parent->SetStatusText( msg, 1 );
     //}
-
-    Refresh();
-    event.Skip();
 }
 
 void GLCanvas::onMouseWheel(wxMouseEvent& event)

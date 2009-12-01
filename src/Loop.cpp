@@ -10,13 +10,13 @@ Loop::Loop(Face *f) {
 
 void Loop::setNormal() {
     HalfEdge *h = this->hed;
-    HalfEdge *h2 = h->mate();
+    HalfEdge *h2 = h->next;
     Vec3 v(h2->origin->x - h->origin->x,
            h2->origin->y - h->origin->y,
            h2->origin->z - h->origin->z);
 
     while((h = h->next) != this->hed) {
-        h2 = h->mate();
+        h2 = h->next;
         Vec3 u(h2->origin->x - h->origin->x,
                h2->origin->y - h->origin->y,
                h2->origin->z - h->origin->z);

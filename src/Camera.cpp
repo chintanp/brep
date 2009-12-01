@@ -38,7 +38,7 @@ void Camera::updateRotation(int mouseX, int mouseY,
     {
         mapTrackball(mouseX, mouseY, windowWidth, windowHeight);
         float ang = angle(currPos, lastPos);
-        std::cout << "angle: " << ang << std::endl;
+        //std::cout << "angle: " << ang << std::endl;
         Vec3 axis = normalize(cross(currPos, lastPos));
         rotate(axis, ang);
         lastPos = currPos;

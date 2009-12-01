@@ -28,6 +28,8 @@ public:
     int id;
     BoundingBox bb;
     bool initialized;
+
+    float r, g, b;
 };
 
 #endif

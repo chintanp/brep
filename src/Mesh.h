@@ -19,6 +19,7 @@ public:
     void addEdge(Edge *e);
 
     int numFaces;
+    int numVertices;
 
 //TODO: encapsulamento
     std::list<Vertex*> vertices;

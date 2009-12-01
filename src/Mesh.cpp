@@ -3,6 +3,7 @@
 Mesh::Mesh(int id) : id(id), initialized(false) {
     r = g = b = 0.6;
     numFaces = 0;
+    numVertices = 0;
 }
 
 int Mesh::getId() {
@@ -31,8 +32,9 @@ void Mesh::addVertex(Vertex *v) {
         if (bb.pMax.z < v->z)
             bb.pMax.z = v->z;
         if (bb.pMin.z > v->z)
-            bb.pMin.z = v->z;       
+            bb.pMin.z = v->z;
     }
+    numVertices++;
 }
 
 void Mesh::addFace(Face *f) {

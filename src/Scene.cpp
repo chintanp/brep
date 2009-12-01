@@ -2,7 +2,6 @@
 #include <GL/gl.h>
 #include <iostream>
 int Scene::numMeshes = 0;
-int Scene::numVertices = 0;
 
 Scene::Scene() {
 }
@@ -10,12 +9,13 @@ Scene::Scene() {
 void Scene::render() {
     std::list<Mesh*>::iterator mIter;
     for(mIter = meshes.begin(); mIter != meshes.end(); mIter++){
+        std::cout << "Mesh: " << (*mIter)->getId() << std::endl;
         std::list<Face*>::iterator fIter;
         //glLoadName((*mIter)->id);
         int i = 1;
         glColor3f((*mIter)->r,(*mIter)->g, (*mIter)->b);
         for(fIter = (*mIter)->faces.begin(); fIter != (*mIter)->faces.end(); fIter++) {
-            //std::cout << "face: " << (*fIter)->getId();
+            std::cout << "face: " << (*fIter)->getId();
             /*if (i == 0) {
                 glColor3f(0.0, 0.0, 0.0);
                 //i++;
@@ -35,9 +35,9 @@ void Scene::render() {
                 glColor3f(1.0, 0.5, 0.0);
             i++;*/
             std::list<Loop*>::iterator lIter;
-            
+
             for (lIter = (*fIter)->loops.begin(); lIter != (*fIter)->loops.end(); lIter++) {
-                //std::cout << "  loop: " << std::endl;
+                std::cout << "  loop: " << std::endl;
                 HalfEdge *he = (*lIter)->hed;
 
                 (*lIter)->id = i;
@@ -48,11 +48,11 @@ void Scene::render() {
                 glBegin(GL_POLYGON);
                 do {
                     Vertex *vert = he->origin;
-                    //std::cout << "\t vertice " << vert->getId() << ": " << vert->x << ", " << vert->y << ", " << vert->z << std::endl;
+                    std::cout << "\t vertice " << vert->getId() << ": " << vert->x << ", " << vert->y << ", " << vert->z << std::endl;
                     glVertex3f(vert->x, vert->y, vert->z);
                 }while((he = he->next) != (*lIter)->hed);
                 glEnd();
-                //std::cout << std::endl;
+                std::cout << std::endl;
             }
         }
     }
@@ -105,8 +105,8 @@ Loop* Scene::getLoop(int id) {
         std::list<Face*>::iterator fIter;
         for(fIter = (*mIter)->faces.begin(); fIter != (*mIter)->faces.end(); fIter++) {
             std::list<Loop*>::iterator lIter;
-            for (lIter = (*fIter)->loops.begin(); lIter != (*fIter)->loops.end(); lIter++) 
-                if((*lIter)->id == id) 
+            for (lIter = (*fIter)->loops.begin(); lIter != (*fIter)->loops.end(); lIter++)
+                if((*lIter)->id == id)
                     return *lIter;
         }
     }
@@ -140,7 +140,7 @@ void Scene::mvfs(float x, float y, float z) {
     f = new Face(m);
     std::cout << "criada face: " << f->id << std::endl;
     l = new Loop(f);
-    v = new Vertex(x, y, z, m, Scene::numVertices++);
+    v = new Vertex(x, y, z, m);
     std::cout << "criado vertex: " << v->id << std::endl;
     he = new HalfEdge;
 
@@ -159,7 +159,9 @@ void Scene::lmev(HalfEdge *he1, HalfEdge *he2, float x,
                 float y, float z)
 {
     HalfEdge *he;
-    Vertex *v = new Vertex(x, y, z, he1->loop->face->solid, Scene::numVertices++);
+    Face *f = he1->loop->face;
+
+    Vertex *v = new Vertex(x, y, z, he1->loop->face->solid);
     Edge *e = new Edge(he1->loop->face->solid);
 
     he = he1;
@@ -172,7 +174,7 @@ void Scene::lmev(HalfEdge *he1, HalfEdge *he2, float x,
 
     v->hed = he2->prev;
     he2->origin->hed = he2;
-    
+
     updateBoundingBox();
 }
 

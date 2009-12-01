@@ -132,38 +132,46 @@ void GLCanvas::addCorner(float minX, float minY, float minZ,
 
 void GLCanvas::addCylinder(float pX, float pY, float pZ, float radius, float heigth, int disc)
 {
+    int num = 0;
+
     scene.mvfs(radius*cos(0) + pX, pY, radius*sin(0) + pZ);
 
     for(float i = 2.0*M_PI/(float)disc; i <= 2.0*M_PI; i+= 2.0*M_PI/(float)disc)
     {
         if(i+ 2.0*M_PI/(float)disc >= 2.0*M_PI)
         {
-            scene.smev(Scene::numMeshes - 1, 0, Scene::numVertices - 1, radius*cos(i) + pX, pY, radius*sin(i) + pZ);
-            scene.smef(Scene::numMeshes - 1, 0, Scene::numVertices - 1, 0);
+            scene.smev(Scene::numMeshes - 1, 0, num, radius*cos(i) + pX, pY, radius*sin(i) + pZ);
+            num++;
+            scene.smef(Scene::numMeshes - 1, 0, num, 0);
         }
         else
-            scene.smev(Scene::numMeshes - 1, 0, Scene::numVertices - 1, radius*cos(i) + pX, pY, radius*sin(i) + pZ);
+        {
+            scene.smev(Scene::numMeshes - 1, 0, num, radius*cos(i) + pX, pY, radius*sin(i) + pZ);
+            num++;
+        }
     }
 
-    int ult = Scene::numVertices - 1;
+    int ult = num;
     int aux = 0;
 
     scene.smev(Scene::numMeshes - 1, 0, aux, radius*cos(0) + pX, pY + heigth, radius*sin(0) + pZ);
+    num++;
     aux++;
 
     for(float i = 2.0*M_PI/(float)disc; i <= 2.0*M_PI; i+= 2.0*M_PI/(float)disc)
     {
         if(i+ 2.0*M_PI/(float)disc >= 2.0*M_PI)
         {
-            scene.smev(Scene::numMeshes - 1, 0, Scene::numVertices - 1, radius*cos(i) + pX, pY + heigth, radius*sin(i) + pZ);
-            scene.smef(Scene::numMeshes - 1, 0, Scene::numVertices - 1, aux);
-
-            scene.smef(Scene::numMeshes - 1, 0, Scene::numVertices - 1, ult+1);
+            scene.smev(Scene::numMeshes - 1, 0, num, radius*cos(i) + pX, pY + heigth, radius*sin(i) + pZ);
+            num++;
+            scene.smef(Scene::numMeshes - 1, 0, num, aux);
+            scene.smef(Scene::numMeshes - 1, 0, num++, ult+1);
         }
         else
         {
-            scene.smev(Scene::numMeshes - 1, 0, Scene::numVertices - 1, radius*cos(i) + pX, pY + heigth, radius*sin(i) + pZ);
-            scene.smef(Scene::numMeshes - 1, 0, Scene::numVertices - 1, aux);
+            scene.smev(Scene::numMeshes - 1, 0, num, radius*cos(i) + pX, pY + heigth, radius*sin(i) + pZ);
+            num++;
+            scene.smef(Scene::numMeshes - 1, 0, num, aux);
             aux++;
         }
     }
@@ -175,8 +183,9 @@ void GLCanvas::init()
 {
     //addCube(-2, -2, 2, 4);
     //addCorner(2, 2, 2, 5, 5, 5, 8, 1, 5);
-    addCylinder(0.0, 0.0, 0.0, 2.0, 3.0, 7);
-    //addCylinder(-1.0, -1.0, -1.0, 2.0, 3.0, 5);
+
+    addCylinder(0.0, 0.0, 0.0, 2.0, 3.0, 4);
+    addCylinder(-5.0, -1.0, -1.0, 2.0, 3.0, 5);
 
     glClearColor(1.0, 1.0, 1.0, 1.0);
     glEnable( GL_DEPTH_TEST );
@@ -333,7 +342,7 @@ void GLCanvas::onMouseLeftUp(wxMouseEvent &event) {
 }
 
 void GLCanvas::selectPicking(int x, int y) {
-    int buff[64] = {0};
+    GLuint buff[64] = {0};
     int hits, view[4];
 
     glSelectBuffer(64, buff);
@@ -358,7 +367,7 @@ void GLCanvas::selectPicking(int x, int y) {
     glPopMatrix();
 
     hits = glRenderMode(GL_RENDER);
-    
+
     std::cout << "hits: "  << hits << std::endl;
     int nearest = buff[3];
     int nearestZ = buff[1];
@@ -384,7 +393,7 @@ void GLCanvas::selectPicking(int x, int y) {
     l->r = 1.0;
     l->g = 0.0;
     l->b = 0.0;
-    
+
     Refresh();
 }
 

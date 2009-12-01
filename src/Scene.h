@@ -31,13 +31,12 @@ public:
     bool mef(int idSolid, int idFace, int idVertex1, int idVertex2,
              int idVertex3, int idVertex4);
     bool smef(int idSolid, int idFace, int idVertex1, int idVertex2);
-    
+
     void updateBoundingBox();
 
     std::list<Mesh*> meshes;
 
     static int numMeshes;
-    static int numVertices;
 
     BoundingBox bbox;
 };

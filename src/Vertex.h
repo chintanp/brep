@@ -7,8 +7,8 @@ class Mesh;
 
 class Vertex {
 public:
-    Vertex(float x, float y, float z, Mesh *m, int id);
-    
+    Vertex(float x, float y, float z, Mesh *m);
+
     int getId();
 
     int id;

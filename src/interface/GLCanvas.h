@@ -42,7 +42,9 @@ private:
     DECLARE_EVENT_TABLE()
 
     void selectPicking(int x, int y);
-
+    bool selectFace;
+    bool selectMesh;
+    bool selectVertex;
 
 private:
     wxGLContext *glContext;

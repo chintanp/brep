@@ -4,6 +4,7 @@ Mesh::Mesh(int id) : id(id), initialized(false) {
     r = g = b = 0.6;
     numFaces = 0;
     numVertices = 0;
+    numLoops = 0;
 }
 
 int Mesh::getId() {

@@ -6,54 +6,46 @@ int Scene::numMeshes = 0;
 Scene::Scene() {
 }
 
-void Scene::render() {
-    std::list<Mesh*>::iterator mIter;
-    for(mIter = meshes.begin(); mIter != meshes.end(); mIter++){
-        std::cout << "Mesh: " << (*mIter)->getId() << std::endl;
-        std::list<Face*>::iterator fIter;
-        //glLoadName((*mIter)->id);
-        int i = 1;
-        glColor3f((*mIter)->r,(*mIter)->g, (*mIter)->b);
-        for(fIter = (*mIter)->faces.begin(); fIter != (*mIter)->faces.end(); fIter++) {
-            std::cout << "face: " << (*fIter)->getId();
-            /*if (i == 0) {
-                glColor3f(0.0, 0.0, 0.0);
-                //i++;
-                //continue;
+void Scene::render(RenderMode mode) {
+    if (mode == FACES) {
+        std::list<Mesh*>::iterator mIter;
+        for(mIter = meshes.begin(); mIter != meshes.end(); mIter++){
+            std::list<Face*>::iterator fIter;
+            glPushName((*mIter)->id);
+            glColor3f((*mIter)->r,(*mIter)->g, (*mIter)->b);
+            for(fIter = (*mIter)->faces.begin(); fIter != (*mIter)->faces.end(); fIter++) {
+                std::list<Loop*>::iterator lIter;
+                for (lIter = (*fIter)->loops.begin(); lIter != (*fIter)->loops.end(); lIter++) {
+                    HalfEdge *he = (*lIter)->hed;
+                    glPushName((*lIter)->id);
+                    glColor3f((*lIter)->r, (*lIter)->g, (*lIter)->b);
+                    glNormal3f((*lIter)->normal.x, (*lIter)->normal.y, (*lIter)->normal.z);
+                    glBegin(GL_POLYGON);
+                    do {
+                        Vertex *vert = he->origin;
+                        glVertex3f(vert->x, vert->y, vert->z);
+                    }while((he = he->next) != (*lIter)->hed);
+                    glEnd();
+                    glPopName();
+                }
             }
-            else if (i == 1)
-                glColor3f(1.0, 0.0, 0.0);
-            else if (i == 2)
-                glColor3f(0.0, 1.0, 0.0);
-            else if (i == 3)
-                glColor3f(0.0, 0.0, 1.0);
-            else if (i  == 4)
-                glColor3f(1.0, 1.0, 0.0);
-            else if (i  == 5)
-                glColor3f(0.5, 1.0, 0.0);
-            else
-                glColor3f(1.0, 0.5, 0.0);
-            i++;*/
-            std::list<Loop*>::iterator lIter;
-
-            for (lIter = (*fIter)->loops.begin(); lIter != (*fIter)->loops.end(); lIter++) {
-                std::cout << "  loop: " << std::endl;
-                HalfEdge *he = (*lIter)->hed;
-
-                (*lIter)->id = i;
-                glLoadName(i);
-                i++;
-                glColor3f((*lIter)->r, (*lIter)->g, (*lIter)->b);
-                glNormal3f((*lIter)->normal.x, (*lIter)->normal.y, (*lIter)->normal.z);
-                glBegin(GL_POLYGON);
-                do {
-                    Vertex *vert = he->origin;
-                    std::cout << "\t vertice " << vert->getId() << ": " << vert->x << ", " << vert->y << ", " << vert->z << std::endl;
-                    glVertex3f(vert->x, vert->y, vert->z);
-                }while((he = he->next) != (*lIter)->hed);
+            glPopName();
+        }
+    } else if (mode == POINTS) {
+        std::list<Mesh*>::iterator mIter;
+        for(mIter = meshes.begin(); mIter != meshes.end(); mIter++){
+            std::list<Vertex*>::iterator vIter;
+            glPushName((*mIter)->id);
+            glColor3f((*mIter)->r,(*mIter)->g, (*mIter)->b);
+            for(vIter = (*mIter)->vertices.begin(); vIter != (*mIter)->vertices.end(); vIter++) {
+                glPushName((*vIter)->id);
+                glColor3f((*vIter)->r, (*vIter)->g, (*vIter)->b);
+                glBegin(GL_POINTS);
+                glVertex3f((*vIter)->x, (*vIter)->y, (*vIter)->z);
                 glEnd();
-                std::cout << std::endl;
+                glPopName();
             }
+            glPopName();
         }
     }
 }
@@ -99,17 +91,24 @@ HalfEdge* Scene::getHEd(Face *f, int idVertex1, int idVertex2) {
     return NULL;
 }
 
-Loop* Scene::getLoop(int id) {
-    std::list<Mesh*>::iterator mIter;
-    for(mIter = meshes.begin(); mIter != meshes.end(); mIter++){
-        std::list<Face*>::iterator fIter;
-        for(fIter = (*mIter)->faces.begin(); fIter != (*mIter)->faces.end(); fIter++) {
-            std::list<Loop*>::iterator lIter;
-            for (lIter = (*fIter)->loops.begin(); lIter != (*fIter)->loops.end(); lIter++)
-                if((*lIter)->id == id)
-                    return *lIter;
-        }
+Loop* Scene::getLoop(int solidId, int id) {
+    Mesh *m = getSolid(solidId);
+    std::list<Face*>::iterator fIter;
+    for(fIter = m->faces.begin(); fIter != m->faces.end(); fIter++) {
+        std::list<Loop*>::iterator lIter;
+        for (lIter = (*fIter)->loops.begin(); lIter != (*fIter)->loops.end(); lIter++)
+            if((*lIter)->id == id)
+                return *lIter;
     }
+    return NULL;
+}
+
+Vertex* Scene::getVertex(int solidId, int id) {
+    Mesh *m = getSolid(solidId);
+    std::list<Vertex*>::iterator vIter;
+    for(vIter = m->vertices.begin(); vIter != m->vertices.end(); vIter++)
+        if((*vIter)->id == id)
+            return *vIter;
     return NULL;
 }
 

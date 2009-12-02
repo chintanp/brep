@@ -1,9 +1,13 @@
 #include "Loop.h"
 #include "Face.h"
+#include "Mesh.h"
 
 Loop::Loop(Face *f) {
     face = f;
     face->addLoop(this);
+
+    this->id = f->solid->numLoops++;
+
 
     r = g = b= 0.6;
 }

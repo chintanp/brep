@@ -15,6 +15,8 @@ public:
     float x, y, z;
     //Ponteiro para a half edge que sai desse vértice
     HalfEdge *hed;
+
+    float r, g, b;
 };
 
 #endif

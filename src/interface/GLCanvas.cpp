@@ -17,6 +17,9 @@ GLCanvas::GLCanvas(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wx
 wxGLCanvas(parent, id, pos, size, style, name,  attribList)
 {
    glContext = new wxGLContext(this);
+   selectFace = true;
+   selectMesh = false;
+   selectVertex = false;
 }
 
 GLCanvas::~GLCanvas()
@@ -184,7 +187,7 @@ void GLCanvas::init()
     //addCube(-2, -2, 2, 4);
     //addCorner(2, 2, 2, 5, 5, 5, 8, 1, 5);
 
-    addCylinder(0.0, 0.0, 0.0, 2.0, 3.0, 4);
+    addCylinder(0.0, 0.0, 0.0, 2.0, 3.0, 8);
     addCylinder(-5.0, -1.0, -1.0, 2.0, 3.0, 5);
 
     glClearColor(1.0, 1.0, 1.0, 1.0);
@@ -197,6 +200,8 @@ void GLCanvas::init()
     glLineWidth( 2.0 );
     glEnable( GL_POLYGON_SMOOTH );
     glEnable(GL_POLYGON_OFFSET_FILL);
+    glEnable(GL_POINT_SMOOTH);
+    glPointSize(2.0);
 
     glShadeModel(GL_SMOOTH);
     glEnable(GL_LIGHTING);
@@ -272,7 +277,8 @@ void GLCanvas::render()
                 (scene.bbox.pMin.z + scene.bbox.pMax.z));
     glTranslatef(-center.x, -center.y, -center.z);
     if(!scene.isEmpty()) {
-        scene.render();
+        scene.render(FACES);
+        scene.render(POINTS);
     }
 
     //glFlush();
@@ -342,10 +348,10 @@ void GLCanvas::onMouseLeftUp(wxMouseEvent &event) {
 }
 
 void GLCanvas::selectPicking(int x, int y) {
-    GLuint buff[64] = {0};
+    GLuint buff[512] = {0};
     int hits, view[4];
 
-    glSelectBuffer(64, buff);
+    glSelectBuffer(512, buff);
     glGetIntegerv(GL_VIEWPORT, view);
 
     glRenderMode(GL_SELECT);
@@ -361,7 +367,8 @@ void GLCanvas::selectPicking(int x, int y) {
                   camera.frustum.near, camera.frustum.far);
     glMatrixMode(GL_MODELVIEW);
     SwapBuffers();
-    scene.render();
+    if(selectFace)
+        scene.render(FACES);
 
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
@@ -369,30 +376,56 @@ void GLCanvas::selectPicking(int x, int y) {
     hits = glRenderMode(GL_RENDER);
 
     std::cout << "hits: "  << hits << std::endl;
-    int nearest = buff[3];
+    //int nearestMesh = buff[3];
+    //int nearestFace = buff[4];
+    //int nearestVertex = buff[5];
+    int nearestMesh = buff[4];
+    int nearestFace = buff[5];
     int nearestZ = buff[1];
     for (int i = 1; i < hits; i++) {
-        if (nearestZ > buff[4*i + 1]) {
-            nearestZ = buff[4*i + 1];
-            nearest = buff[4*i + 3];
+        if (nearestZ > buff[6*i + 1]) {
+            nearestZ = buff[6*i + 1];
+            //nearestMesh = buff[6*i + 3];
+            //nearestFace = buff[6*i + 4];
+            //nearestVertex = buff[6*i + 5];
+            nearestMesh = buff[6*i + 4];
+            nearestFace = buff[6*i + 5];
         }
     }
 
     for (int i = 0; i < hits; i++) {
-        std::cout << "Number: " << buff[i*4] << std::endl;
-        std::cout << "Min z: " << buff[i*4 + 1] << std::endl;
-        std::cout << "Max z: " << buff[i*4 + 2] << std::endl;
-        std::cout << "Name: " << buff[i*4+3] << std::endl;
+        std::cout << "hit: " << i << std::endl;
+        std::cout << "\tNumber: " << buff[i*6] << std::endl;
+        std::cout << "\tMin z: " << buff[i*6 + 1] << std::endl;
+        std::cout << "\tMax z: " << buff[i*6 + 2] << std::endl;
+        std::cout << "\tName Mesh: " << buff[i*6+3] << std::endl;
+        std::cout << "\tName Face: " << buff[i*6+4] << std::endl;
+        //std::cout << "\tName Vertex: " << buff[i*6+5] << std::endl;
     }
 
-    std::cout << "face escolhida: " << nearest << std::endl;
+    std::cout << "mesh escolhido: " << nearestMesh << std::endl;
+    std::cout << "face escolhido: " << nearestFace << std::endl;
+    //std::cout << "vertex escolhido: " << nearestVertex << std::endl;
+
     glMatrixMode(GL_MODELVIEW);
-    Loop *l = scene.getLoop(nearest);
-    if (!l)
+    if (hits == 0)
         return;
-    l->r = 1.0;
-    l->g = 0.0;
-    l->b = 0.0;
+    Mesh *m = scene.getSolid(nearestMesh);
+    Loop *l = scene.getLoop(m->id, nearestFace);
+
+    //Vertex *v = scene.getVertex(m->id, nearestVertex);
+    //TODO considerar seleção de vertice e mesh
+    if (selectFace == true) {
+        l->r = 1.0;
+        l->g = 0.0;
+        l->b = 0.0;
+    } //else if (selectMesh == true) {  
+    //}
+    //else if (selectVertex){
+    //}
+    //else if (selectEdge){
+    //}
+
 
     Refresh();
 }

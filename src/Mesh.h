@@ -20,7 +20,7 @@ public:
 
     int numFaces;
     int numVertices;
-
+    int numLoops;
 //TODO: encapsulamento
     std::list<Vertex*> vertices;
     std::list<Face*> faces;

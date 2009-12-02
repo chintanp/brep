@@ -21,6 +21,7 @@ public:
     int numFaces;
     int numVertices;
     int numLoops;
+    int numEdges;
 //TODO: encapsulamento
     std::list<Vertex*> vertices;
     std::list<Face*> faces;

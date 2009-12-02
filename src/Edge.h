@@ -9,7 +9,9 @@ class Edge {
 public:
     Edge(Mesh *m);
     
+    int id;
     HalfEdge *hed1, *hed2;
+    float r, g, b;
 };
 
 

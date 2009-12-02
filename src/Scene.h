@@ -21,6 +21,7 @@ public:
     HalfEdge* getHEd(Face *f, int idVertex1);
     Loop* getLoop(int idSolid, int id);
     Vertex* getVertex(int idSolid, int id);
+    Edge* getEdge(int idSolid, int id);
 
     void mvfs(float x, float y, float z);
     void lmev(HalfEdge *h1, HalfEdge *he2, float x,

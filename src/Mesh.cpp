@@ -5,6 +5,7 @@ Mesh::Mesh(int id) : id(id), initialized(false) {
     numFaces = 0;
     numVertices = 0;
     numLoops = 0;
+    numEdges = 0;
 }
 
 int Mesh::getId() {
@@ -45,4 +46,5 @@ void Mesh::addFace(Face *f) {
 
 void Mesh::addEdge(Edge *e) {
     edges.push_back(e);
+    numEdges++;
 }

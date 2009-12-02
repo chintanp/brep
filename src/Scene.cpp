@@ -36,16 +36,42 @@ void Scene::render(RenderMode mode) {
         for(mIter = meshes.begin(); mIter != meshes.end(); mIter++){
             std::list<Vertex*>::iterator vIter;
             glPushName((*mIter)->id);
+            //std::cout << "Push mesh: " << (*mIter)->id << std::endl;
+            glBegin(GL_POINTS);
             glColor3f((*mIter)->r,(*mIter)->g, (*mIter)->b);
             for(vIter = (*mIter)->vertices.begin(); vIter != (*mIter)->vertices.end(); vIter++) {
-                glPushName((*vIter)->id);
+                
+                //std::cout << "\nPush vertex: " << (*vIter)->id << std::endl;
                 glColor3f((*vIter)->r, (*vIter)->g, (*vIter)->b);
-                glBegin(GL_POINTS);
+                glPushName((*vIter)->id);
                 glVertex3f((*vIter)->x, (*vIter)->y, (*vIter)->z);
+                glPopName();
+                //std::cout << "\tpop vertex" << std::endl;
+            }
+            glEnd();
+            glPopName();
+            //std::cout << "pop mesh" << std::endl;
+        }
+    } else if (mode == LINES) {
+        std::list<Mesh*>::iterator mIter;
+        for(mIter = meshes.begin(); mIter != meshes.end(); mIter++){
+            std::list<Edge*>::iterator eIter;
+            glPushName((*mIter)->id);
+            //std::cout << "Push mesh: " << (*mIter)->id << std::endl;
+            glColor3f((*mIter)->r,(*mIter)->g, (*mIter)->b);
+            for(eIter = (*mIter)->edges.begin(); eIter != (*mIter)->edges.end(); eIter++) {
+                glColor3f((*eIter)->r,(*eIter)->g, (*eIter)->b);
+                glPushName((*eIter)->id);
+                //std::cout << "\tPush edge: " << (*eIter)->id << std::endl;
+                glBegin(GL_LINES);
+                    glVertex3f((*eIter)->hed1->origin->x, (*eIter)->hed1->origin->y, (*eIter)->hed1->origin->z);
+                    glVertex3f((*eIter)->hed2->origin->x, (*eIter)->hed2->origin->y, (*eIter)->hed2->origin->z);
                 glEnd();
                 glPopName();
+                //std::cout << "\tpop edge" << std::endl;
             }
             glPopName();
+            //std::cout << "pop mesh" << std::endl;
         }
     }
 }
@@ -109,6 +135,15 @@ Vertex* Scene::getVertex(int solidId, int id) {
     for(vIter = m->vertices.begin(); vIter != m->vertices.end(); vIter++)
         if((*vIter)->id == id)
             return *vIter;
+    return NULL;
+}
+
+Edge* Scene::getEdge(int solidId, int id) {
+    Mesh *m = getSolid(solidId);
+    std::list<Edge*>::iterator eIter;
+    for(eIter = m->edges.begin(); eIter != m->edges.end(); eIter++)
+        if((*eIter)->id == id)
+            return *eIter;
     return NULL;
 }
 

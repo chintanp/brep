@@ -279,6 +279,7 @@ void GLCanvas::render()
     if(!scene.isEmpty()) {
         scene.render(FACES);
         scene.render(POINTS);
+        scene.render(LINES);
     }
 
     //glFlush();
@@ -361,24 +362,35 @@ void GLCanvas::selectPicking(int x, int y) {
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
-    gluPickMatrix(x, y, 1.0, 1.0, view);
+    gluPickMatrix(x, y, 5.0, 5.0, view);
     //gluPerspective(60, 1.0, 0.0001, 1000.0);
     glFrustum(camera.frustum.left, camera.frustum.right, camera.frustum.bottom, camera.frustum.top,
                   camera.frustum.near, camera.frustum.far);
     glMatrixMode(GL_MODELVIEW);
     SwapBuffers();
-    if(selectFace)
-        scene.render(FACES);
+    //if(selectFace)
+        scene.render(LINES);
 
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
 
     hits = glRenderMode(GL_RENDER);
+    
+   /*int i = 0;
+    int k = 0;
+    while(i < hits) {
+        numberPrim = buff[k];
+        nearestZ = buff[k + 1];
+        //farestZ = buff[k+2];
+        k +=3;
+        for(int j = 0; j < numberPrim; j++) {
+            primitive[j] = buff[k];
+            k++;
+        }
+    }*/
 
     std::cout << "hits: "  << hits << std::endl;
-    //int nearestMesh = buff[3];
-    //int nearestFace = buff[4];
-    //int nearestVertex = buff[5];
+    //int numberPrim = buff[0];
     int nearestMesh = buff[4];
     int nearestFace = buff[5];
     int nearestZ = buff[1];
@@ -398,8 +410,8 @@ void GLCanvas::selectPicking(int x, int y) {
         std::cout << "\tNumber: " << buff[i*6] << std::endl;
         std::cout << "\tMin z: " << buff[i*6 + 1] << std::endl;
         std::cout << "\tMax z: " << buff[i*6 + 2] << std::endl;
-        std::cout << "\tName Mesh: " << buff[i*6+3] << std::endl;
-        std::cout << "\tName Face: " << buff[i*6+4] << std::endl;
+        for(int j = 0; j < buff[i*6]; j++)
+            std::cout << "\tNo. " << j << ": " << buff[i*6 + 3 + j] << std::endl;
         //std::cout << "\tName Vertex: " << buff[i*6+5] << std::endl;
     }
 
@@ -411,15 +423,18 @@ void GLCanvas::selectPicking(int x, int y) {
     if (hits == 0)
         return;
     Mesh *m = scene.getSolid(nearestMesh);
-    Loop *l = scene.getLoop(m->id, nearestFace);
-
-    //Vertex *v = scene.getVertex(m->id, nearestVertex);
+    //Loop *l = scene.getLoop(m->id, nearestFace);
+    //Vertex *v = scene.getVertex(m->id, nearestFace);
+    Edge *e = scene.getEdge(m->id, nearestFace);
     //TODO considerar seleção de vertice e mesh
-    if (selectFace == true) {
-        l->r = 1.0;
-        l->g = 0.0;
-        l->b = 0.0;
-    } //else if (selectMesh == true) {  
+    e->r = 1.0;
+    e->g = 0.0;
+    e->b = 0.0;
+    //if (selectFace == true) {
+    //  l->r = 1.0;
+    //    l->g = 0.0;
+    //    l->b = 0.0;
+    //} //else if (selectMesh == true) {  
     //}
     //else if (selectVertex){
     //}

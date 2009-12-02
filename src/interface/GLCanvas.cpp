@@ -18,7 +18,8 @@ wxGLCanvas(parent, id, pos, size, style, name,  attribList)
 {
    glContext = new wxGLContext(this);
    selectFace = false;
-   selectMesh = true;
+   selectMesh = false;
+   selectEdge = true;
    selectVertex = false;
 }
 
@@ -41,7 +42,8 @@ void GLCanvas::addCube(float minX, float minY, float minZ, float size)
     //f1 -> front
     scene.smef(Scene::numMeshes - 1, 0, 3, 0);
 
-    //v4
+    scene.sweep(Scene::numMeshes - 1, 0, 0, 0, -size);
+    /*//v4
     scene.smev(Scene::numMeshes - 1, 0, 1, minX+size, minY, minZ-size);
     //v5
     scene.smev(Scene::numMeshes - 1, 0, 2, minX+size, minY+size, minZ-size);
@@ -59,7 +61,7 @@ void GLCanvas::addCube(float minX, float minY, float minZ, float size)
     scene.smef(Scene::numMeshes - 1, 0, 6, 7);
 
     //f1 -> bottom
-    scene.smef(Scene::numMeshes - 1, 0, 7, 4);
+    scene.smef(Scene::numMeshes - 1, 0, 7, 4);*/
 
     return;
 }
@@ -184,11 +186,11 @@ void GLCanvas::addCylinder(float pX, float pY, float pZ, float radius, float hei
 
 void GLCanvas::init()
 {
-    //addCube(-2, -2, 2, 4);
+    addCube(-2, -2, 2, 4);
     //addCorner(2, 2, 2, 5, 5, 5, 8, 1, 5);
 
-    addCylinder(0.0, 0.0, 0.0, 2.0, 3.0, 8);
-    addCylinder(-5.0, -1.0, -1.0, 2.0, 3.0, 5);
+    //addCylinder(0.0, 0.0, 0.0, 2.0, 3.0, 8);
+    //addCylinder(-5.0, -1.0, -1.0, 2.0, 3.0, 5);
 
     glClearColor(1.0, 1.0, 1.0, 1.0);
     glEnable( GL_DEPTH_TEST );
@@ -277,9 +279,9 @@ void GLCanvas::render()
                 (scene.bbox.pMin.z + scene.bbox.pMax.z));
     glTranslatef(-center.x, -center.y, -center.z);
     if(!scene.isEmpty()) {
-        if (selectFace)
-            scene.render(FACES);
-        else if (selectMesh)
+        if (selectMesh)
+            scene.render(MESHES);
+        else
             scene.render(MESHES);
         scene.render(POINTS);
         scene.render(LINES);
@@ -412,7 +414,6 @@ void GLCanvas::selectPicking(int x, int y) {
         return;
     Mesh *m = scene.getSolid(nearestMesh);
     
-    //TODO considerar seleção de vertice e mesh
     if(selectMesh) {
         m->r = 1.0;
         m->g = 0.0;

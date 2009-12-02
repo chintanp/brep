@@ -36,6 +36,8 @@ public:
     bool mef(int idSolid, int idFace, int idVertex1, int idVertex2,
              int idVertex3, int idVertex4);
     bool smef(int idSolid, int idFace, int idVertex1, int idVertex2);
+    
+    void sweep(int idSolid, int idFace, float dx, float dy, float dz);
 
     void updateBoundingBox();
 

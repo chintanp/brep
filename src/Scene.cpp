@@ -37,18 +37,17 @@ void Scene::render(RenderMode mode) {
             std::list<Vertex*>::iterator vIter;
             glPushName((*mIter)->id);
             //std::cout << "Push mesh: " << (*mIter)->id << std::endl;
-            glBegin(GL_POINTS);
             glColor3f((*mIter)->r,(*mIter)->g, (*mIter)->b);
             for(vIter = (*mIter)->vertices.begin(); vIter != (*mIter)->vertices.end(); vIter++) {
-                
                 //std::cout << "\nPush vertex: " << (*vIter)->id << std::endl;
                 glColor3f((*vIter)->r, (*vIter)->g, (*vIter)->b);
                 glPushName((*vIter)->id);
+                glBegin(GL_POINTS);
                 glVertex3f((*vIter)->x, (*vIter)->y, (*vIter)->z);
+                glEnd();
                 glPopName();
                 //std::cout << "\tpop vertex" << std::endl;
             }
-            glEnd();
             glPopName();
             //std::cout << "pop mesh" << std::endl;
         }

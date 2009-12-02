@@ -5,7 +5,7 @@
 #include "Mesh.h"
 #include "BoundingBox.h"
 
-enum RenderMode { FACES, POINTS, LINES };
+enum RenderMode { MESHES, FACES, POINTS, LINES };
 
 class Scene {
 public:

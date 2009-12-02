@@ -7,18 +7,20 @@ Scene::Scene() {
 }
 
 void Scene::render(RenderMode mode) {
-    if (mode == FACES) {
+    if (mode == FACES || mode == MESHES) {
         std::list<Mesh*>::iterator mIter;
         for(mIter = meshes.begin(); mIter != meshes.end(); mIter++){
             std::list<Face*>::iterator fIter;
             glPushName((*mIter)->id);
-            glColor3f((*mIter)->r,(*mIter)->g, (*mIter)->b);
+            if(mode == MESHES)
+                glColor3f((*mIter)->r,(*mIter)->g, (*mIter)->b);
             for(fIter = (*mIter)->faces.begin(); fIter != (*mIter)->faces.end(); fIter++) {
                 std::list<Loop*>::iterator lIter;
                 for (lIter = (*fIter)->loops.begin(); lIter != (*fIter)->loops.end(); lIter++) {
                     HalfEdge *he = (*lIter)->hed;
                     glPushName((*lIter)->id);
-                    glColor3f((*lIter)->r, (*lIter)->g, (*lIter)->b);
+                    if (mode == FACES)
+                        glColor3f((*lIter)->r, (*lIter)->g, (*lIter)->b);
                     glNormal3f((*lIter)->normal.x, (*lIter)->normal.y, (*lIter)->normal.z);
                     glBegin(GL_POLYGON);
                     do {

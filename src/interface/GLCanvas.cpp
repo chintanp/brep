@@ -17,8 +17,8 @@ GLCanvas::GLCanvas(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wx
 wxGLCanvas(parent, id, pos, size, style, name,  attribList)
 {
    glContext = new wxGLContext(this);
-   selectFace = true;
-   selectMesh = false;
+   selectFace = false;
+   selectMesh = true;
    selectVertex = false;
 }
 
@@ -277,7 +277,10 @@ void GLCanvas::render()
                 (scene.bbox.pMin.z + scene.bbox.pMax.z));
     glTranslatef(-center.x, -center.y, -center.z);
     if(!scene.isEmpty()) {
-        scene.render(FACES);
+        if (selectFace)
+            scene.render(FACES);
+        else if (selectMesh)
+            scene.render(MESHES);
         scene.render(POINTS);
         scene.render(LINES);
     }
@@ -367,7 +370,9 @@ void GLCanvas::selectPicking(int x, int y) {
     glMatrixMode(GL_MODELVIEW);
     SwapBuffers();
     
-    if(selectFace)
+    if(selectMesh)
+        scene.render(MESHES);
+    else if(selectFace)
         scene.render(FACES);
     else if(selectEdge)
         scene.render(LINES);
@@ -408,7 +413,11 @@ void GLCanvas::selectPicking(int x, int y) {
     Mesh *m = scene.getSolid(nearestMesh);
     
     //TODO considerar seleção de vertice e mesh
-    if(selectFace) {
+    if(selectMesh) {
+        m->r = 1.0;
+        m->g = 0.0;
+        m->b = 0.0;
+    } else if(selectFace) {
      Loop *l = scene.getLoop(m->id, nearestItem);
      l->r = 1.0;
      l->g = 0.0;

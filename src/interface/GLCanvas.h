@@ -42,16 +42,15 @@ private:
     DECLARE_EVENT_TABLE()
 
     void selectPicking(int x, int y);
-    bool selectFace;
+    
     bool selectMesh;
+    bool selectFace;
+    bool selectEdge;
     bool selectVertex;
-
 private:
     wxGLContext *glContext;
     Scene scene;
     Camera camera;
-    //Textura usada para desenhar a cena
-    unsigned int texID;
 };
 
 #endif

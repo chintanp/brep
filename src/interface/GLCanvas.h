@@ -30,6 +30,7 @@ public:
                     float midX, float midY, float midZ,
                     float maxX, float maxY, float maxZ);
     void addCylinder(float pX, float pY, float pZ, float radius, float height, int disc);
+    void addSphere(float pX, float pY, float pZ, float radius, int disc);
 
 private:
     void onPaint(wxPaintEvent& event);

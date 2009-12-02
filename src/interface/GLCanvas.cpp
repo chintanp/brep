@@ -92,12 +92,33 @@ void GLCanvas::addCylinder(float pX, float pY, float pZ, float radius, float hei
     scene.sweep(Scene::numMeshes - 1, 0, 0.0, height, 0.0);
 }
 
+void GLCanvas::addSphere(float pX, float pY, float pZ, float radius, int disc) {
+    float stepXY = M_PI/disc;
+    float stepXZ = 2*M_PI/disc;
+    
+    scene.mvfs(radius*cos(-M_PI*0.5), radius*sin(-M_PI*0.5), 0);
+
+    int idNum = 0;
+    for (int i = 0; i < disc; i++) {
+        int tempID = idNum;
+        for (int j = 0; j < disc; j++) {
+            float angleXY = -M_PI*0.5 + (i+1)*stepXY;
+            float angleXZ = (j+1)*stepXZ;
+            scene.smev(Scene::numMeshes - 1, 0, idNum, radius*cos(angleXY)*sin(angleXZ), radius*sin(angleXZ)*sin(angleXY), radius*cos(angleXZ));
+            scene.smef(Scene::numMeshes - 1, 0, idNum, idNum+1);
+            idNum++;
+        }
+        scene.smef(Scene::numMeshes - 1, 0, idNum, tempID);
+    }
+}
+
 void GLCanvas::init()
 {
-    addCube(-2, -2, 2, 4);
+    //addCube(-2, -2, 2, 4);
     //addCorner(-2, -2, -2, 1, 4, 2, 2, 2, 2);
-    addCylinder(0.0, 0.0, 0.0, 2.0, 3.0, 8);
-    addCylinder(-5.0, -1.0, -1.0, 2.0, 3.0, 5);
+    addCylinder(0.0, 10.0, 0.0, 2.0, 3.0, 20);
+    addSphere(0.0, 0.0, 0.0, 5, 20);
+    //addCylinder(-5.0, -1.0, -1.0, 2.0, 3.0, 5);
 
     glClearColor(1.0, 1.0, 1.0, 1.0);
     glEnable( GL_DEPTH_TEST );

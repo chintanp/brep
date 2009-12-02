@@ -340,6 +340,15 @@ void Scene::sweep(int idSolid, int idFace, float dx, float dy, float dz) {
     }
 }
 
+void Scene::rsweep(int idSolid, int idFace) {
+    HalfEdge *first, *cfirst, *last, *scan;
+    Mesh *m = getSolid(idSolid);
+    Face *f = getFace(m, idFace);
+    
+    std::list<Loop*>::iterator lIter = f->loops.begin();
+    first = (*lIter)->hed;
+}
+
 void Scene::updateBoundingBox() {
     std::list<Mesh*>::iterator mIter = meshes.begin();
     this->bbox = (*mIter)->bb;

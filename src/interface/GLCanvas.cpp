@@ -43,25 +43,6 @@ void GLCanvas::addCube(float minX, float minY, float minZ, float size)
     scene.smef(Scene::numMeshes - 1, 0, 3, 0);
 
     scene.sweep(Scene::numMeshes - 1, 0, 0, 0, -size);
-    /*//v4
-    scene.smev(Scene::numMeshes - 1, 0, 1, minX+size, minY, minZ-size);
-    //v5
-    scene.smev(Scene::numMeshes - 1, 0, 2, minX+size, minY+size, minZ-size);
-    //f1 -> right
-    scene.smef(Scene::numMeshes - 1, 0, 4, 5);
-
-    //v6
-    scene.smev(Scene::numMeshes - 1, 0, 3, minX, minY+size, minZ-size);
-    //f1 -> up
-    scene.smef(Scene::numMeshes - 1, 0, 5, 6);
-
-    //v7
-    scene.smev(Scene::numMeshes - 1, 0, 0, minX, minY, minZ-size);
-    //f1 -> left
-    scene.smef(Scene::numMeshes - 1, 0, 6, 7);
-
-    //f1 -> bottom
-    scene.smef(Scene::numMeshes - 1, 0, 7, 4);*/
 
     return;
 }
@@ -70,7 +51,6 @@ void GLCanvas::addCorner(float minX, float minY, float minZ,
                 float midX, float midY, float midZ,
                 float maxX, float maxY, float maxZ)
 {
-// INICIO DA BASE
     //v0
     scene.mvfs(minX, minY, minZ);
     //v1
@@ -80,62 +60,15 @@ void GLCanvas::addCorner(float minX, float minY, float minZ,
     //v3
     scene.smev(Scene::numMeshes - 1, 0, 2, midX, maxY, minZ);
     //v4
-    scene.smev(Scene::numMeshes - 1, 0, 3, minX, maxY, minZ);
-    //f1 -> front
-    scene.smef(Scene::numMeshes - 1, 0, 4, 0);
-
-    //v5
-    scene.smev(Scene::numMeshes - 1, 0, 1, maxX, minY, maxZ);
-    //v6
-    scene.smev(Scene::numMeshes - 1, 0, 2, maxX, maxY, maxZ);
-    //f1 -> right
-    scene.smef(Scene::numMeshes - 1, 0, 5, 6);
-
-    //v7
-    scene.smev(Scene::numMeshes - 1, 0, 3, midX, maxY, midZ);
-    //f1 -> up'
-    scene.smef(Scene::numMeshes - 1, 0, 6, 7);
-
-    //v8
-    scene.smev(Scene::numMeshes - 1, 0, 4, minX, maxY, maxZ);
-    //v9
-    scene.smev(Scene::numMeshes - 1, 0, 0, minX, minY, maxZ);
-    //f1 -> left
-    scene.smef(Scene::numMeshes - 1, 0, 8, 9);
-
-    //f1 -> bottom
-    scene.smef(Scene::numMeshes - 1, 0, 9, 5);
-// FIM DA BASE
-
-// INICIO DO "CORPO"
-
-    //v10
     scene.smev(Scene::numMeshes - 1, 0, 3, midX, midY, minZ);
-    //v11
+    //v5
     scene.smev(Scene::numMeshes - 1, 0, 4, minX, midY, minZ);
     //f1 -> front
-    scene.smef(Scene::numMeshes - 1, 0, 10, 11);
-
-    //v12
-    scene.smev(Scene::numMeshes - 1, 0, 7, midX, midY, midZ);
-    //f1 -> left
-    scene.smef(Scene::numMeshes - 1, 0, 12, 10);
-
-    //v13
-    scene.smev(Scene::numMeshes - 1, 0, 8, minX, midY, midZ);
-    //f1 -> right
-    scene.smef(Scene::numMeshes - 1, 0, 11, 13);
-
-    //f1 -> top
-    scene.smef(Scene::numMeshes - 1, 0, 12, 13);
-// FIM DO "CORPO"
-
-    scene.smef(Scene::numMeshes - 1, 0, 8, 7);
-
-    return;
+    scene.smef(Scene::numMeshes - 1, 0, 5, 0);
+    scene.sweep(Scene::numMeshes - 1, 0, 0.0, 0.0, maxZ - minZ);
 }
 
-void GLCanvas::addCylinder(float pX, float pY, float pZ, float radius, float heigth, int disc)
+void GLCanvas::addCylinder(float pX, float pY, float pZ, float radius, float height, int disc)
 {
     int num = 0;
 
@@ -156,41 +89,15 @@ void GLCanvas::addCylinder(float pX, float pY, float pZ, float radius, float hei
         }
     }
 
-    int ult = num;
-    int aux = 0;
-
-    scene.smev(Scene::numMeshes - 1, 0, aux, radius*cos(0) + pX, pY + heigth, radius*sin(0) + pZ);
-    num++;
-    aux++;
-
-    for(float i = 2.0*M_PI/(float)disc; i <= 2.0*M_PI; i+= 2.0*M_PI/(float)disc)
-    {
-        if(i+ 2.0*M_PI/(float)disc >= 2.0*M_PI)
-        {
-            scene.smev(Scene::numMeshes - 1, 0, num, radius*cos(i) + pX, pY + heigth, radius*sin(i) + pZ);
-            num++;
-            scene.smef(Scene::numMeshes - 1, 0, num, aux);
-            scene.smef(Scene::numMeshes - 1, 0, num++, ult+1);
-        }
-        else
-        {
-            scene.smev(Scene::numMeshes - 1, 0, num, radius*cos(i) + pX, pY + heigth, radius*sin(i) + pZ);
-            num++;
-            scene.smef(Scene::numMeshes - 1, 0, num, aux);
-            aux++;
-        }
-    }
-
-    return;
+    scene.sweep(Scene::numMeshes - 1, 0, 0.0, height, 0.0);
 }
 
 void GLCanvas::init()
 {
     addCube(-2, -2, 2, 4);
-    //addCorner(2, 2, 2, 5, 5, 5, 8, 1, 5);
-
-    //addCylinder(0.0, 0.0, 0.0, 2.0, 3.0, 8);
-    //addCylinder(-5.0, -1.0, -1.0, 2.0, 3.0, 5);
+    //addCorner(-2, -2, -2, 1, 4, 2, 2, 2, 2);
+    addCylinder(0.0, 0.0, 0.0, 2.0, 3.0, 8);
+    addCylinder(-5.0, -1.0, -1.0, 2.0, 3.0, 5);
 
     glClearColor(1.0, 1.0, 1.0, 1.0);
     glEnable( GL_DEPTH_TEST );

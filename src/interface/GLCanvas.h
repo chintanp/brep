@@ -29,7 +29,7 @@ public:
     void addCorner(float minX, float minY, float minZ,
                     float midX, float midY, float midZ,
                     float maxX, float maxY, float maxZ);
-    void addCylinder(float pX, float pY, float pZ, float radius, float heigth, int disc);
+    void addCylinder(float pX, float pY, float pZ, float radius, float height, int disc);
 
 private:
     void onPaint(wxPaintEvent& event);

@@ -5,11 +5,13 @@
 #include "Mesh.h"
 #include "BoundingBox.h"
 
+enum RenderMode { FACES, POINTS, LINES };
+
 class Scene {
 public:
     //TODO função pra limpar a cena
     Scene();
-    void render();
+    void render(RenderMode mode);
 
     bool isEmpty();
 
@@ -17,7 +19,9 @@ public:
     Face* getFace(Mesh *m, int idFace);
     HalfEdge* getHEd(Face *f, int idVertex1, int idVertex2);
     HalfEdge* getHEd(Face *f, int idVertex1);
-    Loop* getLoop(int id);
+    Loop* getLoop(int idSolid, int id);
+    Vertex* getVertex(int idSolid, int id);
+
     void mvfs(float x, float y, float z);
     void lmev(HalfEdge *h1, HalfEdge *he2, float x,
              float y, float z);

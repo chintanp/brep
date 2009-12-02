@@ -38,6 +38,8 @@ public:
     bool smef(int idSolid, int idFace, int idVertex1, int idVertex2);
     
     void sweep(int idSolid, int idFace, float dx, float dy, float dz);
+    //Sweeping no eixo x
+    void rsweep(int idSolid, int idFace);
 
     void updateBoundingBox();
 

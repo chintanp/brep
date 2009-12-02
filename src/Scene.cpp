@@ -317,6 +317,29 @@ bool Scene::smef(int idSolid, int idFace, int idVertex1, int idVertex2) {
     return true;
 }
 
+void Scene::sweep(int idSolid, int idFace, float dx, float dy, float dz) {
+    Mesh *m = getSolid(idSolid);
+    Face *f = getFace(m, idFace);
+    HalfEdge *first, *scan;
+    Vertex *v;
+    
+    std::list<Loop*>::iterator lIter;
+    for(lIter = f->loops.begin(); lIter != f->loops.end(); lIter++) {
+        first = (*lIter)->hed;
+        scan = first->next;
+        v = scan->origin;
+        lmev(scan, scan, v->x + dx, v->y + dy, v->z + dz);
+        while(scan != first) {
+            v = scan->next->origin;
+            lmev(scan->next, scan->next, v->x + dx, v->y + dy, v->z + dz);
+            lmef(scan->prev, scan->next->next);
+            scan = scan->next->mate()->next;
+        }
+        lmef(scan->prev, scan->next->next);
+
+    }
+}
+
 void Scene::updateBoundingBox() {
     std::list<Mesh*>::iterator mIter = meshes.begin();
     this->bbox = (*mIter)->bb;

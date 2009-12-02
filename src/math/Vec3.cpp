@@ -39,6 +39,7 @@ Vec3& Vec3::operator*=(float s) {
 	x *= s;
 	y *= s;
 	z *= s;
+        return *this;
 }
 
 Vec3 Vec3::operator/(float s) const {

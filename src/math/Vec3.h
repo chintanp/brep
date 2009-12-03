@@ -31,5 +31,4 @@ Vec3 cross(const Vec3& v1, const Vec3& v2);
 Vec3 normalize(const Vec3& v);
 float angle(const Vec3& v1, const Vec3& v2);
 
-
 #endif

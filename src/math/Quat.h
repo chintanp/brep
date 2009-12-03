@@ -19,5 +19,6 @@ public:
 Quat operator*(const Quat& q2, const Quat& q1);
 Quat normalize(const Quat& q);
 Quat conjugate(const Quat& q);
+Vec3 rotateVec(Vec3& v, const Quat& q);
 
 #endif

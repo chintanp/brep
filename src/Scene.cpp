@@ -1,6 +1,10 @@
 #include "Scene.h"
 #include <GL/gl.h>
 #include <iostream>
+#include "math/Vec3.h"
+#include "math/Quat.h"
+#include <cmath>
+
 int Scene::numMeshes = 0;
 
 Scene::Scene() {
@@ -340,13 +344,45 @@ void Scene::sweep(int idSolid, int idFace, float dx, float dy, float dz) {
     }
 }
 
-void Scene::rsweep(int idSolid, int idFace) {
+
+void Scene::rsweep(int idSolid, int idFace, int disc) {
     HalfEdge *first, *cfirst, *last, *scan;
+    Face *tailf;
     Mesh *m = getSolid(idSolid);
     Face *f = getFace(m, idFace);
     
+    Quat q;
+    q.fromAxisAngle(Vec3(1.0, 0.0, 0.0), 2*M_PI/disc);
+
     std::list<Loop*>::iterator lIter = f->loops.begin();
     first = (*lIter)->hed;
+
+    while(first->edge != first->next->edge) 
+        first = first->next;
+    last = first->next;
+    while(last->edge != last->next->edge)
+        last = last->next;
+    cfirst = first;
+    while(--disc) {
+        Vec3 vcoord(cfirst->next->next->origin->x, cfirst->next->next->origin->y, cfirst->next->next->origin->z);
+        Vec3 v = rotateVec(vcoord, q);
+        lmev(cfirst->next, cfirst->next, v.x, v.y, v.z);
+        scan = cfirst->next;
+        while(scan != last->next) {
+            vcoord = Vec3(scan->prev->origin->x, scan->prev->origin->y, scan->prev->origin->z);
+            v = rotateVec(vcoord, q);
+            lmev(scan->prev, scan->prev, v.x, v.y, v.z);
+            lmef(scan->prev->prev, scan->next);
+            scan = scan->next->next->mate();
+        }
+        last = scan;
+        cfirst = cfirst->next->next->mate();
+    }
+    //tailf = mef(cfirst->next)
+    while(cfirst != scan) {
+        lmef(cfirst, cfirst->next->next->next);
+        cfirst = cfirst->prev->mate()->prev;
+    }
 }
 
 void Scene::updateBoundingBox() {

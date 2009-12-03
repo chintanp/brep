@@ -2,13 +2,18 @@
 #include <iostream>
 
 BEGIN_EVENT_TABLE(GLCanvas, wxGLCanvas)
-  EVT_SIZE( GLCanvas::onSize )
-  EVT_PAINT( GLCanvas::onPaint )
-  EVT_ERASE_BACKGROUND( GLCanvas::onEraseBackground )
-  EVT_ENTER_WINDOW( GLCanvas::onEnterWindow )
-  EVT_LEFT_UP( GLCanvas::onMouseLeftUp )
-  EVT_MOTION( GLCanvas::onMouseMove )
-  EVT_MOUSEWHEEL( GLCanvas::onMouseWheel )
+    EVT_RIGHT_DOWN( GLCanvas::menu )
+    EVT_SIZE( GLCanvas::onSize )
+    EVT_PAINT( GLCanvas::onPaint )
+    EVT_ERASE_BACKGROUND( GLCanvas::onEraseBackground )
+    EVT_ENTER_WINDOW( GLCanvas::onEnterWindow )
+    EVT_LEFT_UP( GLCanvas::onMouseLeftUp )
+    EVT_MOTION( GLCanvas::onMouseMove )
+    EVT_MOUSEWHEEL( GLCanvas::onMouseWheel )
+    EVT_MENU( ID_ADD_CUBE, GLCanvas::_addCube )
+    EVT_MENU( ID_ADD_CORNER, GLCanvas::_addCorner )
+    EVT_MENU( ID_ADD_CYLINDER, GLCanvas::_addCylinder )
+    EVT_MENU( ID_ADD_SPHERE, GLCanvas::_addSphere )
 END_EVENT_TABLE()
 
 
@@ -21,12 +26,63 @@ wxGLCanvas(parent, id, pos, size, style, name,  attribList)
    selectMesh = false;
    selectEdge = true;
    selectVertex = false;
+
+    option_menu = new wxMenu();
+	wxMenu* primitive_menu = new wxMenu();
+
+	wxMenuItem* cube_menuItem;
+	cube_menuItem = new wxMenuItem( primitive_menu, ID_ADD_CUBE, wxString( wxT("Cube") ) , wxEmptyString, wxITEM_NORMAL );
+	primitive_menu->Append( cube_menuItem );
+
+	wxMenuItem* cylinder_menuItem;
+	cylinder_menuItem = new wxMenuItem( primitive_menu, ID_ADD_CYLINDER, wxString( wxT("Cylinder") ) , wxEmptyString, wxITEM_NORMAL );
+	primitive_menu->Append( cylinder_menuItem );
+
+	wxMenuItem* corner_menuItem;
+	corner_menuItem = new wxMenuItem( primitive_menu, ID_ADD_CORNER, wxString( wxT("Corner") ) , wxEmptyString, wxITEM_NORMAL );
+	primitive_menu->Append( corner_menuItem );
+
+	wxMenuItem* sphere_menuItem;
+	sphere_menuItem = new wxMenuItem( primitive_menu, ID_ADD_SPHERE, wxString( wxT("Sphere") ) , wxEmptyString, wxITEM_NORMAL );
+	primitive_menu->Append( sphere_menuItem );
+
+	option_menu->Append( -1, wxT("Add primitive"), primitive_menu );
+
 }
 
 GLCanvas::~GLCanvas()
 {
     delete glContext;
     glContext = NULL;
+}
+
+void GLCanvas::_addCube(wxCommandEvent& event)
+{
+    std::cout << "CUBO" << std::endl;
+
+    addCube(-2, -2, -2, 4);
+
+}
+
+void GLCanvas::_addCorner(wxCommandEvent& event)
+{
+    std::cout << "CORNER" << std::endl;
+
+//    addCorner();
+}
+
+void GLCanvas::_addCylinder(wxCommandEvent& event)
+{
+    std::cout << "CYLINDER" << std::endl;
+
+    addCylinder(0, 0, 0, 2, 4, 10);
+}
+
+void GLCanvas::_addSphere(wxCommandEvent& event)
+{
+    std::cout << "SPHERE" << std::endl;
+
+    addSphere(0, 0, 0, 4, 10)
 }
 
 void GLCanvas::addCube(float minX, float minY, float minZ, float size)
@@ -95,7 +151,7 @@ void GLCanvas::addCylinder(float pX, float pY, float pZ, float radius, float hei
 void GLCanvas::addSphere(float pX, float pY, float pZ, float radius, int disc) {
     float stepXY = M_PI/disc;
     float stepXZ = 2*M_PI/disc;
-    
+
     scene.mvfs(radius*cos(-M_PI*0.5), radius*sin(-M_PI*0.5), 0);
 
     int idNum = 0;
@@ -112,12 +168,19 @@ void GLCanvas::addSphere(float pX, float pY, float pZ, float radius, int disc) {
     }
 }
 
+void GLCanvas::menu(wxMouseEvent& event)
+{
+
+    	PopupMenu(option_menu);
+
+}
+
 void GLCanvas::init()
 {
     //addCube(-2, -2, 2, 4);
     //addCorner(-2, -2, -2, 1, 4, 2, 2, 2, 2);
     addCylinder(0.0, 10.0, 0.0, 2.0, 3.0, 20);
-    addSphere(0.0, 0.0, 0.0, 5, 20);
+    //addSphere(0.0, 0.0, 0.0, 5, 20);
     //addCylinder(-5.0, -1.0, -1.0, 2.0, 3.0, 5);
 
     glClearColor(1.0, 1.0, 1.0, 1.0);
@@ -299,7 +362,7 @@ void GLCanvas::selectPicking(int x, int y) {
                   camera.frustum.near, camera.frustum.far);
     glMatrixMode(GL_MODELVIEW);
     SwapBuffers();
-    
+
     if(selectMesh)
         scene.render(MESHES);
     else if(selectFace)
@@ -313,7 +376,7 @@ void GLCanvas::selectPicking(int x, int y) {
     glPopMatrix();
 
     hits = glRenderMode(GL_RENDER);
-    
+
     std::cout << "hits: "  << hits << std::endl;
     int nearestMesh = buff[3];
     int nearestItem = buff[4];
@@ -341,7 +404,7 @@ void GLCanvas::selectPicking(int x, int y) {
     if (hits == 0)
         return;
     Mesh *m = scene.getSolid(nearestMesh);
-    
+
     if(selectMesh) {
         m->r = 1.0;
         m->g = 0.0;
@@ -374,7 +437,7 @@ void GLCanvas::onMouseMove(wxMouseEvent &event)
     GetClientSize( &windowSize.x, &windowSize.y );
     static wxString msg;
 
-    if ( event.Dragging() )
+    if ( event.LeftIsDown() )
     {
         camera.updateRotation(mouse.x,mouse.y, windowSize.x, windowSize.y);
         Refresh();

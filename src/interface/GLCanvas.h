@@ -16,6 +16,7 @@ public:
     ~GLCanvas();
 
     void init();
+
     void render();
     void renderBackground();
 
@@ -32,7 +33,22 @@ public:
     void addCylinder(float pX, float pY, float pZ, float radius, float height, int disc);
     void addSphere(float pX, float pY, float pZ, float radius, int disc);
 
+protected:
+		enum
+		{
+            ID_ADD_CUBE = 1000,
+            ID_ADD_CORNER,
+            ID_ADD_CYLINDER,
+            ID_ADD_SPHERE,
+		};
+
 private:
+    void _addCube(wxCommandEvent& event);
+    void _addCorner(wxCommandEvent& event);
+    void _addCylinder(wxCommandEvent& event);
+    void _addSphere(wxCommandEvent& event);
+
+
     void onPaint(wxPaintEvent& event);
     void onSize(wxSizeEvent& event);
     void onEraseBackground(wxEraseEvent& event);
@@ -40,10 +56,11 @@ private:
     void onMouseLeftUp(wxMouseEvent& event);
     void onMouseMove(wxMouseEvent& event);
     void onMouseWheel(wxMouseEvent& event);
+    void menu(wxMouseEvent& event);
     DECLARE_EVENT_TABLE()
 
     void selectPicking(int x, int y);
-    
+
     bool selectMesh;
     bool selectFace;
     bool selectEdge;
@@ -52,6 +69,7 @@ private:
     wxGLContext *glContext;
     Scene scene;
     Camera camera;
+    wxMenu* option_menu;
 };
 
 #endif

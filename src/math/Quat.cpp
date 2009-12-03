@@ -85,3 +85,10 @@ Quat normalize(const Quat& q) {
 Quat conjugate(const Quat& q) {
 	return Quat(-q.x, -q.y, -q.z, q.w);
 }
+
+Vec3 rotateVec(Vec3& v, const Quat& q) {
+    Quat q1(v.x, v.y, v.z, 0);
+    Quat result = (q*q1)*conjugate(q);
+    Vec3 resultVec(result.x, result.y, result.z);
+    return resultVec; 
+}

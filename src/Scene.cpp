@@ -181,7 +181,7 @@ void Scene::mvfs(float x, float y, float z) {
     he->edge = NULL;
     //v->hed = he;
     meshes.push_back(m);
-    updateBoundingBox();
+    //updateBoundingBox();
 }
 
 void Scene::lmev(HalfEdge *he1, HalfEdge *he2, float x,
@@ -204,7 +204,7 @@ void Scene::lmev(HalfEdge *he1, HalfEdge *he2, float x,
     v->hed = he2->prev;
     he2->origin->hed = he2;
 
-    updateBoundingBox();
+    //updateBoundingBox();
 }
 
 void Scene::lmef(HalfEdge *h1, HalfEdge *h2) {

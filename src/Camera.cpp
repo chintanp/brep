@@ -4,7 +4,8 @@
 
 Camera::Camera() : initialized(false), lastPos(0, 0, 0), 
                    currPos(0, 0, 0), orientation(0, 0, 0, 1) {
-    setProjection(-1, 1, -1, 1, 0, 1);
+    setProjection(-10, 10, -7.5, 7.5, 0.001, 1000);
+    pos = Vec3(0.0, 0.0, 10.0);
 }
 
 void Camera::setupViewMatrix(float *m) {
@@ -38,7 +39,6 @@ void Camera::updateRotation(int mouseX, int mouseY,
     {
         mapTrackball(mouseX, mouseY, windowWidth, windowHeight);
         float ang = angle(currPos, lastPos);
-        //std::cout << "angle: " << ang << std::endl;
         Vec3 axis = normalize(cross(currPos, lastPos));
         rotate(axis, ang);
         lastPos = currPos;

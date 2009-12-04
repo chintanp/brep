@@ -295,13 +295,12 @@ void GLCanvas::setVertexSelect()
 
 void GLCanvas::menu(wxMouseEvent& event)
 {
-    setMeshSelect();
     PopupMenu(option_menu);
 }
 
 void GLCanvas::init()
 {
-    addCube(-2, -2, 2, 4);
+    //addCube(-2, -2, 2, 4);
     //addCorner(-2, -2, -2, 1, 4, 2, 2, 2, 2);
     //addCylinder(0.0, 10.0, 0.0, 2.0, 3.0, 20);
     //addSphere(0.0, 0.0, 0.0, 5, 20);
@@ -469,7 +468,6 @@ void GLCanvas::onMouseLeftUp(wxMouseEvent &event) {
 
     wxPoint windowSize;
     GetClientSize( &windowSize.x, &windowSize.y );
-    selectPicking(mouse.x, windowSize.y - mouse.y);
 
     if(selectVertex || selectEdge || selectFace || selectMesh)
         selectPicking(mouse.x, windowSize.y - mouse.y);
@@ -501,7 +499,7 @@ void GLCanvas::draw(int x, int y) {
             std::cout << "criado uma face" << std::endl;
             startLineLoop = true;
             numPts = 0;
-        } else { 
+        } else {
             scene.smev(Scene::numMeshes - 1, 0, numPts - 1, x, y, 0.0);
             numPts++;
         }
@@ -575,6 +573,7 @@ void GLCanvas::selectPicking(int x, int y) {
         {
             if((*it)->id == m->id)
             {
+                std::cout << "ETASERTSDFASDFASDFASDFASDFASDF" << std::endl;
                 m->r = 0.6;
                 m->g = 0.6;
                 m->b = 0.6;
@@ -583,6 +582,7 @@ void GLCanvas::selectPicking(int x, int y) {
                 return;
             }
         }
+        std::cout << "NOSAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
         m->r = 1.0;
         m->g = 0.0;
         m->b = 0.0;

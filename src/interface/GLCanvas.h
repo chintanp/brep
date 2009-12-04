@@ -75,6 +75,10 @@ private:
     bool selectFace;
     bool selectEdge;
     bool selectVertex;
+    bool drawing;
+    bool startLineLoop;
+
+    int numPts;
 
 private:
     std::list<Mesh*> meshList;

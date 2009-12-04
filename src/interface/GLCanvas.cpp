@@ -17,21 +17,20 @@ BEGIN_EVENT_TABLE(GLCanvas, wxGLCanvas)
     EVT_MENU(ID_ADD_SPHERE, GLCanvas::_addSphere)
 END_EVENT_TABLE()
 
-
-
 GLCanvas::GLCanvas(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name, int* attribList) :
 wxGLCanvas(parent, id, pos, size, style, name,  attribList)
 {
-    glContext = new wxGLContext(this);
-    selectFace = false;
-    selectMesh = false;
-    selectEdge = false;
-    selectVertex = false;
-    drawing = true;
+   glContext = new wxGLContext(this);
+   selectFace = false;
+   selectMesh = false;
+   selectEdge = false;
+   selectVertex = true;
+   drawing = true;
 
     startLineLoop = true;
     numPts = 0;
 
+    //MENU
     option_menu = new wxMenu();
     wxMenu* primitive_menu = new wxMenu();
 
@@ -52,6 +51,7 @@ wxGLCanvas(parent, id, pos, size, style, name,  attribList)
     primitive_menu->Append( sphere_menuItem );
 
     option_menu->Append( -1, wxT("Add primitive"), primitive_menu );
+
 }
 
 GLCanvas::~GLCanvas()
@@ -62,35 +62,28 @@ GLCanvas::~GLCanvas()
 
 void GLCanvas::_addCube(wxCommandEvent& event)
 {
-    std::cout << "CUBO" << std::endl;
-
     addCube(-2, -2, -2, 4);
     Refresh();
-    //camera.fit(scene.bbox);
 }
 
 void GLCanvas::_addCorner(wxCommandEvent& event)
 {
-    std::cout << "CORNER" << std::endl;
-
-//    addCorner();
-//    Refresh();
+    addCorner(-2, -2, -2,
+            1, 4, 2,
+            2, 2, 2);
+    Refresh();
 }
 
 void GLCanvas::_addCylinder(wxCommandEvent& event)
 {
-    std::cout << "CYLINDER" << std::endl;
-
-    addCylinder(0, 0, 0, 2, 4, 10);
-    Refresh();
+     addCylinder(0, 0, 0, 2, 4, 10);
+     Refresh();
 }
 
 void GLCanvas::_addSphere(wxCommandEvent& event)
 {
-    std::cout << "SPHERE" << std::endl;
-
-    addSphere(0, 0, 0, 4, 10);
-    Refresh();
+     addSphere(0, 0, 0, 4, 10);
+     Refresh();
 }
 
 void GLCanvas::addCube(float minX, float minY, float minZ, float size)
@@ -158,7 +151,7 @@ void GLCanvas::addCylinder(float pX, float pY, float pZ, float radius, float hei
 
 void GLCanvas::addSphere(float pX, float pY, float pZ, float radius, int disc) {
     float step = M_PI/disc;
-    
+
     //          cos       sin
     scene.mvfs(-1.0*radius, 0, 0);
     for(int i = 0, idNum = 0; i < disc; i++, idNum++) {
@@ -168,16 +161,147 @@ void GLCanvas::addSphere(float pX, float pY, float pZ, float radius, int disc) {
     scene.rsweep(Scene::numMeshes -1 , 0, 2*disc);
 }
 
+void drawBlack(std::list<Mesh*> list)
+{
+    std::list<Mesh*>::iterator it;
+    for (it = list.begin(); it != list.end(); )
+    {
+            (*it)->r = 0.6;
+            (*it)->g = 0.6;
+            (*it)->b = 0.6;
+            it = list.erase(it);
+    }
+}
+
+void drawBlack(std::list<Loop*> list)
+{
+    std::list<Loop*>::iterator it;
+    for (it = list.begin(); it != list.end(); )
+    {
+            (*it)->r = 0.6;
+            (*it)->g = 0.6;
+            (*it)->b = 0.6;
+            it = list.erase(it);
+    }
+}
+
+void drawBlack(std::list<Edge*> list)
+{
+    std::list<Edge*>::iterator it;
+    for (it = list.begin(); it != list.end(); )
+    {
+            (*it)->r = 0.0;
+            (*it)->g = 0.0;
+            (*it)->b = 0.0;
+            it = list.erase(it);
+    }
+}
+
+void drawBlack(std::list<Vertex*> list)
+{
+    std::list<Vertex*>::iterator it;
+    for (it = list.begin(); it != list.end(); )
+    {
+            (*it)->r = 0.0;
+            (*it)->g = 0.0;
+            (*it)->b = 0.0;
+            it = list.erase(it);
+    }
+}
+
+void GLCanvas::setMeshSelect()
+{
+    if(selectFace == true)
+        drawBlack(faceList);
+    else if(selectEdge == true)
+        drawBlack(edgeList);
+    else if(selectVertex == true)
+        drawBlack(vertexList);
+
+    selectMesh=true;
+    selectFace=false;
+    selectEdge=false;
+    selectVertex=false;
+
+    faceList.clear();
+    edgeList.clear();
+    vertexList.clear();
+
+    Refresh();
+}
+
+void GLCanvas::setFaceSelect()
+{
+    if(selectMesh == true)
+        drawBlack(meshList);
+    else if(selectEdge == true)
+        drawBlack(edgeList);
+    else if(selectVertex == true)
+        drawBlack(vertexList);
+
+    selectMesh=false;
+    selectFace=true;
+    selectEdge=false;
+    selectVertex=false;
+
+    meshList.clear();
+    edgeList.clear();
+    vertexList.clear();
+
+    Refresh();
+}
+
+void GLCanvas::setEdgeSelect()
+{
+    if(selectMesh == true)
+        drawBlack(meshList);
+    else if(selectFace == true)
+        drawBlack(faceList);
+    else if(selectVertex == true)
+        drawBlack(vertexList);
+
+    selectMesh=false;
+    selectFace=false;
+    selectEdge=true;
+    selectVertex=false;
+
+    meshList.clear();
+    faceList.clear();
+    vertexList.clear();
+
+    Refresh();
+}
+
+void GLCanvas::setVertexSelect()
+{
+    if(selectMesh == true)
+        drawBlack(meshList);
+    else if(selectFace == true)
+        drawBlack(faceList);
+    else if(selectEdge == true)
+        drawBlack(edgeList);
+
+    selectMesh=false;
+    selectFace=false;
+    selectEdge=false;
+    selectVertex=true;
+
+    meshList.clear();
+    faceList.clear();
+    edgeList.clear();
+
+    Refresh();
+}
+
 void GLCanvas::menu(wxMouseEvent& event)
 {
-
-    	PopupMenu(option_menu);
-
+    setMeshSelect();
+    PopupMenu(option_menu);
 }
 
 void GLCanvas::init()
 {
-    //addCube(-2, -2, 2, 4);
+    addCube(-2, -2, 2, 4);
     //addCorner(-2, -2, -2, 1, 4, 2, 2, 2, 2);
     //addCylinder(0.0, 10.0, 0.0, 2.0, 3.0, 20);
     //addSphere(0.0, 0.0, 0.0, 5, 20);
@@ -203,8 +327,8 @@ void GLCanvas::init()
     glEnable(GL_COLOR_MATERIAL);
 
     glFrontFace(GL_CW);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
+    //glEnable(GL_CULL_FACE);
+    //glCullFace(GL_BACK);
 
     glPolygonMode(GL_BACK, GL_LINE);          //FILL
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);  //WIRE
@@ -248,7 +372,6 @@ void GLCanvas::init()
     float f = camera.frustum.far;
     glFrustum(camera.frustum.left, camera.frustum.right, camera.frustum.bottom, camera.frustum.top,
               camera.frustum.near, camera.frustum.far);
-    
     std::cout << "\t pos: " << camera.pos.x << "  " << camera.pos.y << "  " << camera.pos.z << std::endl;
     std::cout << "\t frustum: " << l << "  " << r << "  " << b << "  " << t << "  " << n << "  " <<  f << std::endl;
 
@@ -270,15 +393,15 @@ void GLCanvas::render()
     glTranslatef(-camera.pos.x, -camera.pos.y, -camera.pos.z);
     glMultMatrixf(m);
 
-    //Vec3 center((scene.bbox.pMin.x + scene.bbox.pMax.x),
-    //            (scene.bbox.pMin.y + scene.bbox.pMax.y),
-    //            (scene.bbox.pMin.z + scene.bbox.pMax.z));
-    //glTranslatef(-center.x, -center.y, -center.z);
+    Vec3 center((scene.bbox.pMin.x + scene.bbox.pMax.x),
+                (scene.bbox.pMin.y + scene.bbox.pMax.y),
+                (scene.bbox.pMin.z + scene.bbox.pMax.z));
+    glTranslatef(-center.x, -center.y, -center.z);
     if(!scene.isEmpty()) {
         if (selectMesh)
             scene.render(MESHES);
         else
-            scene.render(MESHES);
+            scene.render(FACES);
         scene.render(POINTS);
         scene.render(LINES);
     }
@@ -343,9 +466,10 @@ void GLCanvas::onMouseLeftUp(wxMouseEvent &event) {
     camera.reset();
     wxPoint mouse;
     event.GetPosition( &mouse.x, &mouse.y );
-    
+
     wxPoint windowSize;
     GetClientSize( &windowSize.x, &windowSize.y );
+    selectPicking(mouse.x, windowSize.y - mouse.y);
 
     if(selectVertex || selectEdge || selectFace || selectMesh)
         selectPicking(mouse.x, windowSize.y - mouse.y);
@@ -446,24 +570,83 @@ void GLCanvas::selectPicking(int x, int y) {
     Mesh *m = scene.getSolid(nearestMesh);
 
     if(selectMesh) {
+        std::list<Mesh*>::iterator it;
+        for (it = meshList.begin(); it != meshList.end(); ++it)
+        {
+            if((*it)->id == m->id)
+            {
+                m->r = 0.6;
+                m->g = 0.6;
+                m->b = 0.6;
+                meshList.erase(it);
+                Refresh();
+                return;
+            }
+        }
         m->r = 1.0;
         m->g = 0.0;
         m->b = 0.0;
+        meshList.push_back(m);
     } else if(selectFace) {
-     Loop *l = scene.getLoop(m->id, nearestItem);
-     l->r = 1.0;
-     l->g = 0.0;
-     l->b = 0.0;
+         Loop *l = scene.getLoop(m->id, nearestItem);
+
+        std::list<Loop*>::iterator it;
+        for (it = faceList.begin(); it != faceList.end(); ++it)
+        {
+            if((*it)->id == l->id)
+            {
+                l->r = 0.6;
+                l->g = 0.6;
+                l->b = 0.6;
+                faceList.erase(it);
+                Refresh();
+                return;
+            }
+        }
+         l->r = 1.0;
+         l->g = 0.0;
+         l->b = 0.0;
+        faceList.push_back(l);
     } else if(selectEdge) {
         Edge *e = scene.getEdge(m->id, nearestItem);
+
+        std::list<Edge*>::iterator it;
+        for (it = edgeList.begin(); it != edgeList.end(); ++it)
+        {
+            if((*it)->id == e->id)
+            {
+                e->r = 0.0;
+                e->g = 0.0;
+                e->b = 0.0;
+                edgeList.erase(it);
+                Refresh();
+                return;
+            }
+        }
         e->r = 1.0;
         e->g = 0.0;
         e->b = 0.0;
+        edgeList.push_back(e);
     } else if(selectVertex) {
         Vertex *v = scene.getVertex(m->id, nearestItem);
+
+        std::list<Vertex*>::iterator it;
+        for (it = vertexList.begin(); it != vertexList.end(); ++it)
+        {
+            if((*it)->id == v->id)
+            {
+                v->r = 0.0;
+                v->g = 0.0;
+                v->b = 0.0;
+                vertexList.erase(it);
+                Refresh();
+                return;
+            }
+        }
         v->r = 1.0;
         v->g = 0.0;
         v->b = 0.0;
+        vertexList.push_back(v);
     }
     Refresh();
 }

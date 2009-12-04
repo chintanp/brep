@@ -5,6 +5,7 @@
 #include "wx/glcanvas.h"
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <list>
 #include "../Scene.h"
 #include "../Camera.h"
 
@@ -33,6 +34,15 @@ public:
     void addCylinder(float pX, float pY, float pZ, float radius, float height, int disc);
     void addSphere(float pX, float pY, float pZ, float radius, int disc);
 
+    void setMeshSelect();
+
+    void setFaceSelect();
+
+    void setEdgeSelect();
+
+    void setVertexSelect();
+
+
 protected:
 		enum
 		{
@@ -54,7 +64,6 @@ private:
     void onEraseBackground(wxEraseEvent& event);
     void onEnterWindow(wxMouseEvent& event);
     void onMouseLeftUp(wxMouseEvent& event);
-    //void onMouseLeftDown(wxMouseEvent& event);
     void onMouseMove(wxMouseEvent& event);
     void onMouseWheel(wxMouseEvent& event);
     void menu(wxMouseEvent& event);
@@ -67,11 +76,12 @@ private:
     bool selectEdge;
     bool selectVertex;
 
-    //Variáveis para controlar a área de desenho
-    bool drawing;
-    bool startLineLoop;
-    int numPts;
 private:
+    std::list<Mesh*> meshList;
+    std::list<Loop*> faceList;
+    std::list<Edge*> edgeList;
+    std::list<Vertex*> vertexList;
+
     wxGLContext *glContext;
     Scene scene;
     Camera camera;

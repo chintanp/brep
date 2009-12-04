@@ -53,3 +53,23 @@ void BRepPrincipalFrame::zoomOut( wxCommandEvent& event )
 {
 	// TODO: Implement zoomOut
 }
+
+void BRepPrincipalFrame::vertexMode( wxCommandEvent& event )
+{
+	canvas->setVertexSelect();
+}
+
+void BRepPrincipalFrame::edgeMode( wxCommandEvent& event )
+{
+	canvas->setEdgeSelect();
+}
+
+void BRepPrincipalFrame::faceMode( wxCommandEvent& event )
+{
+	canvas->setFaceSelect();
+}
+
+void BRepPrincipalFrame::meshMode( wxCommandEvent& event )
+{
+	canvas->setMeshSelect();
+}

@@ -43,10 +43,12 @@ class PrincipalFrame : public wxFrame
 		void _wxFB_saveModel( wxCommandEvent& event ){ saveModel( event ); }
 		void _wxFB_zoomIn( wxCommandEvent& event ){ zoomIn( event ); }
 		void _wxFB_zoomOut( wxCommandEvent& event ){ zoomOut( event ); }
+		void _wxFB_fit( wxCommandEvent& event ){ fit( event ); }
 		void _wxFB_vertexMode( wxCommandEvent& event ){ vertexMode( event ); }
 		void _wxFB_edgeMode( wxCommandEvent& event ){ edgeMode( event ); }
 		void _wxFB_faceMode( wxCommandEvent& event ){ faceMode( event ); }
 		void _wxFB_meshMode( wxCommandEvent& event ){ meshMode( event ); }
+		void _wxFB_selectMode( wxCommandEvent& event ){ selectMode( event ); }
 
 
 	protected:
@@ -72,7 +74,7 @@ class PrincipalFrame : public wxFrame
 		wxMenu* file_menu;
 		wxMenu* help_menu;
 		wxToolBar* toolBar;
-
+		wxChoice* mode_choice;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void newModel( wxCommandEvent& event ){ event.Skip(); }
@@ -82,10 +84,12 @@ class PrincipalFrame : public wxFrame
 		virtual void saveModel( wxCommandEvent& event ){ event.Skip(); }
 		virtual void zoomIn( wxCommandEvent& event ){ event.Skip(); }
 		virtual void zoomOut( wxCommandEvent& event ){ event.Skip(); }
+		virtual void fit( wxCommandEvent& event ){ event.Skip(); }
 		virtual void vertexMode( wxCommandEvent& event ){ event.Skip(); }
 		virtual void edgeMode( wxCommandEvent& event ){ event.Skip(); }
 		virtual void faceMode( wxCommandEvent& event ){ event.Skip(); }
 		virtual void meshMode( wxCommandEvent& event ){ event.Skip(); }
+		virtual void selectMode( wxCommandEvent& event ){ event.Skip(); }
 
         GLCanvas* canvas;
 

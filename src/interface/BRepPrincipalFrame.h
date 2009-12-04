@@ -25,6 +25,7 @@ protected:
     void edgeMode( wxCommandEvent& event );
     void faceMode( wxCommandEvent& event );
     void meshMode( wxCommandEvent& event );
+    void selectMode( wxCommandEvent& event );
 
 public:
 	/** Constructor */

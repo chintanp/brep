@@ -18,6 +18,10 @@ BEGIN_EVENT_TABLE( PrincipalFrame, wxFrame )
 	EVT_TOOL( ID_SAVE_MODEL_TB, PrincipalFrame::_wxFB_saveModel )
 	EVT_TOOL( ID_ZOOM_IN_TB, PrincipalFrame::_wxFB_zoomIn )
 	EVT_TOOL( ID_ZOOM_OUT_TB, PrincipalFrame::_wxFB_zoomOut )
+	EVT_TOOL( ID_VERTEX_MODE_TB, PrincipalFrame::_wxFB_vertexMode )
+	EVT_TOOL( ID_EDGE_MODE_TB, PrincipalFrame::_wxFB_edgeMode )
+	EVT_TOOL( ID_FACE_MODE_TB, PrincipalFrame::_wxFB_faceMode )
+	EVT_TOOL( ID_MESH_MODE_TB, PrincipalFrame::_wxFB_meshMode )
 END_EVENT_TABLE()
 
 PrincipalFrame::PrincipalFrame( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
@@ -54,6 +58,10 @@ PrincipalFrame::PrincipalFrame( wxWindow* parent, wxWindowID id, const wxString&
 	toolBar->AddTool( ID_ZOOM_IN_TB, wxT("Zoom In"), wxBitmap( wxT("data/icon/zoom_in.png"), wxBITMAP_TYPE_ANY ), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxT("Zoom In") );
 	toolBar->AddTool( ID_ZOOM_OUT_TB, wxT("Zoom Out"), wxBitmap( wxT("data/icon/zoom_out.png"), wxBITMAP_TYPE_ANY ), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxT("Zoom Out") );
 	toolBar->AddSeparator();
+	toolBar->AddTool( ID_VERTEX_MODE_TB, wxT("Vertex Mode"), wxBitmap( wxT("data/icon/vertex.png"), wxBITMAP_TYPE_ANY ), wxNullBitmap, wxITEM_RADIO, wxEmptyString, wxT("Vertex Mode") );
+	toolBar->AddTool( ID_EDGE_MODE_TB, wxT("Edge Mode"), wxBitmap( wxT("data/icon/edge.png"), wxBITMAP_TYPE_ANY ), wxNullBitmap, wxITEM_RADIO, wxEmptyString, wxT("Edge Mode") );
+	toolBar->AddTool( ID_FACE_MODE_TB, wxT("Face Mode"), wxBitmap( wxT("data/icon/face.png"), wxBITMAP_TYPE_ANY ), wxNullBitmap, wxITEM_RADIO, wxEmptyString, wxT("Face Mode") );
+	toolBar->AddTool( ID_MESH_MODE_TB, wxT("Mesh Model "), wxBitmap( wxT("data/icon/mesh.png"), wxBITMAP_TYPE_ANY ), wxNullBitmap, wxITEM_RADIO, wxEmptyString, wxT("Mesh Mode") );
 	toolBar->Realize();
 
 	wxBoxSizer* bSizer_Global;

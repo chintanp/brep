@@ -157,24 +157,7 @@ void GLCanvas::addSphere(float pX, float pY, float pZ, float radius, int disc) {
         float angle = M_PI - step*(i+1);
         scene.smev(Scene::numMeshes - 1, 0, idNum, radius*cos(angle), radius*sin(angle), 0.0);
     }
-    scene.rsweep(Scene::numMeshes -1 , 0, disc);
-    /*float stepXY = M_PI/disc;
-    float stepXZ = 2*M_PI/disc;
-
-    scene.mvfs(radius*cos(-M_PI*0.5), radius*sin(-M_PI*0.5), 0);
-
-    int idNum = 0;
-    for (int i = 0; i < disc; i++) {
-        int tempID = idNum;
-        for (int j = 0; j < disc; j++) {
-            float angleXY = -M_PI*0.5 + (i+1)*stepXY;
-            float angleXZ = (j+1)*stepXZ;
-            scene.smev(Scene::numMeshes - 1, 0, idNum, radius*cos(angleXY)*sin(angleXZ), radius*sin(angleXZ)*sin(angleXY), radius*cos(angleXZ));
-            scene.smef(Scene::numMeshes - 1, 0, idNum, idNum+1);
-            idNum++;
-        }
-        scene.smef(Scene::numMeshes - 1, 0, idNum, tempID);
-    }*/
+    scene.rsweep(Scene::numMeshes -1 , 0, 2*disc);
 }
 
 void GLCanvas::menu(wxMouseEvent& event)
@@ -202,6 +185,7 @@ void GLCanvas::init()
     glLineWidth( 2.0 );
     glEnable( GL_POLYGON_SMOOTH );
     glEnable(GL_POLYGON_OFFSET_FILL);
+    glPolygonOffset(1.0, 1.0);
     glEnable(GL_POINT_SMOOTH);
     glPointSize(3.0);
 

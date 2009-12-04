@@ -347,7 +347,6 @@ void Scene::sweep(int idSolid, int idFace, float dx, float dy, float dz) {
 
 void Scene::rsweep(int idSolid, int idFace, int disc) {
     HalfEdge *first, *cfirst, *last, *scan;
-    Face *tailf;
     Mesh *m = getSolid(idSolid);
     Face *f = getFace(m, idFace);
     
@@ -363,7 +362,7 @@ void Scene::rsweep(int idSolid, int idFace, int disc) {
     while(last->edge != last->next->edge)
         last = last->next;
     cfirst = first;
-    while(--disc) {
+    while(disc--) {
         Vec3 vcoord(cfirst->next->next->origin->x, cfirst->next->next->origin->y, cfirst->next->next->origin->z);
         Vec3 v = rotateVec(vcoord, q);
         lmev(cfirst->next, cfirst->next, v.x, v.y, v.z);
@@ -378,7 +377,6 @@ void Scene::rsweep(int idSolid, int idFace, int disc) {
         last = scan;
         cfirst = cfirst->next->next->mate();
     }
-    //tailf = mef(cfirst->next)
     while(cfirst != scan) {
         lmef(cfirst, cfirst->next->next->next);
         cfirst = cfirst->prev->mate()->prev;

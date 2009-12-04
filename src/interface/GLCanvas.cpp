@@ -82,7 +82,7 @@ void GLCanvas::_addSphere(wxCommandEvent& event)
 {
     std::cout << "SPHERE" << std::endl;
 
-    addSphere(0, 0, 0, 4, 10)
+    addSphere(0, 0, 0, 4, 10);
 }
 
 void GLCanvas::addCube(float minX, float minY, float minZ, float size)
@@ -149,7 +149,16 @@ void GLCanvas::addCylinder(float pX, float pY, float pZ, float radius, float hei
 }
 
 void GLCanvas::addSphere(float pX, float pY, float pZ, float radius, int disc) {
-    float stepXY = M_PI/disc;
+    float step = M_PI/disc;
+    
+    //          cos       sin
+    scene.mvfs(-1.0*radius, 0, 0);
+    for(int i = 0, idNum = 0; i < disc; i++, idNum++) {
+        float angle = M_PI - step*(i+1);
+        scene.smev(Scene::numMeshes - 1, 0, idNum, radius*cos(angle), radius*sin(angle), 0.0);
+    }
+    scene.rsweep(Scene::numMeshes -1 , 0, disc);
+    /*float stepXY = M_PI/disc;
     float stepXZ = 2*M_PI/disc;
 
     scene.mvfs(radius*cos(-M_PI*0.5), radius*sin(-M_PI*0.5), 0);
@@ -165,7 +174,7 @@ void GLCanvas::addSphere(float pX, float pY, float pZ, float radius, int disc) {
             idNum++;
         }
         scene.smef(Scene::numMeshes - 1, 0, idNum, tempID);
-    }
+    }*/
 }
 
 void GLCanvas::menu(wxMouseEvent& event)
@@ -179,8 +188,8 @@ void GLCanvas::init()
 {
     //addCube(-2, -2, 2, 4);
     //addCorner(-2, -2, -2, 1, 4, 2, 2, 2, 2);
-    addCylinder(0.0, 10.0, 0.0, 2.0, 3.0, 20);
-    //addSphere(0.0, 0.0, 0.0, 5, 20);
+    //addCylinder(0.0, 10.0, 0.0, 2.0, 3.0, 20);
+    addSphere(0.0, 0.0, 0.0, 5, 20);
     //addCylinder(-5.0, -1.0, -1.0, 2.0, 3.0, 5);
 
     glClearColor(1.0, 1.0, 1.0, 1.0);

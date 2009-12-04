@@ -194,7 +194,7 @@
                         <event name="OnUpdateUI"></event>
                     </object>
                 </object>
-                <object class="wxMenu" expanded="0">
+                <object class="wxMenu" expanded="1">
                     <property name="label">Help</property>
                     <property name="name">help_menu</property>
                     <property name="permission">protected</property>
@@ -334,6 +334,62 @@
                     <event name="OnUpdateUI"></event>
                 </object>
                 <object class="toolSeparator" expanded="1" />
+                <object class="tool" expanded="1">
+                    <property name="bitmap">icon/vertex.png; Load From File</property>
+                    <property name="id">ID_VERTEX_MODE_TB</property>
+                    <property name="kind">wxITEM_RADIO</property>
+                    <property name="label">Vertex Mode</property>
+                    <property name="name">vertex_tool</property>
+                    <property name="statusbar">Vertex Mode</property>
+                    <property name="tooltip"></property>
+                    <event name="OnMenuSelection"></event>
+                    <event name="OnToolClicked">vertexMode</event>
+                    <event name="OnToolEnter"></event>
+                    <event name="OnToolRClicked"></event>
+                    <event name="OnUpdateUI"></event>
+                </object>
+                <object class="tool" expanded="1">
+                    <property name="bitmap">icon/edge.png; Load From File</property>
+                    <property name="id">ID_EDGE_MODE_TB</property>
+                    <property name="kind">wxITEM_RADIO</property>
+                    <property name="label">Edge Mode</property>
+                    <property name="name">edgeMode_tool</property>
+                    <property name="statusbar">Edge Mode</property>
+                    <property name="tooltip"></property>
+                    <event name="OnMenuSelection"></event>
+                    <event name="OnToolClicked">edgeMode</event>
+                    <event name="OnToolEnter"></event>
+                    <event name="OnToolRClicked"></event>
+                    <event name="OnUpdateUI"></event>
+                </object>
+                <object class="tool" expanded="1">
+                    <property name="bitmap">icon/face.png; Load From File</property>
+                    <property name="id">ID_FACE_MODE_TB</property>
+                    <property name="kind">wxITEM_RADIO</property>
+                    <property name="label">Face Mode</property>
+                    <property name="name">faceMode_tool</property>
+                    <property name="statusbar">Face Mode</property>
+                    <property name="tooltip"></property>
+                    <event name="OnMenuSelection"></event>
+                    <event name="OnToolClicked">faceMode</event>
+                    <event name="OnToolEnter"></event>
+                    <event name="OnToolRClicked"></event>
+                    <event name="OnUpdateUI"></event>
+                </object>
+                <object class="tool" expanded="1">
+                    <property name="bitmap">icon/mesh.png; Load From File</property>
+                    <property name="id">ID_MESH_MODE_TB</property>
+                    <property name="kind">wxITEM_RADIO</property>
+                    <property name="label">Mesh Model </property>
+                    <property name="name">meshMode_tool</property>
+                    <property name="statusbar">Mesh Mode</property>
+                    <property name="tooltip"></property>
+                    <event name="OnMenuSelection"></event>
+                    <event name="OnToolClicked">meshMode</event>
+                    <event name="OnToolEnter"></event>
+                    <event name="OnToolRClicked"></event>
+                    <event name="OnUpdateUI"></event>
+                </object>
             </object>
             <object class="wxBoxSizer" expanded="1">
                 <property name="minimum_size"></property>

@@ -21,6 +21,10 @@ protected:
 	void saveModel( wxCommandEvent& event );
 	void zoomIn( wxCommandEvent& event );
 	void zoomOut( wxCommandEvent& event );
+    void vertexMode( wxCommandEvent& event );
+    void edgeMode( wxCommandEvent& event );
+    void faceMode( wxCommandEvent& event );
+    void meshMode( wxCommandEvent& event );
 
 public:
 	/** Constructor */

@@ -54,17 +54,23 @@ private:
     void onEraseBackground(wxEraseEvent& event);
     void onEnterWindow(wxMouseEvent& event);
     void onMouseLeftUp(wxMouseEvent& event);
+    void onMouseLeftDown(wxMouseEvent& event);
     void onMouseMove(wxMouseEvent& event);
     void onMouseWheel(wxMouseEvent& event);
     void menu(wxMouseEvent& event);
     DECLARE_EVENT_TABLE()
 
     void selectPicking(int x, int y);
-
+    void draw(int x, int y);
     bool selectMesh;
     bool selectFace;
     bool selectEdge;
     bool selectVertex;
+
+    //Variáveis para controlar a área de desenho
+    bool drawing;
+    bool startLineLoop;
+    int numPts;
 private:
     wxGLContext *glContext;
     Scene scene;

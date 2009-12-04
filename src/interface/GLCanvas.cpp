@@ -8,7 +8,7 @@ BEGIN_EVENT_TABLE(GLCanvas, wxGLCanvas)
     EVT_ERASE_BACKGROUND(GLCanvas::onEraseBackground)
     EVT_ENTER_WINDOW(GLCanvas::onEnterWindow)
     EVT_LEFT_UP(GLCanvas::onMouseLeftUp)
-    EVT_LEFT_DOWN(GLCanvas::onMouseLeftDown)
+    //EVT_LEFT_DOWN(GLCanvas::onMouseLeftDown)
     EVT_MOTION(GLCanvas::onMouseMove)
     EVT_MOUSEWHEEL( GLCanvas::onMouseWheel )
     EVT_MENU(ID_ADD_CUBE, GLCanvas::_addCube)
@@ -65,7 +65,8 @@ void GLCanvas::_addCube(wxCommandEvent& event)
     std::cout << "CUBO" << std::endl;
 
     addCube(-2, -2, -2, 4);
-
+    Refresh();
+    //camera.fit(scene.bbox);
 }
 
 void GLCanvas::_addCorner(wxCommandEvent& event)
@@ -73,6 +74,7 @@ void GLCanvas::_addCorner(wxCommandEvent& event)
     std::cout << "CORNER" << std::endl;
 
 //    addCorner();
+//    Refresh();
 }
 
 void GLCanvas::_addCylinder(wxCommandEvent& event)
@@ -80,6 +82,7 @@ void GLCanvas::_addCylinder(wxCommandEvent& event)
     std::cout << "CYLINDER" << std::endl;
 
     addCylinder(0, 0, 0, 2, 4, 10);
+    Refresh();
 }
 
 void GLCanvas::_addSphere(wxCommandEvent& event)
@@ -87,6 +90,7 @@ void GLCanvas::_addSphere(wxCommandEvent& event)
     std::cout << "SPHERE" << std::endl;
 
     addSphere(0, 0, 0, 4, 10);
+    Refresh();
 }
 
 void GLCanvas::addCube(float minX, float minY, float minZ, float size)
@@ -180,10 +184,10 @@ void GLCanvas::init()
     //addCylinder(-5.0, -1.0, -1.0, 2.0, 3.0, 5);
 
     glClearColor(1.0, 1.0, 1.0, 1.0);
-    //glEnable( GL_DEPTH_TEST );
-    //glClearDepth(1.0f);
-    //glDepthFunc(GL_LEQUAL);
-    //glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+    glEnable( GL_DEPTH_TEST );
+    glClearDepth(1.0f);
+    glDepthFunc(GL_LEQUAL);
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
     glEnable( GL_LINE_SMOOTH );
     glLineWidth( 2.0 );
@@ -199,8 +203,8 @@ void GLCanvas::init()
     glEnable(GL_COLOR_MATERIAL);
 
     glFrontFace(GL_CW);
-    //glEnable(GL_CULL_FACE);
-    //glCullFace(GL_BACK);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
 
     glPolygonMode(GL_BACK, GL_LINE);          //FILL
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);  //WIRE
@@ -230,7 +234,7 @@ void GLCanvas::init()
     glViewport(0, 0, (GLint) w , (GLint) h );
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    camera.fit(scene.bbox);
+    //camera.fit(scene.bbox);
     std::cout << "\nbounding box da cena: " << std::endl;
     std::cout << "\tpMin: " << scene.bbox.pMin.x << " " << scene.bbox.pMin.y << "  " << scene.bbox.pMin.z << std::endl;
     std::cout << "\tpMax " << scene.bbox.pMax.x << " " << scene.bbox.pMax.y << "  " << scene.bbox.pMax.z << std::endl;
@@ -266,10 +270,10 @@ void GLCanvas::render()
     glTranslatef(-camera.pos.x, -camera.pos.y, -camera.pos.z);
     glMultMatrixf(m);
 
-    Vec3 center((scene.bbox.pMin.x + scene.bbox.pMax.x),
-                (scene.bbox.pMin.y + scene.bbox.pMax.y),
-                (scene.bbox.pMin.z + scene.bbox.pMax.z));
-    glTranslatef(-center.x, -center.y, -center.z);
+    //Vec3 center((scene.bbox.pMin.x + scene.bbox.pMax.x),
+    //            (scene.bbox.pMin.y + scene.bbox.pMax.y),
+    //            (scene.bbox.pMin.z + scene.bbox.pMax.z));
+    //glTranslatef(-center.x, -center.y, -center.z);
     if(!scene.isEmpty()) {
         if (selectMesh)
             scene.render(MESHES);
@@ -336,7 +340,7 @@ void GLCanvas::clear() {
 }
 
 void GLCanvas::onMouseLeftUp(wxMouseEvent &event) {
-    //camera.reset();
+    camera.reset();
     wxPoint mouse;
     event.GetPosition( &mouse.x, &mouse.y );
     
@@ -349,17 +353,17 @@ void GLCanvas::onMouseLeftUp(wxMouseEvent &event) {
     //    draw(mouse.x, windowSize.y - mouse.y);
 }
 
-void GLCanvas::onMouseLeftDown(wxMouseEvent &event) {
-    wxPoint windowSize;
-    GetClientSize(&windowSize.x, &windowSize.y);
-    wxPoint mouse;
-    event.GetPosition(&mouse.x, &mouse.y);
+//void GLCanvas::onMouseLeftDown(wxMouseEvent &event) {
+//    wxPoint windowSize;
+//    GetClientSize(&windowSize.x, &windowSize.y);
+//    wxPoint mouse;
+//    event.GetPosition(&mouse.x, &mouse.y);
 
     //if(drawing) {
     //    draw(mouse.x, windowSize.y - mouse.y);
     //}
     //Refresh();
-}
+//}
 
 void GLCanvas::draw(int x, int y) {
     if(startLineLoop) {
@@ -394,8 +398,8 @@ void GLCanvas::selectPicking(int x, int y) {
     glPushMatrix();
     glLoadIdentity();
     gluPickMatrix(x, y, 5.0, 5.0, view);
-    //glFrustum(camera.frustum.left, camera.frustum.right, camera.frustum.bottom, camera.frustum.top,
-    //              camera.frustum.near, camera.frustum.far);
+    glFrustum(camera.frustum.left, camera.frustum.right, camera.frustum.bottom, camera.frustum.top,
+                  camera.frustum.near, camera.frustum.far);
     glMatrixMode(GL_MODELVIEW);
     SwapBuffers();
 
@@ -502,8 +506,8 @@ void GLCanvas::onMouseWheel(wxMouseEvent& event)
         //Atualiza o frustum
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        //glFrustum(camera.frustum.left, camera.frustum.right, camera.frustum.bottom, camera.frustum.top,
-        //          camera.frustum.near, camera.frustum.far);
+        glFrustum(camera.frustum.left, camera.frustum.right, camera.frustum.bottom, camera.frustum.top,
+                  camera.frustum.near, camera.frustum.far);
         Refresh();
     }
 }

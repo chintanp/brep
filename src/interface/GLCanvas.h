@@ -5,6 +5,7 @@
 #include "wx/glcanvas.h"
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <list>
 #include "../Scene.h"
 #include "../Camera.h"
 
@@ -32,6 +33,15 @@ public:
                     float maxX, float maxY, float maxZ);
     void addCylinder(float pX, float pY, float pZ, float radius, float height, int disc);
     void addSphere(float pX, float pY, float pZ, float radius, int disc);
+
+    void setMeshSelect();
+
+    void setFaceSelect();
+
+    void setEdgeSelect();
+
+    void setVertexSelect();
+
 
 protected:
 		enum
@@ -65,7 +75,13 @@ private:
     bool selectFace;
     bool selectEdge;
     bool selectVertex;
+
 private:
+    std::list<Mesh*> meshList;
+    std::list<Loop*> faceList;
+    std::list<Edge*> edgeList;
+    std::list<Vertex*> vertexList;
+
     wxGLContext *glContext;
     Scene scene;
     Camera camera;

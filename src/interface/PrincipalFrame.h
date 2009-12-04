@@ -43,6 +43,10 @@ class PrincipalFrame : public wxFrame
 		void _wxFB_saveModel( wxCommandEvent& event ){ saveModel( event ); }
 		void _wxFB_zoomIn( wxCommandEvent& event ){ zoomIn( event ); }
 		void _wxFB_zoomOut( wxCommandEvent& event ){ zoomOut( event ); }
+		void _wxFB_vertexMode( wxCommandEvent& event ){ vertexMode( event ); }
+		void _wxFB_edgeMode( wxCommandEvent& event ){ edgeMode( event ); }
+		void _wxFB_faceMode( wxCommandEvent& event ){ faceMode( event ); }
+		void _wxFB_meshMode( wxCommandEvent& event ){ meshMode( event ); }
 
 
 	protected:
@@ -56,6 +60,10 @@ class PrincipalFrame : public wxFrame
 			ID_SAVE_MODEL_TB,
 			ID_ZOOM_IN_TB,
 			ID_ZOOM_OUT_TB,
+			ID_VERTEX_MODE_TB,
+			ID_EDGE_MODE_TB,
+			ID_FACE_MODE_TB,
+			ID_MESH_MODE_TB,
 			ID_BITMAP,
 		};
 
@@ -74,6 +82,10 @@ class PrincipalFrame : public wxFrame
 		virtual void saveModel( wxCommandEvent& event ){ event.Skip(); }
 		virtual void zoomIn( wxCommandEvent& event ){ event.Skip(); }
 		virtual void zoomOut( wxCommandEvent& event ){ event.Skip(); }
+		virtual void vertexMode( wxCommandEvent& event ){ event.Skip(); }
+		virtual void edgeMode( wxCommandEvent& event ){ event.Skip(); }
+		virtual void faceMode( wxCommandEvent& event ){ event.Skip(); }
+		virtual void meshMode( wxCommandEvent& event ){ event.Skip(); }
 
         GLCanvas* canvas;
 

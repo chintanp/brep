@@ -215,7 +215,7 @@
                     </object>
                 </object>
             </object>
-            <object class="wxToolBar" expanded="0">
+            <object class="wxToolBar" expanded="1">
                 <property name="bg"></property>
                 <property name="bitmapsize"></property>
                 <property name="context_help"></property>
@@ -333,6 +333,20 @@
                     <event name="OnToolRClicked"></event>
                     <event name="OnUpdateUI"></event>
                 </object>
+                <object class="tool" expanded="1">
+                    <property name="bitmap">icon/zoom.png; Load From File</property>
+                    <property name="id">ID_ZOOM_OUT_TB</property>
+                    <property name="kind">wxITEM_NORMAL</property>
+                    <property name="label">Fit</property>
+                    <property name="name">fit_tool</property>
+                    <property name="statusbar">Fit</property>
+                    <property name="tooltip"></property>
+                    <event name="OnMenuSelection"></event>
+                    <event name="OnToolClicked">fit</event>
+                    <event name="OnToolEnter"></event>
+                    <event name="OnToolRClicked"></event>
+                    <event name="OnUpdateUI"></event>
+                </object>
                 <object class="toolSeparator" expanded="1" />
                 <object class="tool" expanded="1">
                     <property name="bitmap">icon/vertex.png; Load From File</property>
@@ -388,6 +402,54 @@
                     <event name="OnToolClicked">meshMode</event>
                     <event name="OnToolEnter"></event>
                     <event name="OnToolRClicked"></event>
+                    <event name="OnUpdateUI"></event>
+                </object>
+                <object class="toolSeparator" expanded="1" />
+                <object class="toolSeparator" expanded="1" />
+                <object class="wxChoice" expanded="1">
+                    <property name="bg"></property>
+                    <property name="choices">&quot;Edit Mode&quot; &quot;Draw Mode&quot;</property>
+                    <property name="context_help"></property>
+                    <property name="enabled">1</property>
+                    <property name="fg"></property>
+                    <property name="font"></property>
+                    <property name="hidden">0</property>
+                    <property name="id">wxID_ANY</property>
+                    <property name="maximum_size"></property>
+                    <property name="minimum_size"></property>
+                    <property name="name">mode_choice</property>
+                    <property name="permission">protected</property>
+                    <property name="pos"></property>
+                    <property name="selection">0</property>
+                    <property name="size"></property>
+                    <property name="subclass"></property>
+                    <property name="tooltip"></property>
+                    <property name="window_extra_style"></property>
+                    <property name="window_name"></property>
+                    <property name="window_style"></property>
+                    <event name="OnChar"></event>
+                    <event name="OnChoice">selectMode</event>
+                    <event name="OnEnterWindow"></event>
+                    <event name="OnEraseBackground"></event>
+                    <event name="OnKeyDown"></event>
+                    <event name="OnKeyUp"></event>
+                    <event name="OnKillFocus"></event>
+                    <event name="OnLeaveWindow"></event>
+                    <event name="OnLeftDClick"></event>
+                    <event name="OnLeftDown"></event>
+                    <event name="OnLeftUp"></event>
+                    <event name="OnMiddleDClick"></event>
+                    <event name="OnMiddleDown"></event>
+                    <event name="OnMiddleUp"></event>
+                    <event name="OnMotion"></event>
+                    <event name="OnMouseEvents"></event>
+                    <event name="OnMouseWheel"></event>
+                    <event name="OnPaint"></event>
+                    <event name="OnRightDClick"></event>
+                    <event name="OnRightDown"></event>
+                    <event name="OnRightUp"></event>
+                    <event name="OnSetFocus"></event>
+                    <event name="OnSize"></event>
                     <event name="OnUpdateUI"></event>
                 </object>
             </object>

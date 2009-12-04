@@ -62,7 +62,15 @@ PrincipalFrame::PrincipalFrame( wxWindow* parent, wxWindowID id, const wxString&
 	toolBar->AddTool( ID_EDGE_MODE_TB, wxT("Edge Mode"), wxBitmap( wxT("data/icon/edge.png"), wxBITMAP_TYPE_ANY ), wxNullBitmap, wxITEM_RADIO, wxEmptyString, wxT("Edge Mode") );
 	toolBar->AddTool( ID_FACE_MODE_TB, wxT("Face Mode"), wxBitmap( wxT("data/icon/face.png"), wxBITMAP_TYPE_ANY ), wxNullBitmap, wxITEM_RADIO, wxEmptyString, wxT("Face Mode") );
 	toolBar->AddTool( ID_MESH_MODE_TB, wxT("Mesh Model "), wxBitmap( wxT("data/icon/mesh.png"), wxBITMAP_TYPE_ANY ), wxNullBitmap, wxITEM_RADIO, wxEmptyString, wxT("Mesh Mode") );
+	toolBar->AddSeparator();
+	toolBar->AddSeparator();
+	wxString mode_choiceChoices[] = { wxT("Edit Mode"), wxT("Draw Mode") };
+	int mode_choiceNChoices = sizeof( mode_choiceChoices ) / sizeof( wxString );
+	mode_choice = new wxChoice( toolBar, wxID_ANY, wxDefaultPosition, wxDefaultSize, mode_choiceNChoices, mode_choiceChoices, 0 );
+	mode_choice->SetSelection( 0 );
+	toolBar->AddControl( mode_choice );
 	toolBar->Realize();
+
 
 	wxBoxSizer* bSizer_Global;
 	bSizer_Global = new wxBoxSizer( wxHORIZONTAL );

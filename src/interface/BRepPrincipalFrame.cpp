@@ -73,3 +73,8 @@ void BRepPrincipalFrame::meshMode( wxCommandEvent& event )
 {
 	canvas->setMeshSelect();
 }
+
+void BRepPrincipalFrame::selectMode( wxCommandEvent& event )
+{
+	mode_choice->Hide();
+}

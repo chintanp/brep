@@ -9,8 +9,11 @@ enum RenderMode { MESHES, FACES, POINTS, LINES };
 
 class Scene {
 public:
-    //TODO função pra limpar a cena
     Scene();
+    ~Scene();
+    
+    void clear();
+
     void render(RenderMode mode);
 
     bool isEmpty();

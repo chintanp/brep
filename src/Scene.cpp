@@ -8,6 +8,19 @@
 int Scene::numMeshes = 0;
 
 Scene::Scene() {
+    
+}
+
+Scene::~Scene() {
+    this->clear();
+}
+
+void Scene::clear() {
+    std::list<Mesh*>::iterator iter;
+    for(iter = meshes.begin(); iter != meshes.end(); iter++) {
+        delete *iter;
+    }
+    meshes.clear();
 }
 
 void Scene::render(RenderMode mode) {

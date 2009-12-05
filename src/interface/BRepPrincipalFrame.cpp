@@ -80,48 +80,40 @@ void BRepPrincipalFrame::meshMode( wxCommandEvent& event )
 
 void BRepPrincipalFrame::add_Corner( wxCommandEvent& event )
 {
-    std::cout << "1111111111111111" << std::endl;
     canvas->_addCorner(event);
     Refresh();
 }
 
 void BRepPrincipalFrame::add_Cylinder( wxCommandEvent& event )
 {
-    std::cout << "222222222222222222" << std::endl;
     canvas->_addCylinder(event);
     Refresh();
 }
 
 void BRepPrincipalFrame::add_Sphere( wxCommandEvent& event )
 {
-    std::cout << "33333333333333333333333" << std::endl;
     canvas->_addSphere(event);
     Refresh();
 }
 
 void BRepPrincipalFrame::add_Cube( wxCommandEvent& event )
 {
-    std::cout << "44444444444444444444" << std::endl;
     canvas->_addCube(event);
     Refresh();
 }
 
 void BRepPrincipalFrame::add_Circle( wxCommandEvent& event )
 {
-    std::cout << "asddddddddd 11" << std::endl;
 }
 
 void BRepPrincipalFrame::add_Line( wxCommandEvent& event )
 {
-    std::cout << "asddddddddd 22" << std::endl;
 }
 
 void BRepPrincipalFrame::doneDrawMode( wxCommandEvent& event )
 {
-    std::cout << "asddddddddd 33" << std::endl;
 }
 
 void BRepPrincipalFrame::sweeping( wxCommandEvent& event )
 {
-    std::cout << "asddddddddd 44" << std::endl;
 }

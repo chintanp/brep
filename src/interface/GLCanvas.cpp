@@ -67,7 +67,6 @@ GLCanvas::~GLCanvas()
 
 void GLCanvas::_addCube(wxCommandEvent& event)
 {
-        std::cout << "44444444444444444444" << std::endl;
     addCube(-2, -2, -2, 4);
     Refresh();
 }
@@ -75,8 +74,8 @@ void GLCanvas::_addCube(wxCommandEvent& event)
 void GLCanvas::_addCorner(wxCommandEvent& event)
 {
     addCorner(-2, -2, -2,
-            1, 4, 2,
-            2, 2, 2);
+               1, 4, 2,
+               2, 2, 2);
     Refresh();
 }
 
@@ -99,7 +98,6 @@ void GLCanvas::_deleteMesh(wxCommandEvent& event)
 
 void GLCanvas::addCube(float minX, float minY, float minZ, float size)
 {
-    std::cout << "44444444444444444444" << std::endl;
     //v0, f0, s0
     scene.mvfs(minX, minY, minZ);
     //v1
@@ -171,7 +169,7 @@ void GLCanvas::addSphere(float pX, float pY, float pZ, float radius, int disc) {
         scene.smev(Scene::numMeshes - 1, 0, idNum, radius*cos(angle), radius*sin(angle), 0.0);
     }
     scene.rsweep(Scene::numMeshes -1 , 0, 2*disc);
-}
+} 
 
 void drawBlack(std::list<Mesh*> list)
 {
@@ -312,7 +310,7 @@ void GLCanvas::menu(wxMouseEvent& event)
 
 void GLCanvas::init()
 {
-    addCube(-1, -1, 1, 2);
+    //addCube(-1, -1, 1, 2);
     //addCorner(-2, -2, -2, 1, 4, 2, 2, 2, 2);
     //addCylinder(0.0, 10.0, 0.0, 2.0, 3.0, 20);
     //addSphere(0.0, 0.0, 0.0, 5, 20);
@@ -404,10 +402,10 @@ void GLCanvas::render()
     glTranslatef(-camera.pos.x, -camera.pos.y, -camera.pos.z);
     glMultMatrixf(m);
     
-    Vec3 center((scene.bbox.pMin.x + scene.bbox.pMax.x),
-                (scene.bbox.pMin.y + scene.bbox.pMax.y),
-                (scene.bbox.pMin.z + scene.bbox.pMax.z));
-    glTranslatef(-center.x, -center.y, -center.z);
+    //Vec3 center((scene.bbox.pMin.x + scene.bbox.pMax.x),
+    //            (scene.bbox.pMin.y + scene.bbox.pMax.y),
+    //            (scene.bbox.pMin.z + scene.bbox.pMax.z));
+    //glTranslatef(-center.x, -center.y, -center.z);
     if(!scene.isEmpty()) {
         if (selectMesh)
             scene.render(MESHES);
@@ -505,13 +503,10 @@ void GLCanvas::draw(int x, int y) {
         scene.mvfs(x, y, 0.0);
         numPts++;
         startLineLoop = false;
-        std::cout << "criado o primeiro ponto" << std::endl;
     } else {
-        std::cout << "criado novo ponto" << std::endl;
         Vertex *first = scene.getVertex(Scene::numMeshes - 1, 0);
         if(fabs(x - first->x) < 3 && fabs(y - first->y) < 3) {
             scene.smef(Scene::numMeshes -1, 0, numPts - 1, 0);
-            std::cout << "criado uma face" << std::endl;
             startLineLoop = true;
             numPts = 0;
         } else {

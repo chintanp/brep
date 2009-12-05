@@ -340,8 +340,9 @@ void Scene::removeSolid(int idSolid) {
         if ((*iter)->id == idSolid) {
             delete *iter;
             meshes.erase(iter);
+            Scene::numMeshes--;
+            return;
         }
-    Scene::numMeshes--;
 }
 
 void Scene::sweep(int idSolid, int idFace, float dx, float dy, float dz) {

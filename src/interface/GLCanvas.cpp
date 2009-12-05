@@ -62,6 +62,7 @@ GLCanvas::~GLCanvas()
 
 void GLCanvas::_addCube(wxCommandEvent& event)
 {
+        std::cout << "44444444444444444444" << std::endl;
     addCube(-2, -2, -2, 4);
     Refresh();
 }
@@ -88,6 +89,7 @@ void GLCanvas::_addSphere(wxCommandEvent& event)
 
 void GLCanvas::addCube(float minX, float minY, float minZ, float size)
 {
+    std::cout << "44444444444444444444" << std::endl;
     //v0, f0, s0
     scene.mvfs(minX, minY, minZ);
     //v1
@@ -300,7 +302,7 @@ void GLCanvas::menu(wxMouseEvent& event)
 
 void GLCanvas::init()
 {
-    //addCube(-2, -2, 2, 4);
+    addCube(-1, -1, 1, 2);
     //addCorner(-2, -2, -2, 1, 4, 2, 2, 2, 2);
     //addCylinder(0.0, 10.0, 0.0, 2.0, 3.0, 20);
     //addSphere(0.0, 0.0, 0.0, 5, 20);

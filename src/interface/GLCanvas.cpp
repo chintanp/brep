@@ -15,6 +15,7 @@ BEGIN_EVENT_TABLE(GLCanvas, wxGLCanvas)
     EVT_MENU(ID_ADD_CORNER, GLCanvas::_addCorner)
     EVT_MENU(ID_ADD_CYLINDER, GLCanvas::_addCylinder)
     EVT_MENU(ID_ADD_SPHERE, GLCanvas::_addSphere)
+    EVT_MENU(ID_DELETE_MESH, GLCanvas::_deleteMesh)
 END_EVENT_TABLE()
 
 GLCanvas::GLCanvas(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name, int* attribList) :
@@ -52,6 +53,10 @@ wxGLCanvas(parent, id, pos, size, style, name,  attribList)
 
     option_menu->Append( -1, wxT("Add primitive"), primitive_menu );
 
+    wxMenuItem* delete_menuItem;
+    delete_menuItem = new wxMenuItem( primitive_menu, ID_DELETE_MESH, wxString( wxT("Delete") ) , wxEmptyString, wxITEM_NORMAL );
+    option_menu->Append( delete_menuItem );
+
 }
 
 GLCanvas::~GLCanvas()
@@ -62,6 +67,7 @@ GLCanvas::~GLCanvas()
 
 void GLCanvas::_addCube(wxCommandEvent& event)
 {
+        std::cout << "44444444444444444444" << std::endl;
     addCube(-2, -2, -2, 4);
     Refresh();
 }
@@ -86,8 +92,14 @@ void GLCanvas::_addSphere(wxCommandEvent& event)
      Refresh();
 }
 
+void GLCanvas::_deleteMesh(wxCommandEvent& event)
+{
+    return;
+}
+
 void GLCanvas::addCube(float minX, float minY, float minZ, float size)
 {
+    std::cout << "44444444444444444444" << std::endl;
     //v0, f0, s0
     scene.mvfs(minX, minY, minZ);
     //v1
@@ -300,7 +312,7 @@ void GLCanvas::menu(wxMouseEvent& event)
 
 void GLCanvas::init()
 {
-    //addCube(-2, -2, 2, 4);
+    addCube(-1, -1, 1, 2);
     //addCorner(-2, -2, -2, 1, 4, 2, 2, 2, 2);
     //addCylinder(0.0, 10.0, 0.0, 2.0, 3.0, 20);
     //addSphere(0.0, 0.0, 0.0, 5, 20);

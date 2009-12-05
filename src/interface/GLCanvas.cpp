@@ -93,7 +93,11 @@ void GLCanvas::_addSphere(wxCommandEvent& event)
 
 void GLCanvas::_deleteMesh(wxCommandEvent& event)
 {
-    return;
+    std::list<Mesh*>::iterator iter;
+    for(iter = meshList.begin(); iter != meshList.end(); iter++) {
+        scene.removeSolid((*iter)->id);
+    }
+    meshList.clear();
 }
 
 void GLCanvas::addCube(float minX, float minY, float minZ, float size)

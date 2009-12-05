@@ -7,10 +7,10 @@ Face::Face(Mesh *m) : solid(m), id(m->numFaces)  {
 
 Face::~Face() {
     std::list<Loop*>::iterator iter;
-    for(iter = loops.begin(); iter != loops.end(); ) {
+    for(iter = loops.begin(); iter != loops.end(); iter++) {
         delete *iter;
-        loops.erase(iter);
     }
+    loops.clear();
 }
 
 void Face::addLoop(Loop *l) {

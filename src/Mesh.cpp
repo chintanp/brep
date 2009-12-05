@@ -11,24 +11,24 @@ Mesh::Mesh(int id) : id(id), initialized(false) {
 Mesh::~Mesh() {
     //apaga os vertices
     std::list<Vertex*>::iterator vIter;
-    for(vIter = vertices.begin(); vIter != vertices.end(); ) {
+    for(vIter = vertices.begin(); vIter != vertices.end(); vIter++) {
         delete *vIter;
-        vertices.erase(vIter);
     }
+    vertices.clear();
 
     //apaga as arestas
     std::list<Edge*>::iterator eIter;
-    for(eIter = edges.begin(); eIter != edges.end(); ) {
+    for(eIter = edges.begin(); eIter != edges.end(); eIter++) {
         delete *eIter;
-        edges.erase(eIter);
     }
+    edges.clear();
     
     //apaga as faces
     std::list<Face*>::iterator fIter;
-    for(fIter = faces.begin(); fIter != faces.end(); ) {
+    for(fIter = faces.begin(); fIter != faces.end(); fIter++) {
         delete *fIter;
-        faces.erase(fIter);
     }
+    faces.clear();
 
 }
 

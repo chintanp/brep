@@ -19,9 +19,16 @@
 #include <wx/icon.h>
 #include <wx/menu.h>
 #include <wx/toolbar.h>
+#include <wx/bmpbuttn.h>
+#include <wx/button.h>
+#include <wx/stattext.h>
+#include <wx/gbsizer.h>
 #include <wx/sizer.h>
+#include <wx/panel.h>
+#include <wx/notebook.h>
 #include <wx/statbmp.h>
 #include <wx/frame.h>
+
 
 
 #include "GLCanvas.h"
@@ -48,7 +55,14 @@ class PrincipalFrame : public wxFrame
 		void _wxFB_edgeMode( wxCommandEvent& event ){ edgeMode( event ); }
 		void _wxFB_faceMode( wxCommandEvent& event ){ faceMode( event ); }
 		void _wxFB_meshMode( wxCommandEvent& event ){ meshMode( event ); }
-		void _wxFB_selectMode( wxCommandEvent& event ){ selectMode( event ); }
+		void _wxFB_add_Corner( wxCommandEvent& event ){ add_Corner( event ); }
+		void _wxFB_add_Cylinder( wxCommandEvent& event ){ add_Cylinder( event ); }
+		void _wxFB_add_Sphere( wxCommandEvent& event ){ add_Sphere( event ); }
+		void _wxFB_sweeping( wxCommandEvent& event ){ sweeping( event ); }
+		void _wxFB_add_Cube( wxCommandEvent& event ){ add_Cube( event ); }
+		void _wxFB_add_Circle( wxCommandEvent& event ){ add_Circle( event ); }
+		void _wxFB_add_Line( wxCommandEvent& event ){ add_Line( event ); }
+		void _wxFB_doneDrawMode( wxCommandEvent& event ){ doneDrawMode( event ); }
 
 
 	protected:
@@ -66,6 +80,14 @@ class PrincipalFrame : public wxFrame
 			ID_EDGE_MODE_TB,
 			ID_FACE_MODE_TB,
 			ID_MESH_MODE_TB,
+			wxID_CORNER,
+			wxID_CYLINDER,
+			wxID_SPHERE,
+			wxID_SWEEPING,
+			wxID_CUBE,
+			wxID_CIRCLE,
+			wxID_LINE,
+			wxID_DONE,
 			ID_BITMAP,
 		};
 
@@ -74,7 +96,23 @@ class PrincipalFrame : public wxFrame
 		wxMenu* file_menu;
 		wxMenu* help_menu;
 		wxToolBar* toolBar;
-		wxChoice* mode_choice;
+		wxNotebook* editMode_notebook;
+		wxPanel* edit_panel;
+		wxBitmapButton* corner_bpButton;
+		wxBitmapButton* cylinder_bpButton;
+		wxBitmapButton* sphere_bpButton;
+		wxButton* sweeping_button;
+		wxBitmapButton* cube_bpButton;
+		wxStaticText* cube_staticText;
+		wxStaticText* corner_staticText;
+		wxStaticText* cylinder_staticText;
+		wxStaticText* sphere_staticText;
+		wxPanel* drawMode_panel;
+		wxBitmapButton* circle_bpButton;
+		wxBitmapButton* line_bpButton;
+		wxButton* done_button;
+		wxStaticText* line_staticText;
+		wxStaticText* line_staticText2;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void newModel( wxCommandEvent& event ){ event.Skip(); }
@@ -89,7 +127,14 @@ class PrincipalFrame : public wxFrame
 		virtual void edgeMode( wxCommandEvent& event ){ event.Skip(); }
 		virtual void faceMode( wxCommandEvent& event ){ event.Skip(); }
 		virtual void meshMode( wxCommandEvent& event ){ event.Skip(); }
-		virtual void selectMode( wxCommandEvent& event ){ event.Skip(); }
+		virtual void add_Corner( wxCommandEvent& event ){ event.Skip(); }
+		virtual void add_Cylinder( wxCommandEvent& event ){ event.Skip(); }
+		virtual void add_Sphere( wxCommandEvent& event ){ event.Skip(); }
+		virtual void sweeping( wxCommandEvent& event ){ event.Skip(); }
+		virtual void add_Cube( wxCommandEvent& event ){ event.Skip(); }
+		virtual void add_Circle( wxCommandEvent& event ){ event.Skip(); }
+		virtual void add_Line( wxCommandEvent& event ){ event.Skip(); }
+		virtual void doneDrawMode( wxCommandEvent& event ){ event.Skip(); }
 
         GLCanvas* canvas;
 

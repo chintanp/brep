@@ -5,6 +5,14 @@ Face::Face(Mesh *m) : solid(m), id(m->numFaces)  {
     solid->addFace(this);
 }
 
+Face::~Face() {
+    std::list<Loop*>::iterator iter;
+    for(iter = loops.begin(); iter != loops.end(); ) {
+        delete *iter;
+        loops.erase(iter);
+    }
+}
+
 void Face::addLoop(Loop *l) {
     loops.push_back(l);
 }

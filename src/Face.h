@@ -8,7 +8,7 @@ class Mesh;
 class Face {
 public:
     Face(Mesh *m);
-    
+    ~Face();    
     void addLoop(Loop *l);
     
     int getId();

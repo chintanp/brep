@@ -8,7 +8,7 @@ BEGIN_EVENT_TABLE(GLCanvas, wxGLCanvas)
     EVT_ERASE_BACKGROUND(GLCanvas::onEraseBackground)
     EVT_ENTER_WINDOW(GLCanvas::onEnterWindow)
     EVT_LEFT_UP(GLCanvas::onMouseLeftUp)
-    //EVT_LEFT_DOWN(GLCanvas::onMouseLeftDown)
+    EVT_LEFT_DOWN(GLCanvas::onMouseLeftDown)
     EVT_MOTION(GLCanvas::onMouseMove)
     EVT_MOUSEWHEEL( GLCanvas::onMouseWheel )
     EVT_MENU(ID_ADD_CUBE, GLCanvas::_addCube)
@@ -24,7 +24,7 @@ wxGLCanvas(parent, id, pos, size, style, name,  attribList)
    selectFace = false;
    selectMesh = false;
    selectEdge = false;
-   selectVertex = true;
+   selectVertex = false;
    drawing = true;
 
     startLineLoop = true;
@@ -329,7 +329,7 @@ void GLCanvas::init()
     //glEnable(GL_CULL_FACE);
     //glCullFace(GL_BACK);
 
-    glPolygonMode(GL_BACK, GL_LINE);          //FILL
+    //glPolygonMode(GL_BACK, GL_LINE);          //FILL
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);  //WIRE
 
 
@@ -369,13 +369,13 @@ void GLCanvas::init()
     float t = camera.frustum.top;
     float n = camera.frustum.near;
     float f = camera.frustum.far;
-    glFrustum(camera.frustum.left, camera.frustum.right, camera.frustum.bottom, camera.frustum.top,
-              camera.frustum.near, camera.frustum.far);
+    //glFrustum(camera.frustum.left, camera.frustum.right, camera.frustum.bottom, camera.frustum.top,
+    //          camera.frustum.near, camera.frustum.far);
     std::cout << "\t pos: " << camera.pos.x << "  " << camera.pos.y << "  " << camera.pos.z << std::endl;
     std::cout << "\t frustum: " << l << "  " << r << "  " << b << "  " << t << "  " << n << "  " <<  f << std::endl;
 
     //Drawing
-    //glOrtho(0, w, 0, h, -1, 1);
+    glOrtho(0, w, 0, h, -1, 1);
  }
 
 void GLCanvas::render()
@@ -387,15 +387,15 @@ void GLCanvas::render()
     glLoadIdentity();
     //renderBackground();
 
-    float m[16];
-    camera.setupViewMatrix(m);
-    glTranslatef(-camera.pos.x, -camera.pos.y, -camera.pos.z);
-    glMultMatrixf(m);
+    //float m[16];
+    //camera.setupViewMatrix(m);
+    //glTranslatef(-camera.pos.x, -camera.pos.y, -camera.pos.z);
+    //glMultMatrixf(m);
 
-    Vec3 center((scene.bbox.pMin.x + scene.bbox.pMax.x),
-                (scene.bbox.pMin.y + scene.bbox.pMax.y),
-                (scene.bbox.pMin.z + scene.bbox.pMax.z));
-    glTranslatef(-center.x, -center.y, -center.z);
+    //Vec3 center((scene.bbox.pMin.x + scene.bbox.pMax.x),
+    //            (scene.bbox.pMin.y + scene.bbox.pMax.y),
+    //            (scene.bbox.pMin.z + scene.bbox.pMax.z));
+    //glTranslatef(-center.x, -center.y, -center.z);
     if(!scene.isEmpty()) {
         if (selectMesh)
             scene.render(MESHES);
@@ -473,26 +473,29 @@ void GLCanvas::onMouseLeftUp(wxMouseEvent &event) {
         selectPicking(mouse.x, windowSize.y - mouse.y);
     //else if (drawing)
     //    draw(mouse.x, windowSize.y - mouse.y);
+    Refresh();
 }
 
-//void GLCanvas::onMouseLeftDown(wxMouseEvent &event) {
-//    wxPoint windowSize;
-//    GetClientSize(&windowSize.x, &windowSize.y);
-//    wxPoint mouse;
-//    event.GetPosition(&mouse.x, &mouse.y);
+void GLCanvas::onMouseLeftDown(wxMouseEvent &event) {
+    wxPoint windowSize;
+    GetClientSize(&windowSize.x, &windowSize.y);
+    wxPoint mouse;
+    event.GetPosition(&mouse.x, &mouse.y);
 
-    //if(drawing) {
-    //    draw(mouse.x, windowSize.y - mouse.y);
-    //}
-    //Refresh();
-//}
+    if(drawing) {
+        draw(mouse.x, windowSize.y - mouse.y);
+    }
+    Refresh();
+}
 
 void GLCanvas::draw(int x, int y) {
     if(startLineLoop) {
         scene.mvfs(x, y, 0.0);
         numPts++;
         startLineLoop = false;
+        std::cout << "criado o primeiro ponto" << std::endl;
     } else {
+        std::cout << "criado novo ponto" << std::endl;
         Vertex *first = scene.getVertex(Scene::numMeshes - 1, 0);
         if(fabs(x - first->x) < 3 && fabs(y - first->y) < 3) {
             scene.smef(Scene::numMeshes -1, 0, numPts - 1, 0);
@@ -500,6 +503,13 @@ void GLCanvas::draw(int x, int y) {
             startLineLoop = true;
             numPts = 0;
         } else {
+            Mesh *m = scene.getSolid(Scene::numMeshes - 1);
+            std::list<Vertex*>::iterator vIter = m->vertices.begin();
+            vIter++;
+            for(; vIter != m->vertices.end(); vIter++)
+                if(fabs(x - (*vIter)->x) < 3 && fabs(y - (*vIter)->y)< 3) 
+                    return;
+            
             scene.smev(Scene::numMeshes - 1, 0, numPts - 1, x, y, 0.0);
             numPts++;
         }
@@ -573,7 +583,6 @@ void GLCanvas::selectPicking(int x, int y) {
         {
             if((*it)->id == m->id)
             {
-                std::cout << "ETASERTSDFASDFASDFASDFASDFASDF" << std::endl;
                 m->r = 0.6;
                 m->g = 0.6;
                 m->b = 0.6;
@@ -582,7 +591,6 @@ void GLCanvas::selectPicking(int x, int y) {
                 return;
             }
         }
-        std::cout << "NOSAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
         m->r = 1.0;
         m->g = 0.0;
         m->b = 0.0;
@@ -714,6 +722,11 @@ void GLCanvas::onSize(wxSizeEvent& event)
     GetClientSize(&w, &h);
 
     glViewport(0, 0, (GLint) w , (GLint) h );
+    
+    //if (drawing) {
+    //    glMatrixMode(GL_PROJECTION);
+    //    glOrtho(0, w, 0, h, -1, 1);
+    //}
     Refresh();
 }
 

@@ -64,6 +64,7 @@ private:
     void onEraseBackground(wxEraseEvent& event);
     void onEnterWindow(wxMouseEvent& event);
     void onMouseLeftUp(wxMouseEvent& event);
+    void onMouseLeftDown(wxMouseEvent& event);
     void onMouseMove(wxMouseEvent& event);
     void onMouseWheel(wxMouseEvent& event);
     void menu(wxMouseEvent& event);

@@ -46,6 +46,7 @@ public:
     void _addCorner(wxCommandEvent& event);
     void _addCylinder(wxCommandEvent& event);
     void _addSphere(wxCommandEvent& event);
+    void _deleteMesh(wxCommandEvent& event);
 
 protected:
 		enum
@@ -54,6 +55,7 @@ protected:
             ID_ADD_CORNER,
             ID_ADD_CYLINDER,
             ID_ADD_SPHERE,
+            ID_DELETE_MESH,
 		};
 
 private:

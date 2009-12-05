@@ -1484,7 +1484,7 @@
             <property name="id">wxID_ANY</property>
             <property name="maximum_size"></property>
             <property name="minimum_size"></property>
-            <property name="name">Sweeping</property>
+            <property name="name">Sweeping_Dialog</property>
             <property name="pos"></property>
             <property name="size">370,100</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE</property>

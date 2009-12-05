@@ -25,7 +25,14 @@ protected:
     void edgeMode( wxCommandEvent& event );
     void faceMode( wxCommandEvent& event );
     void meshMode( wxCommandEvent& event );
-    void selectMode( wxCommandEvent& event );
+    void add_Corner( wxCommandEvent& event );
+    void add_Cylinder( wxCommandEvent& event );
+    void add_Sphere( wxCommandEvent& event );
+    void add_Cube( wxCommandEvent& event );
+    void add_Circle( wxCommandEvent& event );
+    void add_Line( wxCommandEvent& event );
+    void doneDrawMode( wxCommandEvent& event );
+    void sweeping( wxCommandEvent& event );
 
 public:
 	/** Constructor */

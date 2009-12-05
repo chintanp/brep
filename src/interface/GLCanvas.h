@@ -42,6 +42,11 @@ public:
 
     void setVertexSelect();
 
+    void _addCube(wxCommandEvent& event);
+    void _addCorner(wxCommandEvent& event);
+    void _addCylinder(wxCommandEvent& event);
+    void _addSphere(wxCommandEvent& event);
+    void _deleteMesh(wxCommandEvent& event);
 
 protected:
 		enum
@@ -50,15 +55,10 @@ protected:
             ID_ADD_CORNER,
             ID_ADD_CYLINDER,
             ID_ADD_SPHERE,
+            ID_DELETE_MESH,
 		};
 
 private:
-    void _addCube(wxCommandEvent& event);
-    void _addCorner(wxCommandEvent& event);
-    void _addCylinder(wxCommandEvent& event);
-    void _addSphere(wxCommandEvent& event);
-
-
     void onPaint(wxPaintEvent& event);
     void onSize(wxSizeEvent& event);
     void onEraseBackground(wxEraseEvent& event);

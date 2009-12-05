@@ -49,6 +49,8 @@
 		<Unit filename="src/interface/PrincipalApp.h" />
 		<Unit filename="src/interface/PrincipalFrame.cpp" />
 		<Unit filename="src/interface/PrincipalFrame.h" />
+		<Unit filename="src/interface/Sweeping_Dialog.cpp" />
+		<Unit filename="src/interface/Sweeping_Dialog.h" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/math/Quat.cpp" />
 		<Unit filename="src/math/Quat.h" />

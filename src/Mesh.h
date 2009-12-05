@@ -9,9 +9,8 @@
 
 class Mesh {
 public:
-//TODO: destrutor desalocando a memória
     Mesh(int id);
-
+    ~Mesh();
     int getId();
 
     void addVertex(Vertex *v);

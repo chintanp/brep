@@ -321,6 +321,16 @@ bool Scene::smef(int idSolid, int idFace, int idVertex1, int idVertex2) {
     return true;
 }
 
+void Scene::removeSolid(int idSolid) {
+    std::list<Mesh*>::iterator iter;
+    for(iter = meshes.begin(); iter != meshes.end(); iter++)
+        if ((*iter)->id == idSolid) {
+            delete *iter;
+            meshes.erase(iter);
+        }
+    Scene::numMeshes--;
+}
+
 void Scene::sweep(int idSolid, int idFace, float dx, float dy, float dz) {
     Mesh *m = getSolid(idSolid);
     Face *f = getFace(m, idFace);

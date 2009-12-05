@@ -24,8 +24,8 @@ wxGLCanvas(parent, id, pos, size, style, name,  attribList)
    selectFace = false;
    selectMesh = false;
    selectEdge = false;
-   selectVertex = false;
-   drawing = true;
+   selectVertex = true;
+   drawing = false;
 
     startLineLoop = true;
     numPts = 0;
@@ -369,13 +369,13 @@ void GLCanvas::init()
     float t = camera.frustum.top;
     float n = camera.frustum.near;
     float f = camera.frustum.far;
-    //glFrustum(camera.frustum.left, camera.frustum.right, camera.frustum.bottom, camera.frustum.top,
-    //          camera.frustum.near, camera.frustum.far);
+    glFrustum(camera.frustum.left, camera.frustum.right, camera.frustum.bottom, camera.frustum.top,
+              camera.frustum.near, camera.frustum.far);
     std::cout << "\t pos: " << camera.pos.x << "  " << camera.pos.y << "  " << camera.pos.z << std::endl;
     std::cout << "\t frustum: " << l << "  " << r << "  " << b << "  " << t << "  " << n << "  " <<  f << std::endl;
 
     //Drawing
-    glOrtho(0, w, 0, h, -1, 1);
+    //glOrtho(0, w, 0, h, -1, 1);
  }
 
 void GLCanvas::render()
@@ -385,17 +385,17 @@ void GLCanvas::render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    //renderBackground();
+    renderBackground();
 
-    //float m[16];
-    //camera.setupViewMatrix(m);
-    //glTranslatef(-camera.pos.x, -camera.pos.y, -camera.pos.z);
-    //glMultMatrixf(m);
-
-    //Vec3 center((scene.bbox.pMin.x + scene.bbox.pMax.x),
-    //            (scene.bbox.pMin.y + scene.bbox.pMax.y),
-    //            (scene.bbox.pMin.z + scene.bbox.pMax.z));
-    //glTranslatef(-center.x, -center.y, -center.z);
+    float m[16];
+    camera.setupViewMatrix(m);
+    glTranslatef(-camera.pos.x, -camera.pos.y, -camera.pos.z);
+    glMultMatrixf(m);
+    
+    Vec3 center((scene.bbox.pMin.x + scene.bbox.pMax.x),
+                (scene.bbox.pMin.y + scene.bbox.pMax.y),
+                (scene.bbox.pMin.z + scene.bbox.pMax.z));
+    glTranslatef(-center.x, -center.y, -center.z);
     if(!scene.isEmpty()) {
         if (selectMesh)
             scene.render(MESHES);

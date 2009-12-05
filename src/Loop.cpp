@@ -7,7 +7,7 @@ Loop::Loop(Face *f) {
     face->addLoop(this);
 
     this->id = f->solid->numLoops++;
-
+    
 
     r = g = b= 0.6;
 }

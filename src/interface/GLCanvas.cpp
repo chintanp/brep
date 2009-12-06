@@ -294,10 +294,9 @@ void GLCanvas::_rotate(wxCommandEvent& event)
     BRepRotate_Dialog edit(this);
     if(edit.ShowModal() == wxID_OK)
     {
-        edit.getX();
-        edit.getY();
-        edit.getZ();
-        edit.getAngle();
+        std::set<Mesh*>::iterator mIter;
+        for(mIter = meshList.begin(); mIter != meshList.end(); mIter++)
+            (*mIter)->rotate(edit.getAngle()*M_PI/180.0, edit.getX(), edit.getY(), edit.getZ());
     }
 }
 
@@ -306,9 +305,10 @@ void GLCanvas::_scale(wxCommandEvent& event)
     BRepEdit_Dialog edit(this);
     if(edit.ShowModal() == wxID_OK)
     {
-        edit.getX();
-        edit.getY();
-        edit.getZ();
+        //Percorrer a lista de meshes selecionados e aplica a escala
+        std::set<Mesh*>::iterator mIter;
+        for(mIter = meshList.begin(); mIter != meshList.end(); mIter++)
+            (*mIter)->scale(edit.getX(), edit.getY(), edit.getZ());
     }
 }
 
@@ -317,9 +317,10 @@ void GLCanvas::_translate(wxCommandEvent& event)
     BRepEdit_Dialog edit(this);
     if(edit.ShowModal() == wxID_OK)
     {
-        edit.getX();
-        edit.getY();
-        edit.getZ();
+        //Percorrer a lista de meshes selecionados e aplica a translação 
+        std::set<Mesh*>::iterator mIter;
+        for(mIter = meshList.begin(); mIter != meshList.end(); mIter++)
+            (*mIter)->translate(edit.getX(), edit.getY(), edit.getZ());
     }
 }
 

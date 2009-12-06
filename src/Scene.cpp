@@ -26,6 +26,12 @@ void Scene::render(RenderMode mode) {
     if (mode == FACES || mode == MESHES) {
         std::list<Mesh*>::iterator mIter;
         for(mIter = meshes.begin(); mIter != meshes.end(); mIter++){
+            glPushMatrix();
+            float m[16];
+            (*mIter)->orientation.toMatrix(m);
+            glMultMatrixf(m);
+            glScalef((*mIter)->sx, (*mIter)->sy, (*mIter)->sz);
+            glTranslatef((*mIter)->tx, (*mIter)->ty, (*mIter)->tz);
             std::list<Face*>::iterator fIter;
             glPushName((*mIter)->id);
             if(mode == MESHES)
@@ -51,10 +57,17 @@ void Scene::render(RenderMode mode) {
                 }
             }
             glPopName();
+            glPopMatrix();
         }
     } else if (mode == POINTS) {
         std::list<Mesh*>::iterator mIter;
         for(mIter = meshes.begin(); mIter != meshes.end(); mIter++){
+            glPushMatrix();
+            float m[16];
+            (*mIter)->orientation.toMatrix(m);
+            glMultMatrixf(m);
+            glScalef((*mIter)->sx, (*mIter)->sy, (*mIter)->sz);
+            glTranslatef((*mIter)->tx, (*mIter)->ty, (*mIter)->tz);
             std::list<Vertex*>::iterator vIter;
             glPushName((*mIter)->id);
             for(vIter = (*mIter)->vertices.begin(); vIter != (*mIter)->vertices.end(); vIter++) {
@@ -66,10 +79,17 @@ void Scene::render(RenderMode mode) {
                 glPopName();
             }
             glPopName();
+            glPopMatrix();
         }
     } else if (mode == LINES) {
         std::list<Mesh*>::iterator mIter;
         for(mIter = meshes.begin(); mIter != meshes.end(); mIter++){
+            glPushMatrix();
+            float m[16];
+            (*mIter)->orientation.toMatrix(m);
+            glMultMatrixf(m);
+            glScalef((*mIter)->sx, (*mIter)->sy, (*mIter)->sz);
+            glTranslatef((*mIter)->tx, (*mIter)->ty, (*mIter)->tz);
             std::list<Edge*>::iterator eIter;
             glPushName((*mIter)->id);
             for(eIter = (*mIter)->edges.begin(); eIter != (*mIter)->edges.end(); eIter++) {
@@ -82,6 +102,7 @@ void Scene::render(RenderMode mode) {
                 glPopName();
             }
             glPopName();
+            glPopMatrix();
         }
     }
 }

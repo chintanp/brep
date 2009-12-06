@@ -46,7 +46,7 @@ public:
     void setEdgeSelect();
 
     void setVertexSelect();
-    
+
     void switchMode();
     void setStartLineLoop();
     void doneDrawing();
@@ -56,8 +56,9 @@ public:
     void _addCylinder(wxCommandEvent& event);
     void _addSphere(wxCommandEvent& event);
     void _deleteMesh(wxCommandEvent& event);
+    void _edit(wxCommandEvent& event);
 
-    
+
 protected:
 		enum
 		{
@@ -66,6 +67,7 @@ protected:
             ID_ADD_CYLINDER,
             ID_ADD_SPHERE,
             ID_DELETE_MESH,
+            ID_EDIT
 		};
 
 private:

@@ -51,10 +51,14 @@
 		<Unit filename="src/interface/PrincipalFrame.h" />
 		<Unit filename="src/interface/dialog/BRepEdit_Dialog.cpp" />
 		<Unit filename="src/interface/dialog/BRepEdit_Dialog.h" />
+		<Unit filename="src/interface/dialog/BRepRotate_Dialog.cpp" />
+		<Unit filename="src/interface/dialog/BRepRotate_Dialog.h" />
 		<Unit filename="src/interface/dialog/BRepSweeping_Dialog.cpp" />
 		<Unit filename="src/interface/dialog/BRepSweeping_Dialog.h" />
 		<Unit filename="src/interface/dialog/Edit_Dialog.cpp" />
 		<Unit filename="src/interface/dialog/Edit_Dialog.h" />
+		<Unit filename="src/interface/dialog/Rotate_Dialog.cpp" />
+		<Unit filename="src/interface/dialog/Rotate_Dialog.h" />
 		<Unit filename="src/interface/dialog/Sweeping_Dialog.cpp" />
 		<Unit filename="src/interface/dialog/Sweeping_Dialog.h" />
 		<Unit filename="src/main.cpp" />

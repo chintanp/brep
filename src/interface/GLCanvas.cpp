@@ -18,6 +18,9 @@ BEGIN_EVENT_TABLE(GLCanvas, wxGLCanvas)
     EVT_MENU(ID_DELETE_MESH, GLCanvas::_deleteMesh)
     EVT_MENU(ID_EDIT, GLCanvas::_edit)
     EVT_MENU(ID_NEIGHBORHOOD, GLCanvas::_neighborhood)
+    EVT_MENU(ID_ROTATE, GLCanvas::_rotate)
+    EVT_MENU(ID_SCALE, GLCanvas::_scale)
+    EVT_MENU(ID_TRANSLATE, GLCanvas::_translate)
 END_EVENT_TABLE()
 
 GLCanvas::GLCanvas(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name, int* attribList) :
@@ -37,6 +40,8 @@ wxGLCanvas(parent, id, pos, size, style, name,  attribList)
 
     //MENU
     option_menu = new wxMenu();
+    option_menu_mesh = new wxMenu();
+//------------------------------------------
     wxMenu* primitive_menu = new wxMenu();
 
     wxMenuItem* cube_menuItem;
@@ -56,6 +61,38 @@ wxGLCanvas(parent, id, pos, size, style, name,  attribList)
     primitive_menu->Append( sphere_menuItem );
 
     option_menu->Append( -1, wxT("Add primitive"), primitive_menu );
+//-------------------------------------------
+    wxMenu* primitive_menu_mesh = new wxMenu();
+
+    wxMenuItem* cubeMesh_menuItem;
+    cubeMesh_menuItem = new wxMenuItem( primitive_menu, ID_ADD_CUBE, wxString( wxT("Cube") ) , wxEmptyString, wxITEM_NORMAL );
+    primitive_menu_mesh->Append( cubeMesh_menuItem );
+
+    wxMenuItem* cylinderMesh_menuItem;
+    cylinderMesh_menuItem = new wxMenuItem( primitive_menu, ID_ADD_CYLINDER, wxString( wxT("Cylinder") ) , wxEmptyString, wxITEM_NORMAL );
+    primitive_menu_mesh->Append( cylinderMesh_menuItem );
+
+    wxMenuItem* cornerMesh_menuItem;
+    cornerMesh_menuItem = new wxMenuItem( primitive_menu, ID_ADD_CORNER, wxString( wxT("Corner") ) , wxEmptyString, wxITEM_NORMAL );
+    primitive_menu_mesh->Append( cornerMesh_menuItem );
+
+    wxMenuItem* sphereMesh_menuItem;
+    sphereMesh_menuItem = new wxMenuItem( primitive_menu, ID_ADD_SPHERE, wxString( wxT("Sphere") ) , wxEmptyString, wxITEM_NORMAL );
+    primitive_menu_mesh->Append( sphereMesh_menuItem );
+
+    option_menu_mesh->Append( -1, wxT("Add primitive"), primitive_menu_mesh );
+//------------------------------------------
+    wxMenuItem* rotate_menuItem;
+    rotate_menuItem = new wxMenuItem( primitive_menu, ID_ROTATE, wxString( wxT("Rotate") ) , wxEmptyString, wxITEM_NORMAL );
+    option_menu_mesh->Append( rotate_menuItem );
+
+    wxMenuItem* scale_menuItem;
+    scale_menuItem = new wxMenuItem( primitive_menu, ID_SCALE, wxString( wxT("Scale") ) , wxEmptyString, wxITEM_NORMAL );
+    option_menu_mesh->Append( scale_menuItem );
+
+    wxMenuItem* translate_menuItem;
+    translate_menuItem = new wxMenuItem( primitive_menu, ID_TRANSLATE, wxString( wxT("Translate") ) , wxEmptyString, wxITEM_NORMAL );
+    option_menu_mesh->Append( translate_menuItem );
 
     wxMenuItem* neighborhood_menuItem;
     neighborhood_menuItem = new wxMenuItem( primitive_menu, ID_NEIGHBORHOOD, wxString( wxT("Neighborhood") ) , wxEmptyString, wxITEM_NORMAL );
@@ -67,7 +104,7 @@ wxGLCanvas(parent, id, pos, size, style, name,  attribList)
 
     wxMenuItem* delete_menuItem;
     delete_menuItem = new wxMenuItem( primitive_menu, ID_DELETE_MESH, wxString( wxT("Delete") ) , wxEmptyString, wxITEM_NORMAL );
-    option_menu->Append( delete_menuItem );
+    option_menu_mesh->Append( delete_menuItem );
 
 }
 
@@ -142,6 +179,7 @@ void GLCanvas::_deleteMesh(wxCommandEvent& event)
 
 void GLCanvas::_edit(wxCommandEvent& event)
 {
+    std::cout << "ASDasdasdas" << std::endl;
     BRepEdit_Dialog edit(this);
     if(edit.ShowModal() == wxID_OK)
     {
@@ -154,6 +192,40 @@ void GLCanvas::_edit(wxCommandEvent& event)
 void GLCanvas::_neighborhood(wxCommandEvent& event)
 {
 
+}
+
+void GLCanvas::_rotate(wxCommandEvent& event)
+{
+    BRepRotate_Dialog edit(this);
+    if(edit.ShowModal() == wxID_OK)
+    {
+        edit.getX();
+        edit.getY();
+        edit.getZ();
+        edit.getAngle();
+    }
+}
+
+void GLCanvas::_scale(wxCommandEvent& event)
+{
+    BRepEdit_Dialog edit(this);
+    if(edit.ShowModal() == wxID_OK)
+    {
+        edit.getX();
+        edit.getY();
+        edit.getZ();
+    }
+}
+
+void GLCanvas::_translate(wxCommandEvent& event)
+{
+    BRepEdit_Dialog edit(this);
+    if(edit.ShowModal() == wxID_OK)
+    {
+        edit.getX();
+        edit.getY();
+        edit.getZ();
+    }
 }
 
 void GLCanvas::addCube(float minX, float minY, float minZ, float size)
@@ -365,7 +437,10 @@ void GLCanvas::setVertexSelect()
 
 void GLCanvas::menu(wxMouseEvent& event)
 {
-    PopupMenu(option_menu);
+    if(selectMesh)
+        PopupMenu(option_menu_mesh);
+    else
+        PopupMenu(option_menu);
 }
 
 void GLCanvas::init()

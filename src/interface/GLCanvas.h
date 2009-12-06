@@ -8,6 +8,9 @@
 #include <list>
 #include "../Scene.h"
 #include "../Camera.h"
+#include "dialog/BRepEdit_Dialog.h"
+#include "dialog/BRepRotate_Dialog.h"
+
 
 enum Mode {EDIT, DRAW};
 
@@ -69,7 +72,11 @@ protected:
             ID_ADD_CYLINDER,
             ID_ADD_SPHERE,
             ID_DELETE_MESH,
-            ID_EDIT
+            ID_EDIT,
+            ID_NEIGHBORHOOD,
+            ID_ROTATE,
+            ID_SCALE,
+            ID_TRANSLATE,
 		};
 
 private:

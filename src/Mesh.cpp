@@ -6,6 +6,11 @@ Mesh::Mesh(int id) : id(id), initialized(false) {
     numVertices = 0;
     numLoops = 0;
     numEdges = 0;
+
+    //FIXME manifold está aqui somente para
+    //que a face do mundo não seja desenhada para
+    //modelos 2d
+    manifold = true;
 }
 
 Mesh::~Mesh() {

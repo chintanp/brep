@@ -28,6 +28,8 @@ public:
 
     int id;
     BoundingBox bb;
+
+    bool manifold;
     bool initialized;
 
     float r, g, b;

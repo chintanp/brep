@@ -124,9 +124,5 @@ void BRepPrincipalFrame::sweeping( wxCommandEvent& event )
 {
     BRepSweeping_Dialog sweep(this);
     if(sweep.ShowModal() == wxID_OK)
-    {
-        sweep.getX();
-        sweep.getY();
-        sweep.getZ();
-    }
+        canvas->sweep(sweep.getX(), sweep.getY(), sweep.getZ());
 }

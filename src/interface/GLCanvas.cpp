@@ -241,7 +241,45 @@ void GLCanvas::_neighborhood(wxCommandEvent& event)
     }
     else if(selectEdge)
     {
+        std::set<Edge*>  aux;
+        Edge* e;
+        HalfEdge* h;
 
+        std::set<Edge*>::iterator iter;
+        for(iter = edgeList.begin(); iter != edgeList.end(); iter++)
+        {
+            e = (*iter);
+            h = (*iter)->hed1;
+            while(h->mate()->next->edge != (*iter))
+            {
+                e = h->mate()->next->edge;
+                h = h->mate()->next;
+
+                e->r = 1.0;
+                e->g = 0.0;
+                e->b = 0.0;
+
+                aux.insert(e);
+            }
+
+            e = (*iter);
+            h = (*iter)->hed2;
+            while(h->mate()->next->edge != (*iter))
+            {
+                e = h->mate()->next->edge;
+                h = h->mate()->next;
+
+                e->r = 1.0;
+                e->g = 0.0;
+                e->b = 0.0;
+
+                aux.insert(e);
+            }
+
+        }
+
+        for(iter = aux.begin(); iter != aux.end(); iter++)
+            edgeList.insert( (*iter) );
     }
     else
     {

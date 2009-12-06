@@ -21,14 +21,16 @@ END_EVENT_TABLE()
 GLCanvas::GLCanvas(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name, int* attribList) :
 wxGLCanvas(parent, id, pos, size, style, name,  attribList)
 {
-   glContext = new wxGLContext(this);
-   selectFace = false;
-   selectMesh = false;
-   selectEdge = false;
-   selectVertex = true;
-   drawing = false;
+    glContext = new wxGLContext(this);
 
-    startLineLoop = true;
+    currentMode = EDIT;
+
+    selectFace = false;
+    selectMesh = false;
+    selectEdge = false;
+    selectVertex = true;
+
+    startLineLoop = false;
     numPts = 0;
 
     //MENU
@@ -63,6 +65,34 @@ GLCanvas::~GLCanvas()
 {
     delete glContext;
     glContext = NULL;
+}
+
+void GLCanvas::switchMode() {
+    if (currentMode == EDIT) {
+        std::cout << "modo de desneho" << std::endl;
+        currentMode = DRAW;
+        initDraw();
+    } else {
+        std::cout << "modo de edição" << std::endl;
+        currentMode = EDIT;
+        initEdit();
+    }
+}
+
+void GLCanvas::setStartLineLoop() {
+    startLineLoop = true;
+}
+
+void GLCanvas::doneDrawing() {
+    //Copia os meshes de drawScene para scene
+    std::list<Mesh*>::iterator iter;
+    for(iter = drawScene.meshes.begin(); iter != drawScene.meshes.end(); ) {
+        scene.meshes.push_back(*iter);
+        scene.numMeshes++;
+        iter = drawScene.meshes.erase(iter);
+        drawScene.numMeshes--;
+    }
+    Refresh();
 }
 
 void GLCanvas::_addCube(wxCommandEvent& event)
@@ -105,15 +135,15 @@ void GLCanvas::addCube(float minX, float minY, float minZ, float size)
     //v0, f0, s0
     scene.mvfs(minX, minY, minZ);
     //v1
-    scene.smev(Scene::numMeshes - 1, 0, 0, minX+size, minY, minZ);
+    scene.smev(scene.numMeshes - 1, 0, 0, minX+size, minY, minZ);
     //v2
-    scene.smev(Scene::numMeshes - 1, 0, 1, minX+size, minY+size, minZ);
+    scene.smev(scene.numMeshes - 1, 0, 1, minX+size, minY+size, minZ);
     //v3
-    scene.smev(Scene::numMeshes - 1, 0, 2, minX, minY+size, minZ);
+    scene.smev(scene.numMeshes - 1, 0, 2, minX, minY+size, minZ);
     //f1 -> front
-    scene.smef(Scene::numMeshes - 1, 0, 3, 0);
+    scene.smef(scene.numMeshes - 1, 0, 3, 0);
 
-    scene.sweep(Scene::numMeshes - 1, 0, 0, 0, -size);
+    scene.sweep(scene.numMeshes - 1, 0, 0, 0, -size);
 
     return;
 }
@@ -125,18 +155,18 @@ void GLCanvas::addCorner(float minX, float minY, float minZ,
     //v0
     scene.mvfs(minX, minY, minZ);
     //v1
-    scene.smev(Scene::numMeshes - 1, 0, 0, maxX, minY, minZ);
+    scene.smev(scene.numMeshes - 1, 0, 0, maxX, minY, minZ);
     //v2
-    scene.smev(Scene::numMeshes - 1, 0, 1, maxX, maxY, minZ);
+    scene.smev(scene.numMeshes - 1, 0, 1, maxX, maxY, minZ);
     //v3
-    scene.smev(Scene::numMeshes - 1, 0, 2, midX, maxY, minZ);
+    scene.smev(scene.numMeshes - 1, 0, 2, midX, maxY, minZ);
     //v4
-    scene.smev(Scene::numMeshes - 1, 0, 3, midX, midY, minZ);
+    scene.smev(scene.numMeshes - 1, 0, 3, midX, midY, minZ);
     //v5
-    scene.smev(Scene::numMeshes - 1, 0, 4, minX, midY, minZ);
+    scene.smev(scene.numMeshes - 1, 0, 4, minX, midY, minZ);
     //f1 -> front
-    scene.smef(Scene::numMeshes - 1, 0, 5, 0);
-    scene.sweep(Scene::numMeshes - 1, 0, 0.0, 0.0, maxZ - minZ);
+    scene.smef(scene.numMeshes - 1, 0, 5, 0);
+    scene.sweep(scene.numMeshes - 1, 0, 0.0, 0.0, maxZ - minZ);
 }
 
 void GLCanvas::addCylinder(float pX, float pY, float pZ, float radius, float height, int disc)
@@ -149,18 +179,18 @@ void GLCanvas::addCylinder(float pX, float pY, float pZ, float radius, float hei
     {
         if(i+ 2.0*M_PI/(float)disc >= 2.0*M_PI)
         {
-            scene.smev(Scene::numMeshes - 1, 0, num, radius*cos(i) + pX, pY, radius*sin(i) + pZ);
+            scene.smev(scene.numMeshes - 1, 0, num, radius*cos(i) + pX, pY, radius*sin(i) + pZ);
             num++;
-            scene.smef(Scene::numMeshes - 1, 0, num, 0);
+            scene.smef(scene.numMeshes - 1, 0, num, 0);
         }
         else
         {
-            scene.smev(Scene::numMeshes - 1, 0, num, radius*cos(i) + pX, pY, radius*sin(i) + pZ);
+            scene.smev(scene.numMeshes - 1, 0, num, radius*cos(i) + pX, pY, radius*sin(i) + pZ);
             num++;
         }
     }
 
-    scene.sweep(Scene::numMeshes - 1, 0, 0.0, height, 0.0);
+    scene.sweep(scene.numMeshes - 1, 0, 0.0, height, 0.0);
 }
 
 void GLCanvas::addSphere(float pX, float pY, float pZ, float radius, int disc) {
@@ -170,9 +200,9 @@ void GLCanvas::addSphere(float pX, float pY, float pZ, float radius, int disc) {
     scene.mvfs(-1.0*radius, 0, 0);
     for(int i = 0, idNum = 0; i < disc; i++, idNum++) {
         float angle = M_PI - step*(i+1);
-        scene.smev(Scene::numMeshes - 1, 0, idNum, radius*cos(angle), radius*sin(angle), 0.0);
+        scene.smev(scene.numMeshes - 1, 0, idNum, radius*cos(angle), radius*sin(angle), 0.0);
     }
-    scene.rsweep(Scene::numMeshes -1 , 0, 2*disc);
+    scene.rsweep(scene.numMeshes -1 , 0, 2*disc);
 } 
 
 void drawBlack(std::list<Mesh*> list)
@@ -314,12 +344,6 @@ void GLCanvas::menu(wxMouseEvent& event)
 
 void GLCanvas::init()
 {
-    //addCube(-1, -1, 1, 2);
-    //addCorner(-2, -2, -2, 1, 4, 2, 2, 2, 2);
-    //addCylinder(0.0, 10.0, 0.0, 2.0, 3.0, 20);
-    //addSphere(0.0, 0.0, 0.0, 5, 20);
-    //addCylinder(-5.0, -1.0, -1.0, 2.0, 3.0, 5);
-
     glClearColor(1.0, 1.0, 1.0, 1.0);
     glEnable( GL_DEPTH_TEST );
     glClearDepth(1.0f);
@@ -366,17 +390,21 @@ void GLCanvas::init()
 
     //Inicialização do viewport
     int w, h;
-    float ratio = (float) w/(float) h;
     GetClientSize(&w, &h);
     glViewport(0, 0, (GLint) w , (GLint) h );
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    //camera.fit(scene.bbox);
-    std::cout << "\nbounding box da cena: " << std::endl;
-    std::cout << "\tpMin: " << scene.bbox.pMin.x << " " << scene.bbox.pMin.y << "  " << scene.bbox.pMin.z << std::endl;
-    std::cout << "\tpMax " << scene.bbox.pMax.x << " " << scene.bbox.pMax.y << "  " << scene.bbox.pMax.z << std::endl;
-    std::cout << "inicializada a camera." << std::endl;
-    std::cout << "\t pos: " << camera.pos.x << "  " << camera.pos.y << "  " << camera.pos.z << std::endl;
+    
+    
+    if(currentMode == EDIT)
+        initEdit();
+    else
+        initDraw();
+ }
+
+ void GLCanvas::initEdit() {
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
     float l = camera.frustum.left;
     float r = camera.frustum.right;
     float b = camera.frustum.bottom;
@@ -385,12 +413,15 @@ void GLCanvas::init()
     float f = camera.frustum.far;
     glFrustum(camera.frustum.left, camera.frustum.right, camera.frustum.bottom, camera.frustum.top,
               camera.frustum.near, camera.frustum.far);
-    std::cout << "\t pos: " << camera.pos.x << "  " << camera.pos.y << "  " << camera.pos.z << std::endl;
-    std::cout << "\t frustum: " << l << "  " << r << "  " << b << "  " << t << "  " << n << "  " <<  f << std::endl;
-
-    //Drawing
-    //glOrtho(0, w, 0, h, -1, 1);
  }
+
+void GLCanvas::initDraw() {
+    int w, h;
+    GetClientSize(&w, &h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, w, 0, h, -1, 1);
+}
 
 void GLCanvas::render()
 {
@@ -399,24 +430,36 @@ void GLCanvas::render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    renderBackground();
 
-    float m[16];
-    camera.setupViewMatrix(m);
-    glTranslatef(-camera.pos.x, -camera.pos.y, -camera.pos.z);
-    glMultMatrixf(m);
-    
-    //Vec3 center((scene.bbox.pMin.x + scene.bbox.pMax.x),
-    //            (scene.bbox.pMin.y + scene.bbox.pMax.y),
-    //            (scene.bbox.pMin.z + scene.bbox.pMax.z));
-    //glTranslatef(-center.x, -center.y, -center.z);
-    if(!scene.isEmpty()) {
-        if (selectMesh)
-            scene.render(MESHES);
-        else
-            scene.render(FACES);
-        scene.render(POINTS);
-        scene.render(LINES);
+    if(currentMode == EDIT) {
+        renderBackground();
+
+        float m[16];
+        camera.setupViewMatrix(m);
+        glTranslatef(-camera.pos.x, -camera.pos.y, -camera.pos.z);
+        glMultMatrixf(m);
+
+        if(!scene.isEmpty()) {
+            if (selectMesh)
+                scene.render(MESHES);
+            else
+                scene.render(FACES);
+            scene.render(POINTS);
+            scene.render(LINES);
+        }
+    } else { //DRAW
+        if(!drawScene.isEmpty()) {
+            std::cout << "drawScene != empty" << std::endl;
+            if (selectMesh)
+                drawScene.render(MESHES);
+            else
+                drawScene.render(FACES);
+            drawScene.render(POINTS);
+            drawScene.render(LINES);
+        }
+        else {
+            std::cout << "drawScene == empty" << std::endl;
+        }
     }
 
     //glFlush();
@@ -483,7 +526,8 @@ void GLCanvas::onMouseLeftUp(wxMouseEvent &event) {
     wxPoint windowSize;
     GetClientSize( &windowSize.x, &windowSize.y );
 
-    if(selectVertex || selectEdge || selectFace || selectMesh)
+    //TODO picking não funciona no modo DRAW
+    if(currentMode == EDIT && (selectVertex || selectEdge || selectFace || selectMesh))
         selectPicking(mouse.x, windowSize.y - mouse.y);
     //else if (drawing)
     //    draw(mouse.x, windowSize.y - mouse.y);
@@ -496,7 +540,7 @@ void GLCanvas::onMouseLeftDown(wxMouseEvent &event) {
     wxPoint mouse;
     event.GetPosition(&mouse.x, &mouse.y);
 
-    if(drawing) {
+    if(currentMode == DRAW) {
         draw(mouse.x, windowSize.y - mouse.y);
     }
     Refresh();
@@ -504,25 +548,29 @@ void GLCanvas::onMouseLeftDown(wxMouseEvent &event) {
 
 void GLCanvas::draw(int x, int y) {
     if(startLineLoop) {
-        scene.mvfs(x, y, 0.0);
-        numPts++;
-        startLineLoop = false;
-    } else {
-        Vertex *first = scene.getVertex(Scene::numMeshes - 1, 0);
-        if(fabs(x - first->x) < 3 && fabs(y - first->y) < 3) {
-            scene.smef(Scene::numMeshes -1, 0, numPts - 1, 0);
-            startLineLoop = true;
-            numPts = 0;
-        } else {
-            Mesh *m = scene.getSolid(Scene::numMeshes - 1);
-            std::list<Vertex*>::iterator vIter = m->vertices.begin();
-            vIter++;
-            for(; vIter != m->vertices.end(); vIter++)
-                if(fabs(x - (*vIter)->x) < 3 && fabs(y - (*vIter)->y)< 3) 
-                    return;
-            
-            scene.smev(Scene::numMeshes - 1, 0, numPts - 1, x, y, 0.0);
+        if(numPts == 0) {
+            drawScene.mvfs(x, y, 0.0);
             numPts++;
+        } else {
+            Vertex *first = drawScene.getVertex(drawScene.numMeshes - 1, 0);
+            if(fabs(x - first->x) < 3 && fabs(y - first->y) < 3) {
+                drawScene.smef(drawScene.numMeshes -1, 0, numPts - 1, 0);
+                std::cout << "smef" << std::endl;
+                numPts = 0;
+                //Força a criação de um novo mesh.
+                drawScene.numMeshes++;
+            } else {
+                Mesh *m = drawScene.getSolid(drawScene.numMeshes - 1);
+                std::list<Vertex*>::iterator vIter = m->vertices.begin();
+                vIter++;
+                for(; vIter != m->vertices.end(); vIter++)
+                    if(fabs(x - (*vIter)->x) < 3 && fabs(y - (*vIter)->y)< 3) 
+                        return;
+            
+                drawScene.smev(drawScene.numMeshes - 1, 0, numPts - 1, x, y, 0.0);
+                std::cout << "smev" << std::endl;
+                numPts++;
+            }
         }
     }
 }

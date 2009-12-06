@@ -9,6 +9,9 @@
 #include "../Scene.h"
 #include "../Camera.h"
 
+enum Mode {EDIT, DRAW};
+
+
 class GLCanvas : public wxGLCanvas
 {
     friend class CSGFrame;
@@ -17,6 +20,8 @@ public:
     ~GLCanvas();
 
     void init();
+    void initEdit();
+    void initDraw();
 
     void render();
     void renderBackground();
@@ -41,6 +46,10 @@ public:
     void setEdgeSelect();
 
     void setVertexSelect();
+    
+    void switchMode();
+    void setStartLineLoop();
+    void doneDrawing();
 
     void _addCube(wxCommandEvent& event);
     void _addCorner(wxCommandEvent& event);
@@ -48,6 +57,7 @@ public:
     void _addSphere(wxCommandEvent& event);
     void _deleteMesh(wxCommandEvent& event);
 
+    
 protected:
 		enum
 		{
@@ -76,10 +86,11 @@ private:
     bool selectFace;
     bool selectEdge;
     bool selectVertex;
-    bool drawing;
     bool startLineLoop;
 
     int numPts;
+
+    Mode currentMode;
 
 private:
     std::list<Mesh*> meshList;
@@ -89,6 +100,7 @@ private:
 
     wxGLContext *glContext;
     Scene scene;
+    Scene drawScene;
     Camera camera;
     wxMenu* option_menu;
 };

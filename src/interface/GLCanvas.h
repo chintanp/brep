@@ -9,6 +9,7 @@
 #include "../Scene.h"
 #include "../Camera.h"
 #include "dialog/BRepEdit_Dialog.h"
+#include "dialog/BRepRotate_Dialog.h"
 
 
 enum Mode {EDIT, DRAW};
@@ -60,8 +61,9 @@ public:
     void _deleteMesh(wxCommandEvent& event);
     void _edit(wxCommandEvent& event);
     void _neighborhood(wxCommandEvent& event);
-
-
+    void _rotate(wxCommandEvent& event);
+    void _scale(wxCommandEvent& event);
+    void _translate(wxCommandEvent& event);
 
 protected:
 		enum
@@ -73,6 +75,9 @@ protected:
             ID_DELETE_MESH,
             ID_EDIT,
             ID_NEIGHBORHOOD,
+            ID_ROTATE,
+            ID_SCALE,
+            ID_TRANSLATE,
 		};
 
 private:
@@ -110,6 +115,7 @@ private:
     Scene drawScene;
     Camera camera;
     wxMenu* option_menu;
+    wxMenu* option_menu_mesh;
 };
 
 #endif

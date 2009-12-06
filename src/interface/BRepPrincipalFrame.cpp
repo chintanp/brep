@@ -74,7 +74,11 @@ void BRepPrincipalFrame::meshMode( wxCommandEvent& event )
 	canvas->setMeshSelect();
 }
 
-
+void BRepPrincipalFrame::onSelectMode( wxNotebookEvent& event) {
+    std::cout << "mudando de modo de seleção" << std::endl;
+    canvas->switchMode();
+    Refresh();
+}
 
 
 
@@ -108,10 +112,12 @@ void BRepPrincipalFrame::add_Circle( wxCommandEvent& event )
 
 void BRepPrincipalFrame::add_Line( wxCommandEvent& event )
 {
+    canvas->setStartLineLoop();
 }
 
 void BRepPrincipalFrame::doneDrawMode( wxCommandEvent& event )
 {
+    canvas->doneDrawing();
 }
 
 void BRepPrincipalFrame::sweeping( wxCommandEvent& event )

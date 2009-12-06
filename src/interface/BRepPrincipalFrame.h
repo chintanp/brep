@@ -25,6 +25,7 @@ protected:
     void edgeMode( wxCommandEvent& event );
     void faceMode( wxCommandEvent& event );
     void meshMode( wxCommandEvent& event );
+    void onSelectMode( wxNotebookEvent& event );
     void add_Corner( wxCommandEvent& event );
     void add_Cylinder( wxCommandEvent& event );
     void add_Sphere( wxCommandEvent& event );

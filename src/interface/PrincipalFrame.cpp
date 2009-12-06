@@ -23,6 +23,7 @@ BEGIN_EVENT_TABLE( PrincipalFrame, wxFrame )
 	EVT_TOOL( ID_EDGE_MODE_TB, PrincipalFrame::_wxFB_edgeMode )
 	EVT_TOOL( ID_FACE_MODE_TB, PrincipalFrame::_wxFB_faceMode )
 	EVT_TOOL( ID_MESH_MODE_TB, PrincipalFrame::_wxFB_meshMode )
+    EVT_NOTEBOOK_PAGE_CHANGED( ID_SELECT_MODE, PrincipalFrame::_wxFB_onSelectMode )
 	EVT_BUTTON( wxID_CORNER, PrincipalFrame::_wxFB_add_Corner )
 	EVT_BUTTON( wxID_CYLINDER, PrincipalFrame::_wxFB_add_Cylinder )
 	EVT_BUTTON( wxID_SPHERE, PrincipalFrame::_wxFB_add_Sphere )
@@ -81,7 +82,7 @@ PrincipalFrame::PrincipalFrame( wxWindow* parent, wxWindowID id, const wxString&
 	wxBoxSizer* bSizer5;
 	bSizer5 = new wxBoxSizer( wxVERTICAL );
 
-	editMode_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxSize( 170,-1 ), 0 );
+	editMode_notebook = new wxNotebook( this, ID_SELECT_MODE, wxDefaultPosition, wxSize( 170,-1 ), 0 );
 	edit_panel = new wxPanel( editMode_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );

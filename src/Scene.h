@@ -51,7 +51,7 @@ public:
 
     std::list<Mesh*> meshes;
 
-    static int numMeshes;
+    int numMeshes;
 
     BoundingBox bbox;
 };

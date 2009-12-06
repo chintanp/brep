@@ -5,10 +5,8 @@
 #include "math/Quat.h"
 #include <cmath>
 
-int Scene::numMeshes = 0;
-
 Scene::Scene() {
-    
+    numMeshes = 0;    
 }
 
 Scene::~Scene() {
@@ -21,6 +19,7 @@ void Scene::clear() {
         delete *iter;
     }
     meshes.clear();
+    numMeshes = 0;
 }
 
 void Scene::render(RenderMode mode) {
@@ -177,7 +176,7 @@ void Scene::mvfs(float x, float y, float z) {
     HalfEdge *he;
 
 
-    m = new Mesh(Scene::numMeshes++);
+    m = new Mesh(numMeshes++);
     std::cout << "criado mesh: " << m->id << std::endl;
     f = new Face(m);
     std::cout << "criada face: " << f->id << std::endl;
@@ -340,7 +339,7 @@ void Scene::removeSolid(int idSolid) {
         if ((*iter)->id == idSolid) {
             delete *iter;
             meshes.erase(iter);
-            Scene::numMeshes--;
+            numMeshes--;
             return;
         }
 }

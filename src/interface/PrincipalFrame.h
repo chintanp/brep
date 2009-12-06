@@ -55,6 +55,7 @@ class PrincipalFrame : public wxFrame
 		void _wxFB_edgeMode( wxCommandEvent& event ){ edgeMode( event ); }
 		void _wxFB_faceMode( wxCommandEvent& event ){ faceMode( event ); }
 		void _wxFB_meshMode( wxCommandEvent& event ){ meshMode( event ); }
+        void _wxFB_onSelectMode( wxNotebookEvent& event ){ onSelectMode( event ); }
 		void _wxFB_add_Corner( wxCommandEvent& event ){ add_Corner( event ); }
 		void _wxFB_add_Cylinder( wxCommandEvent& event ){ add_Cylinder( event ); }
 		void _wxFB_add_Sphere( wxCommandEvent& event ){ add_Sphere( event ); }
@@ -80,6 +81,7 @@ class PrincipalFrame : public wxFrame
 			ID_EDGE_MODE_TB,
 			ID_FACE_MODE_TB,
 			ID_MESH_MODE_TB,
+            ID_SELECT_MODE,
 			wxID_CORNER,
 			wxID_CYLINDER,
 			wxID_SPHERE,
@@ -127,6 +129,7 @@ class PrincipalFrame : public wxFrame
 		virtual void edgeMode( wxCommandEvent& event ){ event.Skip(); }
 		virtual void faceMode( wxCommandEvent& event ){ event.Skip(); }
 		virtual void meshMode( wxCommandEvent& event ){ event.Skip(); }
+        virtual void onSelectMode( wxNotebookEvent& event ){ event.Skip(); }
 		virtual void add_Corner( wxCommandEvent& event ){ event.Skip(); }
 		virtual void add_Cylinder( wxCommandEvent& event ){ event.Skip(); }
 		virtual void add_Sphere( wxCommandEvent& event ){ event.Skip(); }

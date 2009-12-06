@@ -432,7 +432,7 @@
                                 <property name="fg"></property>
                                 <property name="font"></property>
                                 <property name="hidden">0</property>
-                                <property name="id">wxID_ANY</property>
+                                <property name="id">ID_SELECT_MODE</property>
                                 <property name="maximum_size"></property>
                                 <property name="minimum_size"></property>
                                 <property name="name">editMode_notebook</property>
@@ -461,7 +461,7 @@
                                 <event name="OnMotion"></event>
                                 <event name="OnMouseEvents"></event>
                                 <event name="OnMouseWheel"></event>
-                                <event name="OnNotebookPageChanged"></event>
+                                <event name="OnNotebookPageChanged">onSelectMode</event>
                                 <event name="OnNotebookPageChanging"></event>
                                 <event name="OnPaint"></event>
                                 <event name="OnRightDClick"></event>

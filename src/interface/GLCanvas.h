@@ -8,6 +8,8 @@
 #include <list>
 #include "../Scene.h"
 #include "../Camera.h"
+#include "dialog/BRepEdit_Dialog.h"
+
 
 enum Mode {EDIT, DRAW};
 
@@ -57,6 +59,8 @@ public:
     void _addSphere(wxCommandEvent& event);
     void _deleteMesh(wxCommandEvent& event);
     void _edit(wxCommandEvent& event);
+    void _neighborhood(wxCommandEvent& event);
+
 
 
 protected:
@@ -67,7 +71,8 @@ protected:
             ID_ADD_CYLINDER,
             ID_ADD_SPHERE,
             ID_DELETE_MESH,
-            ID_EDIT
+            ID_EDIT,
+            ID_NEIGHBORHOOD,
 		};
 
 private:

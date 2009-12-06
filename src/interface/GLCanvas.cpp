@@ -17,6 +17,7 @@ BEGIN_EVENT_TABLE(GLCanvas, wxGLCanvas)
     EVT_MENU(ID_ADD_SPHERE, GLCanvas::_addSphere)
     EVT_MENU(ID_DELETE_MESH, GLCanvas::_deleteMesh)
     EVT_MENU(ID_EDIT, GLCanvas::_edit)
+    EVT_MENU(ID_NEIGHBORHOOD, GLCanvas::_neighborhood)
 END_EVENT_TABLE()
 
 GLCanvas::GLCanvas(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name, int* attribList) :
@@ -55,6 +56,10 @@ wxGLCanvas(parent, id, pos, size, style, name,  attribList)
     primitive_menu->Append( sphere_menuItem );
 
     option_menu->Append( -1, wxT("Add primitive"), primitive_menu );
+
+    wxMenuItem* neighborhood_menuItem;
+    neighborhood_menuItem = new wxMenuItem( primitive_menu, ID_NEIGHBORHOOD, wxString( wxT("Neighborhood") ) , wxEmptyString, wxITEM_NORMAL );
+    option_menu->Append( neighborhood_menuItem );
 
     wxMenuItem* edit_menuItem;
     edit_menuItem = new wxMenuItem( primitive_menu, ID_EDIT, wxString( wxT("Edit") ) , wxEmptyString, wxITEM_NORMAL );
@@ -136,6 +141,17 @@ void GLCanvas::_deleteMesh(wxCommandEvent& event)
 }
 
 void GLCanvas::_edit(wxCommandEvent& event)
+{
+    BRepEdit_Dialog edit(this);
+    if(edit.ShowModal() == wxID_OK)
+    {
+        edit.getX();
+        edit.getY();
+        edit.getZ();
+    }
+}
+
+void GLCanvas::_neighborhood(wxCommandEvent& event)
 {
 
 }

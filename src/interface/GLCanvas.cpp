@@ -105,6 +105,13 @@ void GLCanvas::doneDrawing() {
     Refresh();
 }
 
+void GLCanvas::sweep(float dX, float dY, float dZ) {
+    std::list<Loop*>::iterator fIter;
+    for(fIter = faceList.begin(); fIter != faceList.end(); fIter++) {
+        scene.sweep((*fIter)->face->solid->id, (*fIter)->face->id, dX, dY, dZ);
+    }
+}
+
 void GLCanvas::_addCube(wxCommandEvent& event)
 {
     addCube(-2, -2, -2, 4);
@@ -630,6 +637,7 @@ void GLCanvas::draw(int x, int y) {
     if(startLineLoop) {
         if(numPts == 0) {
             drawScene.mvfs(x, y, 0.0);
+            drawScene.getSolid(drawScene.numMeshes - 1)->manifold = false;
             numPts++;
         } else {
             Vertex *first = drawScene.getVertex(drawScene.numMeshes - 1, 0);

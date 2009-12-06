@@ -59,7 +59,8 @@ public:
     void _deleteMesh(wxCommandEvent& event);
     void _edit(wxCommandEvent& event);
 
-
+    void sweep(float dX, float dY, float dZ);
+    
 protected:
 		enum
 		{

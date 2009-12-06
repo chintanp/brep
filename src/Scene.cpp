@@ -30,7 +30,10 @@ void Scene::render(RenderMode mode) {
             glPushName((*mIter)->id);
             if(mode == MESHES)
                 glColor3f((*mIter)->r,(*mIter)->g, (*mIter)->b);
-            for(fIter = (*mIter)->faces.begin(); fIter != (*mIter)->faces.end(); fIter++) {
+            fIter = (*mIter)->faces.begin();
+            if(!(*mIter)->manifold)
+                fIter++;
+            for(; fIter != (*mIter)->faces.end(); fIter++) {
                 std::list<Loop*>::iterator lIter;
                 for (lIter = (*fIter)->loops.begin(); lIter != (*fIter)->loops.end(); lIter++) {
                     HalfEdge *he = (*lIter)->hed;

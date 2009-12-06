@@ -84,6 +84,11 @@ void GLCanvas::setStartLineLoop() {
 }
 
 void GLCanvas::doneDrawing() {
+    if(numPts > 0) {
+        //Erro: uma face não foi fechada
+        return;
+    }
+
     //Copia os meshes de drawScene para scene
     std::list<Mesh*>::iterator iter;
     for(iter = drawScene.meshes.begin(); iter != drawScene.meshes.end(); ) {

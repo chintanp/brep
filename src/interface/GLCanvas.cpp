@@ -16,7 +16,7 @@ BEGIN_EVENT_TABLE(GLCanvas, wxGLCanvas)
     EVT_MENU(ID_ADD_CYLINDER, GLCanvas::_addCylinder)
     EVT_MENU(ID_ADD_SPHERE, GLCanvas::_addSphere)
     EVT_MENU(ID_DELETE_MESH, GLCanvas::_deleteMesh)
-    EVT_MENU(ID_EDIT, GLCanvas::_edit)
+    EVT_MENU(ID_MOVE, GLCanvas::_move)
     EVT_MENU(ID_NEIGHBORHOOD, GLCanvas::_neighborhood)
     EVT_MENU(ID_ROTATE, GLCanvas::_rotate)
     EVT_MENU(ID_SCALE, GLCanvas::_scale)
@@ -98,9 +98,9 @@ wxGLCanvas(parent, id, pos, size, style, name,  attribList)
     neighborhood_menuItem = new wxMenuItem( primitive_menu, ID_NEIGHBORHOOD, wxString( wxT("Neighborhood") ) , wxEmptyString, wxITEM_NORMAL );
     option_menu->Append( neighborhood_menuItem );
 
-    wxMenuItem* edit_menuItem;
-    edit_menuItem = new wxMenuItem( primitive_menu, ID_EDIT, wxString( wxT("Edit") ) , wxEmptyString, wxITEM_NORMAL );
-    option_menu->Append( edit_menuItem );
+    wxMenuItem* move_menuItem;
+    move_menuItem = new wxMenuItem( primitive_menu, ID_MOVE, wxString( wxT("Move") ) , wxEmptyString, wxITEM_NORMAL );
+    option_menu->Append( move_menuItem );
 
     wxMenuItem* delete_menuItem;
     delete_menuItem = new wxMenuItem( primitive_menu, ID_DELETE_MESH, wxString( wxT("Delete") ) , wxEmptyString, wxITEM_NORMAL );
@@ -175,16 +175,15 @@ void GLCanvas::_addSphere(wxCommandEvent& event)
 
 void GLCanvas::_deleteMesh(wxCommandEvent& event)
 {
-    std::list<Mesh*>::iterator iter;
+    std::set<Mesh*>::iterator iter;
     for(iter = meshList.begin(); iter != meshList.end(); iter++) {
         scene.removeSolid((*iter)->id);
     }
     meshList.clear();
 }
 
-void GLCanvas::_edit(wxCommandEvent& event)
+void GLCanvas::_move(wxCommandEvent& event)
 {
-    std::cout << "ASDasdasdas" << std::endl;
     BRepEdit_Dialog edit(this);
     if(edit.ShowModal() == wxID_OK)
     {
@@ -196,7 +195,28 @@ void GLCanvas::_edit(wxCommandEvent& event)
 
 void GLCanvas::_neighborhood(wxCommandEvent& event)
 {
+    if(selectMesh)
+    {
+        std::set<Mesh*>  aux;
 
+        std::set<Mesh*>::iterator iter;
+        for(iter = meshList.begin(); iter != meshList.end(); iter++)
+        {
+
+        }
+    }
+    else if(selectFace)
+    {
+
+    }
+    else if(selectEdge)
+    {
+
+    }
+    else
+    {
+
+    }
 }
 
 void GLCanvas::_rotate(wxCommandEvent& event)
@@ -308,51 +328,52 @@ void GLCanvas::addSphere(float pX, float pY, float pZ, float radius, int disc) {
     scene.rsweep(scene.numMeshes -1 , 0, 2*disc);
 }
 
-void drawBlack(std::list<Mesh*> list)
+void drawBlack(std::set<Mesh*> list)
 {
-    std::list<Mesh*>::iterator it;
-    for (it = list.begin(); it != list.end(); )
+    std::set<Mesh*>::iterator it;
+    for (it = list.begin(); it != list.end(); it++)
     {
             (*it)->r = 0.6;
             (*it)->g = 0.6;
             (*it)->b = 0.6;
-            it = list.erase(it);
+            list.erase(it);
     }
 }
 
-void drawBlack(std::list<Loop*> list)
+void drawBlack(std::set<Loop*> list)
 {
-    std::list<Loop*>::iterator it;
-    for (it = list.begin(); it != list.end(); )
+    std::set<Loop*>::iterator it;
+    for (it = list.begin(); it != list.end(); it++)
     {
             (*it)->r = 0.6;
             (*it)->g = 0.6;
             (*it)->b = 0.6;
-            it = list.erase(it);
+            list.erase(it);
     }
 }
 
-void drawBlack(std::list<Edge*> list)
+void drawBlack(std::set<Edge*> list)
 {
-    std::list<Edge*>::iterator it;
-    for (it = list.begin(); it != list.end(); )
+    std::set<Edge*>::iterator it;
+    for (it = list.begin(); it != list.end(); it++)
     {
             (*it)->r = 0.0;
             (*it)->g = 0.0;
             (*it)->b = 0.0;
-            it = list.erase(it);
+            list.erase(it);
     }
 }
 
-void drawBlack(std::list<Vertex*> list)
+void drawBlack(std::set<Vertex*> list)
 {
-    std::list<Vertex*>::iterator it;
-    for (it = list.begin(); it != list.end(); )
+    std::set<Vertex*>::iterator it;
+    for (it = list.begin(); it != list.end(); it++)
     {
             (*it)->r = 0.0;
             (*it)->g = 0.0;
             (*it)->b = 0.0;
-            it = list.erase(it);
+            list.erase(it);
+            list.erase(it);
     }
 }
 
@@ -808,7 +829,7 @@ void GLCanvas::selectPicking(int x, int y) {
     Mesh *m = scene.getSolid(nearestMesh);
 
     if(selectMesh) {
-        std::list<Mesh*>::iterator it;
+        std::set<Mesh*>::iterator it;
         for (it = meshList.begin(); it != meshList.end(); ++it)
         {
             if((*it)->id == m->id)
@@ -824,11 +845,11 @@ void GLCanvas::selectPicking(int x, int y) {
         m->r = 1.0;
         m->g = 0.0;
         m->b = 0.0;
-        meshList.push_back(m);
+        meshList.insert(m);
     } else if(selectFace) {
          Loop *l = scene.getLoop(m->id, nearestItem);
 
-        std::list<Loop*>::iterator it;
+        std::set<Loop*>::iterator it;
         for (it = faceList.begin(); it != faceList.end(); ++it)
         {
             if((*it)->id == l->id)
@@ -844,11 +865,11 @@ void GLCanvas::selectPicking(int x, int y) {
          l->r = 1.0;
          l->g = 0.0;
          l->b = 0.0;
-        faceList.push_back(l);
+        faceList.insert(l);
     } else if(selectEdge) {
         Edge *e = scene.getEdge(m->id, nearestItem);
 
-        std::list<Edge*>::iterator it;
+        std::set<Edge*>::iterator it;
         for (it = edgeList.begin(); it != edgeList.end(); ++it)
         {
             if((*it)->id == e->id)
@@ -864,11 +885,11 @@ void GLCanvas::selectPicking(int x, int y) {
         e->r = 1.0;
         e->g = 0.0;
         e->b = 0.0;
-        edgeList.push_back(e);
+        edgeList.insert(e);
     } else if(selectVertex) {
         Vertex *v = scene.getVertex(m->id, nearestItem);
 
-        std::list<Vertex*>::iterator it;
+        std::set<Vertex*>::iterator it;
         for (it = vertexList.begin(); it != vertexList.end(); ++it)
         {
             if((*it)->id == v->id)
@@ -884,7 +905,7 @@ void GLCanvas::selectPicking(int x, int y) {
         v->r = 1.0;
         v->g = 0.0;
         v->b = 0.0;
-        vertexList.push_back(v);
+        vertexList.insert(v);
     }
     Refresh();
 }

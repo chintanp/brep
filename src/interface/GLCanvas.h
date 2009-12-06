@@ -6,6 +6,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <list>
+#include <set>
 #include "../Scene.h"
 #include "../Camera.h"
 #include "dialog/BRepEdit_Dialog.h"
@@ -60,7 +61,7 @@ public:
     void _addCylinder(wxCommandEvent& event);
     void _addSphere(wxCommandEvent& event);
     void _deleteMesh(wxCommandEvent& event);
-    void _edit(wxCommandEvent& event);
+    void _move(wxCommandEvent& event);
     void _neighborhood(wxCommandEvent& event);
     void _rotate(wxCommandEvent& event);
     void _scale(wxCommandEvent& event);
@@ -74,7 +75,7 @@ protected:
             ID_ADD_CYLINDER,
             ID_ADD_SPHERE,
             ID_DELETE_MESH,
-            ID_EDIT,
+            ID_MOVE,
             ID_NEIGHBORHOOD,
             ID_ROTATE,
             ID_SCALE,
@@ -106,10 +107,10 @@ private:
     Mode currentMode;
 
 private:
-    std::list<Mesh*> meshList;
-    std::list<Loop*> faceList;
-    std::list<Edge*> edgeList;
-    std::list<Vertex*> vertexList;
+    std::set<Mesh*> meshList;
+    std::set<Loop*> faceList;
+    std::set<Edge*> edgeList;
+    std::set<Vertex*> vertexList;
 
     wxGLContext *glContext;
     Scene scene;

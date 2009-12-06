@@ -1,0 +1,47 @@
+#ifndef CAMERA_H_
+#define CAMERA_H_
+
+#include "BoundingBox.h"
+#include "math/Vec3.h"
+#include "math/Quat.h"
+
+struct Frustum {
+    float left;
+    float right;
+    float bottom;
+    float top;
+    float near;
+    float far;
+};
+
+class Camera {
+public:
+    Camera();
+
+    void setupViewMatrix(float *m);
+    void setProjection(float l, float r, float b,
+                       float t, float n, float f);
+    void updateRotation(int mouseX, int mouseY, 
+                        int windowWidth, int windowHeight);
+    void fit(const BoundingBox& bBox);
+    void reset();
+    
+    void mapTrackball(int mouseX, int mouseY, 
+                      int windowWidth, int windowHeight);
+    void rotate(const Vec3 &axis, float angle);
+    void zoom(float zoomFactor);
+
+    Frustum frustum;
+    
+    //Controla a posição e orientação da camera
+    Vec3 pos;
+    Quat orientation;
+    
+    //Usado para controlar a rotação feita pela interface.
+    //TODO: fazer isso somente pela interface
+    bool initialized;
+    Vec3 lastPos;
+    Vec3 currPos;
+};
+
+#endif

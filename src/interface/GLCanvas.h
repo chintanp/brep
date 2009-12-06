@@ -61,7 +61,10 @@ public:
     void _addSphere(wxCommandEvent& event);
     void _deleteMesh(wxCommandEvent& event);
     void _edit(wxCommandEvent& event);
-
+    void _neighborhood(wxCommandEvent& event);
+    void _rotate(wxCommandEvent& event);
+    void _scale(wxCommandEvent& event);
+    void _translate(wxCommandEvent& event);
     void sweep(float dX, float dY, float dZ);
     
 protected:
@@ -114,6 +117,7 @@ private:
     Scene drawScene;
     Camera camera;
     wxMenu* option_menu;
+    wxMenu* option_menu_mesh;
 };
 
 #endif

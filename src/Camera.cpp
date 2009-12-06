@@ -3,9 +3,10 @@
 #include <iostream>
 
 Camera::Camera() : initialized(false), lastPos(0, 0, 0), 
-                   currPos(0, 0, 0), orientation(0, 0, 0, 1) {
-    setProjection(-10, 10, -7.5, 7.5, 0.001, 1000);
-    pos = Vec3(0.0, 0.0, 10.0);
+                   currPos(0, 0, 0), orientation(0, 0, 0, 1) 
+{
+    pos = Vec3(0.0, 0.0, 2.0);
+    setProjection(-10, 10, -7.5, 7.5, pos.z + 1, pos.z + 50);
 }
 
 void Camera::setupViewMatrix(float *m) {

@@ -203,7 +203,7 @@ void GLCanvas::addSphere(float pX, float pY, float pZ, float radius, int disc) {
         scene.smev(scene.numMeshes - 1, 0, idNum, radius*cos(angle), radius*sin(angle), 0.0);
     }
     scene.rsweep(scene.numMeshes -1 , 0, 2*disc);
-} 
+}
 
 void drawBlack(std::list<Mesh*> list)
 {
@@ -394,8 +394,8 @@ void GLCanvas::init()
     glViewport(0, 0, (GLint) w , (GLint) h );
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    
-    
+
+
     if(currentMode == EDIT)
         initEdit();
     else
@@ -528,7 +528,10 @@ void GLCanvas::onMouseLeftUp(wxMouseEvent &event) {
 
     //TODO picking não funciona no modo DRAW
     if(currentMode == EDIT && (selectVertex || selectEdge || selectFace || selectMesh))
+    {
+        if( event.ShiftDown() )
         selectPicking(mouse.x, windowSize.y - mouse.y);
+    }
     //else if (drawing)
     //    draw(mouse.x, windowSize.y - mouse.y);
     Refresh();
@@ -564,9 +567,9 @@ void GLCanvas::draw(int x, int y) {
                 std::list<Vertex*>::iterator vIter = m->vertices.begin();
                 vIter++;
                 for(; vIter != m->vertices.end(); vIter++)
-                    if(fabs(x - (*vIter)->x) < 3 && fabs(y - (*vIter)->y)< 3) 
+                    if(fabs(x - (*vIter)->x) < 3 && fabs(y - (*vIter)->y)< 3)
                         return;
-            
+
                 drawScene.smev(drawScene.numMeshes - 1, 0, numPts - 1, x, y, 0.0);
                 std::cout << "smev" << std::endl;
                 numPts++;
@@ -781,7 +784,7 @@ void GLCanvas::onSize(wxSizeEvent& event)
     GetClientSize(&w, &h);
 
     glViewport(0, 0, (GLint) w , (GLint) h );
-    
+
     //if (drawing) {
     //    glMatrixMode(GL_PROJECTION);
     //    glOrtho(0, w, 0, h, -1, 1);

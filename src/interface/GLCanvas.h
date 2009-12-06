@@ -25,6 +25,7 @@ public:
 
     void render();
     void renderBackground();
+    void renderEditBackground();
 
     void setRenderSolid();
     void setRenderWireframe();

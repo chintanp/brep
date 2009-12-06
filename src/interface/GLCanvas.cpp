@@ -97,6 +97,17 @@ void GLCanvas::doneDrawing() {
     //Copia os meshes de drawScene para scene
     std::list<Mesh*>::iterator iter;
     for(iter = drawScene.meshes.begin(); iter != drawScene.meshes.end(); ) {
+        //mapeia os vértices para a nova tela
+        //As coordenadas de draw vão de (0 -> w) (0 - h)
+        //As coordenadas da área de edit estão fixas (-10 -> 10) (-7.5 -> 7.5)
+        int w, h;
+        GetClientSize(&w, &h);
+        std::list<Vertex*>::iterator vIter;
+        for(vIter = (*iter)->vertices.begin(); vIter != (*iter)->vertices.end(); vIter++) {
+            (*vIter)->x = 20*(*vIter)->x/(float)w - 10;
+            (*vIter)->y = 15.0*(*vIter)->y/(float)h - 7.5;
+            (*vIter)->z = 0.0;
+        }
         scene.meshes.push_back(*iter);
         scene.numMeshes++;
         iter = drawScene.meshes.erase(iter);
@@ -108,6 +119,8 @@ void GLCanvas::doneDrawing() {
 void GLCanvas::sweep(float dX, float dY, float dZ) {
     std::list<Loop*>::iterator fIter;
     for(fIter = faceList.begin(); fIter != faceList.end(); fIter++) {
+        if (!(*fIter)->face->solid->manifold)
+            (*fIter)->face->solid->manifold = true;
         scene.sweep((*fIter)->face->solid->id, (*fIter)->face->id, dX, dY, dZ);
     }
 }
@@ -155,13 +168,13 @@ void GLCanvas::_edit(wxCommandEvent& event)
 void GLCanvas::addCube(float minX, float minY, float minZ, float size)
 {
     //v0, f0, s0
-    scene.mvfs(minX, minY, minZ);
+    scene.mvfs(minX, minY, minZ+size);
     //v1
-    scene.smev(scene.numMeshes - 1, 0, 0, minX+size, minY, minZ);
+    scene.smev(scene.numMeshes - 1, 0, 0, minX+size, minY, minZ + size);
     //v2
-    scene.smev(scene.numMeshes - 1, 0, 1, minX+size, minY+size, minZ);
+    scene.smev(scene.numMeshes - 1, 0, 1, minX+size, minY+size, minZ + size);
     //v3
-    scene.smev(scene.numMeshes - 1, 0, 2, minX, minY+size, minZ);
+    scene.smev(scene.numMeshes - 1, 0, 2, minX, minY+size, minZ + size);
     //f1 -> front
     scene.smef(scene.numMeshes - 1, 0, 3, 0);
 
@@ -458,9 +471,8 @@ void GLCanvas::render()
 
         float m[16];
         camera.setupViewMatrix(m);
-        glTranslatef(-camera.pos.x, -camera.pos.y, -camera.pos.z);
+        glTranslatef(-camera.pos.x, -camera.pos.y, -5*camera.pos.z); 
         glMultMatrixf(m);
-
         if(!scene.isEmpty()) {
             if (selectMesh)
                 scene.render(MESHES);

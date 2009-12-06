@@ -7,6 +7,13 @@ Mesh::Mesh(int id) : id(id), initialized(false) {
     numLoops = 0;
     numEdges = 0;
 
+    tx = ty = tz = 0;
+    //Identidade para a escala
+    sx = sy = sz = 1;
+    
+    //Quaternion identidade
+    orientation = Quat(0.0, 0.0, 0.0, 1.0);
+
     //FIXME manifold está aqui somente para
     //que a face do mundo não seja desenhada para
     //modelos 2d
@@ -34,7 +41,6 @@ Mesh::~Mesh() {
         delete *fIter;
     }
     faces.clear();
-
 }
 
 int Mesh::getId() {
@@ -76,4 +82,22 @@ void Mesh::addFace(Face *f) {
 void Mesh::addEdge(Edge *e) {
     edges.push_back(e);
     numEdges++;
+}
+
+void Mesh::translate(float dx, float dy, float dz) {
+    tx += dx;
+    ty += dy;
+    tz += dz;
+}
+
+void Mesh::scale(float dx, float dy, float dz) {
+    sx = dx;
+    sy = dy;
+    sz = dz;
+}
+
+void Mesh::rotate(float angle, float x, float y, float z) {
+    Quat q;
+    q.fromAxisAngle(Vec3(x, y, z), angle);
+    orientation = orientation*q;
 }

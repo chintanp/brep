@@ -453,6 +453,7 @@ void GLCanvas::render()
             scene.render(LINES);
         }
     } else { //DRAW
+        renderEditBackground();
         if(!drawScene.isEmpty()) {
             std::cout << "drawScene != empty" << std::endl;
             if (selectMesh)
@@ -507,6 +508,67 @@ void GLCanvas::renderBackground()
         glVertex2f(1.0,1.0);
         glVertex2f(-1.0,1.0);
     glEnd();
+
+    // Restore projection matrix
+    glPopMatrix();
+
+    // Restore modelview matrix
+    glMatrixMode( GL_MODELVIEW );
+    glPopMatrix();
+
+    // Restore states changed
+    glPopAttrib();
+}
+
+void GLCanvas::renderEditBackground() {
+    // Save color, shading, fill mode, culling, matrixe mode, so it can be restored later
+    glPushAttrib( GL_CURRENT_BIT | GL_LIGHTING_BIT | GL_POLYGON_BIT | GL_TRANSFORM_BIT | GL_DEPTH_BUFFER_BIT );
+
+    // To guarantee we can fill a polygon
+    glPolygonMode( GL_FRONT, GL_FILL );
+    glDisable( GL_LIGHTING );
+    glDisable( GL_CULL_FACE );
+
+    // To guarantee we can do gradient color
+    glShadeModel( GL_SMOOTH );
+
+    // Make it be rendered always below objects
+    glDisable( GL_DEPTH_TEST );
+
+    // Save modelview matrix and reset current to identity
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    // Save projection matrix and reset current to identity
+    glMatrixMode( GL_PROJECTION );
+    glPushMatrix();
+    glLoadIdentity();
+
+    glBegin(GL_QUADS);
+    glColor3f(0.7031,0.8143,0.5505);
+        glVertex2f(-1.0,-1.0);
+        glVertex2f(1.0,-1.0);
+    glColor3f(0.3562, 0.55,0.35039);
+        glVertex2f(1.0,1.0);
+        glVertex2f(-1.0,1.0);
+    glEnd();
+
+    int disc = 32;
+    float step = 2.0/(float)disc;
+    glColor3f(1.0, 1.0, 1.0);
+    glLineWidth(0.7);
+    for(int i = 0; i < disc; i++){
+        for(int j = 0; j < disc; j++) {
+            glBegin(GL_LINE_LOOP);
+                glVertex2f(-1 + step*i, -1 + step*j);
+                glVertex2f(-1 + step*i, -1 + step*(j+1));
+                glVertex2f(-1 + step*(i+1), -1 + step*(j+1));
+                glVertex2f(-1 +step*(i+1), -1 +step*j);
+            glEnd();
+        }
+    }
+    glLineWidth(2.0);
 
     // Restore projection matrix
     glPopMatrix();

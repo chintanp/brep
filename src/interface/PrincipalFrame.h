@@ -55,13 +55,13 @@ class PrincipalFrame : public wxFrame
 		void _wxFB_edgeMode( wxCommandEvent& event ){ edgeMode( event ); }
 		void _wxFB_faceMode( wxCommandEvent& event ){ faceMode( event ); }
 		void _wxFB_meshMode( wxCommandEvent& event ){ meshMode( event ); }
-        void _wxFB_onSelectMode( wxNotebookEvent& event ){ onSelectMode( event ); }
+		void _wxFB_drawR2D2( wxCommandEvent& event ){ drawR2D2( event ); }
+		void _wxFB_onSelectMode( wxNotebookEvent& event ){ onSelectMode( event ); }
 		void _wxFB_add_Corner( wxCommandEvent& event ){ add_Corner( event ); }
 		void _wxFB_add_Cylinder( wxCommandEvent& event ){ add_Cylinder( event ); }
 		void _wxFB_add_Sphere( wxCommandEvent& event ){ add_Sphere( event ); }
 		void _wxFB_sweeping( wxCommandEvent& event ){ sweeping( event ); }
 		void _wxFB_add_Cube( wxCommandEvent& event ){ add_Cube( event ); }
-		void _wxFB_add_Circle( wxCommandEvent& event ){ add_Circle( event ); }
 		void _wxFB_add_Line( wxCommandEvent& event ){ add_Line( event ); }
 		void _wxFB_doneDrawMode( wxCommandEvent& event ){ doneDrawMode( event ); }
 
@@ -77,21 +77,20 @@ class PrincipalFrame : public wxFrame
 			ID_SAVE_MODEL_TB,
 			ID_ZOOM_IN_TB,
 			ID_ZOOM_OUT_TB,
-                        ID_FIT_TB,
+			ID_FIT_TB,
 			ID_VERTEX_MODE_TB,
 			ID_EDGE_MODE_TB,
 			ID_FACE_MODE_TB,
 			ID_MESH_MODE_TB,
-            ID_SELECT_MODE,
+			wxID_R2D2_TB,
+			ID_SELECT_MODE,
 			wxID_CORNER,
 			wxID_CYLINDER,
 			wxID_SPHERE,
 			wxID_SWEEPING,
 			wxID_CUBE,
-			wxID_CIRCLE,
 			wxID_LINE,
 			wxID_DONE,
-			ID_BITMAP,
 		};
 
 		wxStatusBar* statusBar;
@@ -128,13 +127,13 @@ class PrincipalFrame : public wxFrame
 		virtual void edgeMode( wxCommandEvent& event ){ event.Skip(); }
 		virtual void faceMode( wxCommandEvent& event ){ event.Skip(); }
 		virtual void meshMode( wxCommandEvent& event ){ event.Skip(); }
-        virtual void onSelectMode( wxNotebookEvent& event ){ event.Skip(); }
+		virtual void drawR2D2( wxCommandEvent& event ){ event.Skip(); }
+		virtual void onSelectMode( wxNotebookEvent& event ){ event.Skip(); }
 		virtual void add_Corner( wxCommandEvent& event ){ event.Skip(); }
 		virtual void add_Cylinder( wxCommandEvent& event ){ event.Skip(); }
 		virtual void add_Sphere( wxCommandEvent& event ){ event.Skip(); }
 		virtual void sweeping( wxCommandEvent& event ){ event.Skip(); }
 		virtual void add_Cube( wxCommandEvent& event ){ event.Skip(); }
-		virtual void add_Circle( wxCommandEvent& event ){ event.Skip(); }
 		virtual void add_Line( wxCommandEvent& event ){ event.Skip(); }
 		virtual void doneDrawMode( wxCommandEvent& event ){ event.Skip(); }
 

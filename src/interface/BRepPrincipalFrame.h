@@ -36,6 +36,7 @@ protected:
     void doneDrawMode( wxCommandEvent& event );
     void sweeping( wxCommandEvent& event );
     void fit( wxCommandEvent& event );
+    void drawR2D2( wxCommandEvent& event );
 public:
 	/** Constructor */
 	BRepPrincipalFrame( wxWindow* parent );

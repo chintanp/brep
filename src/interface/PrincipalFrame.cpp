@@ -23,6 +23,7 @@ BEGIN_EVENT_TABLE( PrincipalFrame, wxFrame )
 	EVT_TOOL( ID_EDGE_MODE_TB, PrincipalFrame::_wxFB_edgeMode )
 	EVT_TOOL( ID_FACE_MODE_TB, PrincipalFrame::_wxFB_faceMode )
 	EVT_TOOL( ID_MESH_MODE_TB, PrincipalFrame::_wxFB_meshMode )
+	EVT_TOOL( wxID_R2D2_TB, PrincipalFrame::_wxFB_drawR2D2 )
 	EVT_NOTEBOOK_PAGE_CHANGED( ID_SELECT_MODE, PrincipalFrame::_wxFB_onSelectMode )
 	EVT_BUTTON( wxID_CORNER, PrincipalFrame::_wxFB_add_Corner )
 	EVT_BUTTON( wxID_CYLINDER, PrincipalFrame::_wxFB_add_Cylinder )
@@ -72,6 +73,8 @@ PrincipalFrame::PrincipalFrame( wxWindow* parent, wxWindowID id, const wxString&
 	toolBar->AddTool( ID_EDGE_MODE_TB, wxT("Edge Mode"), wxBitmap( wxT("data/icon/edge.png"), wxBITMAP_TYPE_ANY ), wxNullBitmap, wxITEM_RADIO, wxEmptyString, wxT("Edge Mode") );
 	toolBar->AddTool( ID_FACE_MODE_TB, wxT("Face Mode"), wxBitmap( wxT("data/icon/face.png"), wxBITMAP_TYPE_ANY ), wxNullBitmap, wxITEM_RADIO, wxEmptyString, wxT("Face Mode") );
 	toolBar->AddTool( ID_MESH_MODE_TB, wxT("Mesh Model "), wxBitmap( wxT("data/icon/mesh.png"), wxBITMAP_TYPE_ANY ), wxNullBitmap, wxITEM_RADIO, wxEmptyString, wxT("Mesh Mode") );
+	toolBar->AddSeparator();
+	toolBar->AddTool( wxID_R2D2_TB, wxT("R2D2"), wxBitmap( wxT("data/icon/r2d2.png"), wxBITMAP_TYPE_ANY ), wxNullBitmap, wxITEM_NORMAL, wxEmptyString, wxEmptyString );
 	toolBar->AddSeparator();
 	toolBar->Realize();
 

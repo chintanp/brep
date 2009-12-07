@@ -335,7 +335,7 @@
                 </object>
                 <object class="tool" expanded="1">
                     <property name="bitmap">icon/zoom.png; Load From File</property>
-                    <property name="id">ID_ZOOM_OUT_TB</property>
+                    <property name="id">ID_FIT_TB</property>
                     <property name="kind">wxITEM_NORMAL</property>
                     <property name="label">Fit</property>
                     <property name="name">fit_tool</property>
@@ -400,6 +400,21 @@
                     <property name="tooltip"></property>
                     <event name="OnMenuSelection"></event>
                     <event name="OnToolClicked">meshMode</event>
+                    <event name="OnToolEnter"></event>
+                    <event name="OnToolRClicked"></event>
+                    <event name="OnUpdateUI"></event>
+                </object>
+                <object class="toolSeparator" expanded="1" />
+                <object class="tool" expanded="1">
+                    <property name="bitmap">icon/r2d2.png; Load From File</property>
+                    <property name="id">wxID_R2D2_TB</property>
+                    <property name="kind">wxITEM_NORMAL</property>
+                    <property name="label">R2D2</property>
+                    <property name="name">r2d2_tool</property>
+                    <property name="statusbar"></property>
+                    <property name="tooltip"></property>
+                    <event name="OnMenuSelection"></event>
+                    <event name="OnToolClicked">drawR2D2</event>
                     <event name="OnToolEnter"></event>
                     <event name="OnToolRClicked"></event>
                     <event name="OnUpdateUI"></event>

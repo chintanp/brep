@@ -75,7 +75,6 @@ void BRepPrincipalFrame::meshMode( wxCommandEvent& event )
 }
 
 void BRepPrincipalFrame::onSelectMode( wxNotebookEvent& event) {
-    std::cout << "mudando de modo de seleção" << std::endl;
     canvas->switchMode();
     Refresh();
 }
@@ -128,11 +127,10 @@ void BRepPrincipalFrame::sweeping( wxCommandEvent& event )
 }
 
 void BRepPrincipalFrame::fit(wxCommandEvent& event) {
-    std::cout << "BRepPrincipalFrame::fit()" << std::endl;
     canvas->fit();
 }
 
 void BRepPrincipalFrame::drawR2D2( wxCommandEvent& event )
 {
-    std::cout << "..R2D2.." << std::endl;
+    canvas->r2d2();
 }

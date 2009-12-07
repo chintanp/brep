@@ -207,9 +207,29 @@ void GLCanvas::_move(wxCommandEvent& event)
     BRepEdit_Dialog edit(this);
     if(edit.ShowModal() == wxID_OK)
     {
-        edit.getX();
-        edit.getY();
-        edit.getZ();
+        //Verificar o que está selecionado
+        if(selectVertex) {
+            std::set<Vertex*>::iterator vIter;
+            for(vIter = vertexList.begin(); vIter != vertexList.end(); vIter++) 
+                (*vIter)->move(edit.getX(), edit.getY(), edit.getZ());
+        } else if(selectEdge) {
+            //Para toda aresta selecionada, mover os 2 vértices dessa aresta
+            std::set<Edge*>::iterator eIter;
+            for(eIter = edgeList.begin(); eIter != edgeList.end(); eIter++) {
+                (*eIter)->hed1->origin->move(edit.getX(), edit.getY(), edit.getZ());
+                (*eIter)->hed2->origin->move(edit.getX(), edit.getY(), edit.getZ());
+            }
+        } else if(selectFace) {
+            //Para toda face selecionada, mover os vértices da face
+            std::set<Loop*>::iterator lIter;
+            for(lIter = faceList.begin(); lIter != faceList.end(); lIter++) {
+                HalfEdge *h = (*lIter)->hed;
+                do {
+                    h->origin->move(edit.getX(), edit.getY(), edit.getZ());
+                    h = h->next;
+                } while(h != (*lIter)->hed);
+            }
+        }
     }
 }
 

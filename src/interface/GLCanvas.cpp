@@ -215,20 +215,28 @@ void GLCanvas::_move(wxCommandEvent& event)
         } else if(selectEdge) {
             //Para toda aresta selecionada, mover os 2 vértices dessa aresta
             std::set<Edge*>::iterator eIter;
+            std::set<Vertex*> tempVertexList;
             for(eIter = edgeList.begin(); eIter != edgeList.end(); eIter++) {
-                (*eIter)->hed1->origin->move(edit.getX(), edit.getY(), edit.getZ());
-                (*eIter)->hed2->origin->move(edit.getX(), edit.getY(), edit.getZ());
+                tempVertexList.insert((*eIter)->hed1->origin);
+                tempVertexList.insert((*eIter)->hed2->origin);
             }
+            std::set<Vertex*>::iterator vIter;
+            for(vIter = tempVertexList.begin(); vIter != tempVertexList.end(); vIter++)
+                (*vIter)->move(edit.getX(), edit.getY(), edit.getZ());
         } else if(selectFace) {
             //Para toda face selecionada, mover os vértices da face
             std::set<Loop*>::iterator lIter;
+            std::set<Vertex*> tempVertexList;
             for(lIter = faceList.begin(); lIter != faceList.end(); lIter++) {
                 HalfEdge *h = (*lIter)->hed;
                 do {
-                    h->origin->move(edit.getX(), edit.getY(), edit.getZ());
+                    tempVertexList.insert(h->origin);
                     h = h->next;
                 } while(h != (*lIter)->hed);
             }
+            std::set<Vertex*>::iterator vIter;
+            for(vIter = tempVertexList.begin(); vIter != tempVertexList.end(); vIter++)
+                (*vIter)->move(edit.getX(), edit.getY(), edit.getZ());
         }
     }
 }

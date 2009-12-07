@@ -167,6 +167,12 @@ void GLCanvas::sweep(float dX, float dY, float dZ) {
     }
 }
 
+void GLCanvas::fit() {
+    std::cout << "GLCanvas::fit" << std::endl;
+    camera.fit();
+    Refresh();
+}
+
 void GLCanvas::_addCube(wxCommandEvent& event)
 {
     addCube(-2, -2, -2, 4);

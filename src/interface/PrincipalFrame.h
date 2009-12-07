@@ -77,6 +77,7 @@ class PrincipalFrame : public wxFrame
 			ID_SAVE_MODEL_TB,
 			ID_ZOOM_IN_TB,
 			ID_ZOOM_OUT_TB,
+                        ID_FIT_TB,
 			ID_VERTEX_MODE_TB,
 			ID_EDGE_MODE_TB,
 			ID_FACE_MODE_TB,

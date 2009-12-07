@@ -12,3 +12,9 @@ Vertex::Vertex(float x, float y, float z, Mesh *m)
 int Vertex::getId() {
     return id;
 }
+
+void Vertex::move(float dx, float dy, float dz) {
+    x += dx;
+    y += dy;
+    z += dz;
+}

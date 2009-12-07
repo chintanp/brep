@@ -10,6 +10,7 @@ public:
     Vertex(float x, float y, float z, Mesh *m);
 
     int getId();
+    void move(float dx, float dy, float dz);
 
     int id;
     float x, y, z;

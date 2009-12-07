@@ -165,6 +165,7 @@ void GLCanvas::sweep(float dX, float dY, float dZ) {
             (*fIter)->face->solid->manifold = true;
         scene.sweep((*fIter)->face->solid->id, (*fIter)->face->id, dX, dY, dZ);
     }
+    Refresh();
 }
 
 void GLCanvas::_addCube(wxCommandEvent& event)
@@ -200,6 +201,7 @@ void GLCanvas::_deleteMesh(wxCommandEvent& event)
         scene.removeSolid((*iter)->id);
     }
     meshList.clear();
+    Refresh();
 }
 
 void GLCanvas::_move(wxCommandEvent& event)
@@ -231,6 +233,7 @@ void GLCanvas::_move(wxCommandEvent& event)
             }
         }
     }
+    Refresh();
 }
 
 
@@ -332,6 +335,7 @@ void GLCanvas::_rotate(wxCommandEvent& event)
         for(mIter = meshList.begin(); mIter != meshList.end(); mIter++)
             (*mIter)->rotate(edit.getAngle()*M_PI/180.0, edit.getX(), edit.getY(), edit.getZ());
     }
+    Refresh();
 }
 
 void GLCanvas::_scale(wxCommandEvent& event)
@@ -344,6 +348,7 @@ void GLCanvas::_scale(wxCommandEvent& event)
         for(mIter = meshList.begin(); mIter != meshList.end(); mIter++)
             (*mIter)->scale(edit.getX(), edit.getY(), edit.getZ());
     }
+    Refresh();
 }
 
 void GLCanvas::_translate(wxCommandEvent& event)
@@ -356,6 +361,7 @@ void GLCanvas::_translate(wxCommandEvent& event)
         for(mIter = meshList.begin(); mIter != meshList.end(); mIter++)
             (*mIter)->translate(edit.getX(), edit.getY(), edit.getZ());
     }
+    Refresh();
 }
 
 void GLCanvas::addCube(float minX, float minY, float minZ, float size)

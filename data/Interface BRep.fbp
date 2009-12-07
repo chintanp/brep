@@ -473,7 +473,7 @@
                                 <object class="notebookpage" expanded="1">
                                     <property name="bitmap"></property>
                                     <property name="label">Edit Mode</property>
-                                    <property name="select">1</property>
+                                    <property name="select">0</property>
                                     <object class="wxPanel" expanded="1">
                                         <property name="bg"></property>
                                         <property name="context_help"></property>
@@ -1055,7 +1055,7 @@
                                 <object class="notebookpage" expanded="1">
                                     <property name="bitmap"></property>
                                     <property name="label">Draw Mode</property>
-                                    <property name="select">0</property>
+                                    <property name="select">1</property>
                                     <object class="wxPanel" expanded="1">
                                         <property name="bg"></property>
                                         <property name="context_help"></property>
@@ -1127,7 +1127,7 @@
                                                         <property name="rowspan">1</property>
                                                         <object class="wxBitmapButton" expanded="1">
                                                             <property name="bg"></property>
-                                                            <property name="bitmap">icon/edge.png; Load From File</property>
+                                                            <property name="bitmap">icon/line.png; Load From File</property>
                                                             <property name="context_help"></property>
                                                             <property name="default">0</property>
                                                             <property name="disabled"></property>

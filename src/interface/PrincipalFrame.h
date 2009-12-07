@@ -110,11 +110,9 @@ class PrincipalFrame : public wxFrame
 		wxStaticText* cylinder_staticText;
 		wxStaticText* sphere_staticText;
 		wxPanel* drawMode_panel;
-		wxBitmapButton* circle_bpButton;
 		wxBitmapButton* line_bpButton;
 		wxButton* done_button;
 		wxStaticText* line_staticText;
-		wxStaticText* line_staticText2;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void newModel( wxCommandEvent& event ){ event.Skip(); }

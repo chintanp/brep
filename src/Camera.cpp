@@ -66,20 +66,9 @@ void Camera::reset() {
     //setProjection(-1, 1, -1, 1, 0, 1);
 }
 
-void Camera::fit(const BoundingBox& bBox) {
-    float width2 = (bBox.pMax.x - bBox.pMin.x) * 0.5;
-    float height2 = (bBox.pMax.y - bBox.pMin.y) * 0.5;
-    float near, far;
-
-    (width2 >= height2) ? height2 = width2 * 0.75 : width2 = height2 * 1.333;
-
-    near = height2;
-    far = 2*(bBox.pMax.z - bBox.pMin.z);
-    if (far < 1000)
-        far = 1000.0;
-
-    pos = Vec3(0.0, 0.0, bBox.pMax.z + 2 * width2);
-    setProjection(-width2, width2, -height2, height2, near, far);
+void Camera::fit() {
+    orientation = Quat(0.0, 0.0, 0.0, 1.0);
+    setProjection(-10, 10, -7.5, 7.5, pos.z + 1, pos.z + 50);
 }
 
 void Camera::mapTrackball(int mouseX, int mouseY, 

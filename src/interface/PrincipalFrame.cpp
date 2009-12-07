@@ -137,7 +137,7 @@ PrincipalFrame::PrincipalFrame( wxWindow* parent, wxWindowID id, const wxString&
 	gbSizer11->SetFlexibleDirection( wxBOTH );
 	gbSizer11->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	line_bpButton = new wxBitmapButton( drawMode_panel, wxID_LINE, wxBitmap( wxT("data/icon/edge.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	line_bpButton = new wxBitmapButton( drawMode_panel, wxID_LINE, wxBitmap( wxT("data/icon/line.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	gbSizer11->Add( line_bpButton, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	done_button = new wxButton( drawMode_panel, wxID_DONE, wxT("Done"), wxDefaultPosition, wxDefaultSize, 0 );

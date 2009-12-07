@@ -210,7 +210,7 @@ void GLCanvas::_move(wxCommandEvent& event)
         //Verificar o que está selecionado
         if(selectVertex) {
             std::set<Vertex*>::iterator vIter;
-            for(vIter = vertexList.begin(); vIter != vertexList.end(); vIter++) 
+            for(vIter = vertexList.begin(); vIter != vertexList.end(); vIter++)
                 (*vIter)->move(edit.getX(), edit.getY(), edit.getZ());
         } else if(selectEdge) {
             //Para toda aresta selecionada, mover os 2 vértices dessa aresta
@@ -232,6 +232,7 @@ void GLCanvas::_move(wxCommandEvent& event)
         }
     }
 }
+
 
 void GLCanvas::_neighborhood(wxCommandEvent& event)
 {
@@ -320,7 +321,6 @@ void GLCanvas::_neighborhood(wxCommandEvent& event)
             vertexList.insert(*vIter);
     }
     Refresh();
-    return;
 }
 
 void GLCanvas::_rotate(wxCommandEvent& event)
@@ -351,7 +351,7 @@ void GLCanvas::_translate(wxCommandEvent& event)
     BRepEdit_Dialog edit(this);
     if(edit.ShowModal() == wxID_OK)
     {
-        //Percorrer a lista de meshes selecionados e aplica a translação 
+        //Percorrer a lista de meshes selecionados e aplica a translação
         std::set<Mesh*>::iterator mIter;
         for(mIter = meshList.begin(); mIter != meshList.end(); mIter++)
             (*mIter)->translate(edit.getX(), edit.getY(), edit.getZ());
@@ -477,7 +477,6 @@ void drawBlack(std::set<Vertex*> list)
             (*it)->r = 0.0;
             (*it)->g = 0.0;
             (*it)->b = 0.0;
-            list.erase(it);
             list.erase(it);
     }
 }

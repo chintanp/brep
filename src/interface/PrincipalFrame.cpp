@@ -23,13 +23,12 @@ BEGIN_EVENT_TABLE( PrincipalFrame, wxFrame )
 	EVT_TOOL( ID_EDGE_MODE_TB, PrincipalFrame::_wxFB_edgeMode )
 	EVT_TOOL( ID_FACE_MODE_TB, PrincipalFrame::_wxFB_faceMode )
 	EVT_TOOL( ID_MESH_MODE_TB, PrincipalFrame::_wxFB_meshMode )
-    EVT_NOTEBOOK_PAGE_CHANGED( ID_SELECT_MODE, PrincipalFrame::_wxFB_onSelectMode )
+	EVT_NOTEBOOK_PAGE_CHANGED( ID_SELECT_MODE, PrincipalFrame::_wxFB_onSelectMode )
 	EVT_BUTTON( wxID_CORNER, PrincipalFrame::_wxFB_add_Corner )
 	EVT_BUTTON( wxID_CYLINDER, PrincipalFrame::_wxFB_add_Cylinder )
 	EVT_BUTTON( wxID_SPHERE, PrincipalFrame::_wxFB_add_Sphere )
 	EVT_BUTTON( wxID_SWEEPING, PrincipalFrame::_wxFB_sweeping )
 	EVT_BUTTON( wxID_CUBE, PrincipalFrame::_wxFB_add_Cube )
-	EVT_BUTTON( wxID_CIRCLE, PrincipalFrame::_wxFB_add_Circle )
 	EVT_BUTTON( wxID_LINE, PrincipalFrame::_wxFB_add_Line )
 	EVT_BUTTON( wxID_DONE, PrincipalFrame::_wxFB_doneDrawMode )
 END_EVENT_TABLE()
@@ -138,22 +137,15 @@ PrincipalFrame::PrincipalFrame( wxWindow* parent, wxWindowID id, const wxString&
 	gbSizer11->SetFlexibleDirection( wxBOTH );
 	gbSizer11->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	circle_bpButton = new wxBitmapButton( drawMode_panel, wxID_CIRCLE, wxBitmap( wxT("data/icon/face.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	gbSizer11->Add( circle_bpButton, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL, 5 );
-
 	line_bpButton = new wxBitmapButton( drawMode_panel, wxID_LINE, wxBitmap( wxT("data/icon/edge.png"), wxBITMAP_TYPE_ANY ), wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
 	gbSizer11->Add( line_bpButton, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	done_button = new wxButton( drawMode_panel, wxID_DONE, wxT("Done"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer11->Add( done_button, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
+	gbSizer11->Add( done_button, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
 	line_staticText = new wxStaticText( drawMode_panel, wxID_ANY, wxT("Line:"), wxDefaultPosition, wxDefaultSize, 0 );
 	line_staticText->Wrap( -1 );
 	gbSizer11->Add( line_staticText, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
-
-	line_staticText2 = new wxStaticText( drawMode_panel, wxID_ANY, wxT("Circle:"), wxDefaultPosition, wxDefaultSize, 0 );
-	line_staticText2->Wrap( -1 );
-	gbSizer11->Add( line_staticText2, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
 
 	bSizer41->Add( gbSizer11, 1, wxALIGN_CENTER_HORIZONTAL, 5 );
 

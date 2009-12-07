@@ -281,9 +281,23 @@ void GLCanvas::_neighborhood(wxCommandEvent& event)
         for(iter = aux.begin(); iter != aux.end(); iter++)
             edgeList.insert( (*iter) );
     }
-    else
+    else //Vertex
     {
-
+        std::set<Vertex*> aux;
+        std::set<Vertex*>::iterator vIter;
+        for(vIter = vertexList.begin(); vIter != vertexList.end(); vIter++) {
+            HalfEdge *h = (*vIter)->hed;
+            do {
+                h = h->mate();
+                h->origin->r = 1.0;
+                h->origin->g = 0.0;
+                h->origin->b = 0.0;
+                aux.insert(h->origin);
+                h = h->next;
+            } while(h != (*vIter)->hed);
+        }
+        for(vIter = aux.begin(); vIter != aux.end(); vIter++)
+            vertexList.insert(*vIter);
     }
     Refresh();
     return;

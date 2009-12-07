@@ -116,11 +116,9 @@ GLCanvas::~GLCanvas()
 
 void GLCanvas::switchMode() {
     if (currentMode == EDIT) {
-        std::cout << "modo de desneho" << std::endl;
         currentMode = DRAW;
         initDraw();
     } else {
-        std::cout << "modo de edição" << std::endl;
         currentMode = EDIT;
         initEdit();
     }
@@ -150,9 +148,7 @@ void GLCanvas::doneDrawing() {
             (*vIter)->y = 15.0*(*vIter)->y/(float)h - 7.5;
             (*vIter)->z = 0.0;
         }
-        std::cout << "scene.numMeshes: " << scene.numMeshes << std::endl;
         (*iter)->id = scene.numMeshes;
-        std::cout << "m->id: " << (*iter)->id << std::endl;
         scene.meshes.push_back(*iter);
         scene.numMeshes++;
         iter = drawScene.meshes.erase(iter);
@@ -452,7 +448,7 @@ void GLCanvas::addSphere(float pX, float pY, float pZ, float radius, int disc) {
         float angle = M_PI - step*(i+1);
         scene.smev(scene.numMeshes - 1, 0, idNum, radius*cos(angle), radius*sin(angle), 0.0);
     }
-    scene.rsweep(scene.numMeshes -1 , 0, 2*disc);
+    scene.rsweep(scene.numMeshes -1 , 0, 2*disc, 2*M_PI);
 }
 
 void drawBlack(std::set<Mesh*> list)
@@ -702,7 +698,6 @@ void GLCanvas::render()
     } else { //DRAW
         renderEditBackground();
         if(!drawScene.isEmpty()) {
-            std::cout << "drawScene != empty" << std::endl;
             if (selectMesh)
                 drawScene.render(MESHES);
             else
@@ -873,7 +868,6 @@ void GLCanvas::draw(int x, int y) {
             Vertex *first = drawScene.getVertex(drawScene.numMeshes - 1, 0);
             if(fabs(x - first->x) < 3 && fabs(y - first->y) < 3) {
                 drawScene.smef(drawScene.numMeshes -1, 0, numPts - 1, 0);
-                std::cout << "smef" << std::endl;
                 numPts = 0;
                 //Força a criação de um novo mesh.
                 drawScene.numMeshes++;
@@ -886,7 +880,6 @@ void GLCanvas::draw(int x, int y) {
                         return;
 
                 drawScene.smev(drawScene.numMeshes - 1, 0, numPts - 1, x, y, 0.0);
-                std::cout << "smev" << std::endl;
                 numPts++;
             }
         }
@@ -947,12 +940,11 @@ void GLCanvas::selectPicking(int x, int y) {
     }
 
     std::cout << "mesh escolhido: " << nearestMesh << std::endl;
-    std::cout << "face escolhido: " << nearestItem << std::endl;
+    std::cout << "obj escolhido: " << nearestItem << std::endl;
     
     if (hits == 0)
         return;
     Mesh *m = scene.getSolid(nearestMesh);
-    std::cout << "m->id: " << m->id << std::endl;
 
     glMatrixMode(GL_MODELVIEW);
     if(selectMesh) {
@@ -981,7 +973,6 @@ void GLCanvas::selectPicking(int x, int y) {
         {
             if(*it == l)
             {
-                std::cout << "ja esta na lista" << std::endl;
                 l->r = 0.6;
                 l->g = 0.6;
                 l->b = 0.6;
@@ -1112,4 +1103,64 @@ void GLCanvas::onSize(wxSizeEvent& event)
 void GLCanvas::onEraseBackground(wxEraseEvent& event)
 {
   //só para se livrar do flicker
+}
+
+void GLCanvas::r2d2() {
+    float radius = 4.0;
+    int disc = 20;
+    float step = M_PI/disc;
+
+    //Semi-esfera
+    scene.mvfs(-1.0*radius, 0, 0);
+    for(int i = 0, idNum = 0; i < disc; i++, idNum++) {
+        float angle = M_PI - step*(i+1);
+        scene.smev(scene.numMeshes - 1, 0, idNum, radius*cos(angle), radius*sin(angle), 0.0);
+    }
+    scene.rsweep(scene.numMeshes -1 , 0, 2*disc, M_PI);
+
+    //Cilindro central
+    scene.mvfs(radius, 0, 0);
+    int idNum;
+    for(int i = 0, idNum = 0; i < 2*disc; i++, idNum++) {
+        float angle = step*(i+1);
+        scene.smev(scene.numMeshes - 1, 0, idNum, radius*cos(angle), radius*sin(angle), 0.0);
+    }
+    scene.smef(scene.numMeshes - 1, 0, idNum, 0);
+    scene.sweep(scene.numMeshes - 1, 0, 0, 0, -8);
+
+    //Cubo central
+    addCube(-0.5, -3.0, -9, 1);
+
+    //Cilindro direita
+    radius = 1.5;
+    scene.mvfs(radius + 6 , 0, 0);
+    for(int i = 0, idNum = 0; i < 2*disc; i++, idNum++) {
+        float angle = step*(i+1);
+        scene.smev(scene.numMeshes - 1, 0, idNum, radius*cos(angle) + 6, radius*sin(angle), 0.0);
+    }
+    scene.smef(scene.numMeshes - 1, 0, idNum, 0);
+    scene.sweep(scene.numMeshes - 1, 0, 0, 0, -8);
+
+    //Cubo direita baixo
+    addCube(5.5, -1.0, -9, 1);
+
+    //Cilindro esquerda
+    scene.mvfs(radius - 6 , 0, 0);
+    for(int i = 0, idNum = 0; i < 2*disc; i++, idNum++) {
+        float angle = step*(i+1);
+        scene.smev(scene.numMeshes - 1, 0, idNum, radius*cos(angle) - 6, radius*sin(angle), 0.0);
+    }
+    scene.smef(scene.numMeshes - 1, 0, idNum, 0);
+    scene.sweep(scene.numMeshes - 1, 0, 0, 0, -8);
+
+    //Cubo esquerda baixo
+    addCube(-6.5, -1.0, -9, 1);
+
+    //Cubo direita cima
+    addCube(4.0, -0.75, -3.0, 1.5);
+
+    //Cubo esquerda cima
+    addCube(-4.75, -0.75, -3, 1);
+
+    Refresh();
 }

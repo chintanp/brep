@@ -201,12 +201,9 @@ void Scene::mvfs(float x, float y, float z) {
 
 
     m = new Mesh(numMeshes++);
-    std::cout << "criado mesh: " << m->id << std::endl;
     f = new Face(m);
-    std::cout << "criada face: " << f->id << std::endl;
     l = new Loop(f);
     v = new Vertex(x, y, z, m);
-    std::cout << "criado vertex: " << v->id << std::endl;
     he = new HalfEdge;
 
     f->outter = l;
@@ -392,13 +389,13 @@ void Scene::sweep(int idSolid, int idFace, float dx, float dy, float dz) {
 }
 
 
-void Scene::rsweep(int idSolid, int idFace, int disc) {
+void Scene::rsweep(int idSolid, int idFace, int disc, float angle) {
     HalfEdge *first, *cfirst, *last, *scan;
     Mesh *m = getSolid(idSolid);
     Face *f = getFace(m, idFace);
     
     Quat q;
-    q.fromAxisAngle(Vec3(1.0, 0.0, 0.0), 2*M_PI/disc);
+    q.fromAxisAngle(Vec3(1.0, 0.0, 0.0), angle/(float)disc);
 
     std::list<Loop*>::iterator lIter = f->loops.begin();
     first = (*lIter)->hed;

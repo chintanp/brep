@@ -45,7 +45,7 @@ public:
 
     void sweep(int idSolid, int idFace, float dx, float dy, float dz);
     //Sweeping no eixo x
-    void rsweep(int idSolid, int idFace, int disc);
+    void rsweep(int idSolid, int idFace, int disc, float angle);
 
     void updateBoundingBox();
 

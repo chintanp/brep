@@ -23,7 +23,7 @@ public:
                        float t, float n, float f);
     void updateRotation(int mouseX, int mouseY, 
                         int windowWidth, int windowHeight);
-    void fit(const BoundingBox& bBox);
+    void fit();
     void reset();
     
     void mapTrackball(int mouseX, int mouseY, 

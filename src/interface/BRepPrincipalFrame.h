@@ -35,7 +35,7 @@ protected:
     void add_Line( wxCommandEvent& event );
     void doneDrawMode( wxCommandEvent& event );
     void sweeping( wxCommandEvent& event );
-
+    void fit( wxCommandEvent& event );
 public:
 	/** Constructor */
 	BRepPrincipalFrame( wxWindow* parent );

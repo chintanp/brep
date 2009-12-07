@@ -67,6 +67,7 @@ public:
     void _scale(wxCommandEvent& event);
     void _translate(wxCommandEvent& event);
     void sweep(float dX, float dY, float dZ);
+    void fit();
     
 protected:
 		enum

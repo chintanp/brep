@@ -126,3 +126,8 @@ void BRepPrincipalFrame::sweeping( wxCommandEvent& event )
     if(sweep.ShowModal() == wxID_OK)
         canvas->sweep(sweep.getX(), sweep.getY(), sweep.getZ());
 }
+
+void BRepPrincipalFrame::fit(wxCommandEvent& event) {
+    std::cout << "BRepPrincipalFrame::fit()" << std::endl;
+    canvas->fit();
+}

@@ -150,6 +150,9 @@ void GLCanvas::doneDrawing() {
             (*vIter)->y = 15.0*(*vIter)->y/(float)h - 7.5;
             (*vIter)->z = 0.0;
         }
+        std::cout << "scene.numMeshes: " << scene.numMeshes << std::endl;
+        (*iter)->id = scene.numMeshes;
+        std::cout << "m->id: " << (*iter)->id << std::endl;
         scene.meshes.push_back(*iter);
         scene.numMeshes++;
         iter = drawScene.meshes.erase(iter);
@@ -168,7 +171,6 @@ void GLCanvas::sweep(float dX, float dY, float dZ) {
 }
 
 void GLCanvas::fit() {
-    std::cout << "GLCanvas::fit" << std::endl;
     camera.fit();
     Refresh();
 }
@@ -940,17 +942,18 @@ void GLCanvas::selectPicking(int x, int y) {
 
     std::cout << "mesh escolhido: " << nearestMesh << std::endl;
     std::cout << "face escolhido: " << nearestItem << std::endl;
-
-    glMatrixMode(GL_MODELVIEW);
+    
     if (hits == 0)
         return;
     Mesh *m = scene.getSolid(nearestMesh);
+    std::cout << "m->id: " << m->id << std::endl;
 
+    glMatrixMode(GL_MODELVIEW);
     if(selectMesh) {
         std::set<Mesh*>::iterator it;
         for (it = meshList.begin(); it != meshList.end(); ++it)
         {
-            if((*it)->id == m->id)
+            if(*it == m)
             {
                 m->r = 0.6;
                 m->g = 0.6;
@@ -970,8 +973,9 @@ void GLCanvas::selectPicking(int x, int y) {
         std::set<Loop*>::iterator it;
         for (it = faceList.begin(); it != faceList.end(); ++it)
         {
-            if((*it)->id == l->id)
+            if(*it == l)
             {
+                std::cout << "ja esta na lista" << std::endl;
                 l->r = 0.6;
                 l->g = 0.6;
                 l->b = 0.6;
@@ -990,7 +994,7 @@ void GLCanvas::selectPicking(int x, int y) {
         std::set<Edge*>::iterator it;
         for (it = edgeList.begin(); it != edgeList.end(); ++it)
         {
-            if((*it)->id == e->id)
+            if(*it == e)
             {
                 e->r = 0.0;
                 e->g = 0.0;
@@ -1010,7 +1014,7 @@ void GLCanvas::selectPicking(int x, int y) {
         std::set<Vertex*>::iterator it;
         for (it = vertexList.begin(); it != vertexList.end(); ++it)
         {
-            if((*it)->id == v->id)
+            if(*it == v)
             {
                 v->r = 0.0;
                 v->g = 0.0;

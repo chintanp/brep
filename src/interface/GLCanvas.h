@@ -115,6 +115,7 @@ private:
     std::set<Loop*> faceList;
     std::set<Edge*> edgeList;
     std::set<Vertex*> vertexList;
+    std::set<int> gridptList;
 
     wxGLContext *glContext;
     Scene scene;

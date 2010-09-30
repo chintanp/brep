@@ -38,6 +38,8 @@ wxGLCanvas(parent, id, pos, size, style, name,  attribList)
     startLineLoop = false;
     numPts = 0;
 
+    deforming = false;
+
     //MENU
     option_menu = new wxMenu();
     option_menu_mesh = new wxMenu();
@@ -839,10 +841,11 @@ void GLCanvas::onMouseLeftUp(wxMouseEvent &event) {
     if(currentMode == EDIT && (selectVertex || selectEdge || selectFace || selectMesh))
     {
         if( event.ShiftDown() )
-        selectPicking(mouse.x, windowSize.y - mouse.y);
+            selectPicking(mouse.x, windowSize.y - mouse.y);
     }
     //else if (drawing)
     //    draw(mouse.x, windowSize.y - mouse.y);
+    deforming = false;
     Refresh();
 }
 
@@ -1038,16 +1041,63 @@ void GLCanvas::onMouseMove(wxMouseEvent &event)
     GetClientSize( &windowSize.x, &windowSize.y );
     static wxString msg;
 
-    if ( event.LeftIsDown() )
-    {
+    if(event.ControlDown() && event.LeftIsDown()) {
+        if(!deforming) {
+            deforming = true;
+
+            int defxo = mouse.x;
+            int defyo = mouse.y;
+
+            //projeta ponto inicial em p0
+            int vPort[4];
+            double mv[16];
+            double proj[16];
+
+            glGetIntegerv(GL_VIEWPORT, vPort);
+            glGetDoublev(GL_MODELVIEW_MATRIX, mv);
+            glGetDoublev(GL_PROJECTION_MATRIX, proj);
+            
+            double p0x, p0y, p0z;
+            gluUnProject(mouse.x, windowSize.y - mouse.y, 0.0, mv, proj, vPort, &p0x, &p0y, &p0z);
+            p0.x = p0x;
+            p0.y = p0y;
+            p0.z = p0z;
+            std::cout << "p0:" << p0.x << "," << p0.y << ", " << p0.z << std::endl;
+        } else {
+            int vPort[4];
+            double mv[16];
+            double proj[16];
+
+            glGetIntegerv(GL_VIEWPORT, vPort);
+            glGetDoublev(GL_MODELVIEW_MATRIX, mv);
+            glGetDoublev(GL_PROJECTION_MATRIX, proj);
+            
+            double p1x, p1y, p1z;
+            gluUnProject(mouse.x, windowSize.y - mouse.y, 0.0, mv, proj, vPort, &p1x, &p1y, &p1z);
+            Vec3 p1;
+            p1.x = p1x;
+            p1.y = p1y;
+            p1.z = p1z;
+            std::cout << "p1:" << p1.x << "," << p1.y << ", " << p1.z << std::endl;
+
+            std::set<Vertex*>::iterator vIter;
+            for(vIter = vertexList.begin(); vIter != vertexList.end(); vIter++)
+                (*vIter)->move(p1.x - p0.x, p1.y - p0.y, p1.z - p0.z);
+            p0 = p1;
+        }
+
+        //update deformation(mouse.x, mouse.y, windowSize.x, windowSize.y) 
+    } else if ( event.LeftIsDown() ) {
         camera.updateRotation(mouse.x,mouse.y, windowSize.x, windowSize.y);
-        Refresh();
-        event.Skip();
+        
         //static std::string temp;
         //temp = manipulator->update( mouse.x, mouse.y, windowSize.x, windowSize.y );
         //msg = wxString::FromAscii( temp.c_str() );
         //parent->SetStatusText( msg, 1 );
     }
+
+    Refresh();
+    event.Skip();
     //else
     //{
     //    msg.Printf(_("Mouse Position: ( %d, %d )"), mouse.x, mouse.y );

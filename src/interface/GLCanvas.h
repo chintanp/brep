@@ -11,6 +11,7 @@
 #include "../Camera.h"
 #include "dialog/BRepEdit_Dialog.h"
 #include "dialog/BRepRotate_Dialog.h"
+#include "../math/Vec3.h"
 
 
 enum Mode {EDIT, DRAW};
@@ -121,6 +122,10 @@ private:
     Camera camera;
     wxMenu* option_menu;
     wxMenu* option_menu_mesh;
+    
+    //variaveis relacionadas a deformacao
+    bool deforming;
+    Vec3 p0;
 };
 
 #endif

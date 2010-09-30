@@ -1085,6 +1085,7 @@ void GLCanvas::onMouseMove(wxMouseEvent &event)
             p0.x = p0x;
             p0.y = p0y;
             p0.z = p0z;
+            std::cout << "p0 inicial: " << p0.x << ", " << p0.y << ", " << p0.z << std::endl;
         } else {
             int vPort[4];
             double mv[16];
@@ -1105,10 +1106,13 @@ void GLCanvas::onMouseMove(wxMouseEvent &event)
             //for(vIter = vertexList.begin(); vIter != vertexList.end(); vIter++)
             //    (*vIter)->move((p1.x - p0.x)*0.25, (p1.y - p0.y)*0.25, (p1.z - p0.z)*0.25);
             std::set<int>::iterator ptIter;
-            for(ptIter = gridptList.begin(); ptIter != gridptList.end(); ptIter++) {
-                scene.grid.pts[*ptIter].pos += (p1 - p0)*0.25;
+            for(ptIter = gridptList.begin(); ptIter != gridptList.end(); ptIter++)  {
+                std::cout << "tentando mover: " << *ptIter << std::endl;
+                scene.grid.pts[*ptIter].pos += (p1 - p0);
             }
+            
             p0 = p1;
+            scene.updateVertices();
         }
     } else if ( event.LeftIsDown() ) {
         camera.updateRotation(mouse.x,mouse.y, windowSize.x, windowSize.y);

@@ -53,6 +53,8 @@ public:
 
     void initFFDGrid();
 
+    void updateVertices();
+
     std::list<Mesh*> meshes;
 
     int numMeshes;

@@ -18,6 +18,7 @@ public:
     HalfEdge *hed;
 
     float r, g, b;
+    float s, t, u;
 };
 
 #endif

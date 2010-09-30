@@ -451,6 +451,8 @@ void GLCanvas::addSphere(float pX, float pY, float pZ, float radius, int disc) {
         scene.smev(scene.numMeshes - 1, 0, idNum, radius*cos(angle), radius*sin(angle), 0.0);
     }
     scene.rsweep(scene.numMeshes -1 , 0, 2*disc, 2*M_PI);
+
+    scene.initFFDGrid();
 }
 
 void drawBlack(std::set<Mesh*> list)
@@ -696,6 +698,7 @@ void GLCanvas::render()
                 scene.render(FACES);
             scene.render(POINTS);
             scene.render(LINES);
+            scene.renderBBox();
         }
     } else { //DRAW
         renderEditBackground();
@@ -914,8 +917,10 @@ void GLCanvas::selectPicking(int x, int y) {
         scene.render(FACES);
     else if(selectEdge)
         scene.render(LINES);
-    else if(selectVertex)
-        scene.render(POINTS);
+    else if(selectVertex) {
+        //scene.render(POINTS);
+        scene.renderBBox();
+    }
 
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
@@ -1009,7 +1014,7 @@ void GLCanvas::selectPicking(int x, int y) {
         e->b = 0.0;
         edgeList.insert(e);
     } else if(selectVertex) {
-        Vertex *v = scene.getVertex(m->id, nearestItem);
+/*        Vertex *v = scene.getVertex(m->id, nearestItem);
 
         std::set<Vertex*>::iterator it;
         for (it = vertexList.begin(); it != vertexList.end(); ++it)
@@ -1027,7 +1032,25 @@ void GLCanvas::selectPicking(int x, int y) {
         v->r = 1.0;
         v->g = 0.0;
         v->b = 0.0;
-        vertexList.insert(v);
+        vertexList.insert(v);*/ 
+        //id do ponto é nearestMesh
+        std::set<int>::iterator it;
+        for (it = gridptList.begin(); it != gridptList.end(); ++it)
+        {
+            if(*it == nearestMesh)
+            {
+                scene.grid.pts[nearestMesh].r = 0.0;
+                scene.grid.pts[nearestMesh].g = 0.0;
+                scene.grid.pts[nearestMesh].b = 1.0;
+                gridptList.erase(it);
+                Refresh();
+                return;
+            }
+        }
+        scene.grid.pts[nearestMesh].r = 0.0;
+        scene.grid.pts[nearestMesh].g = 1.0;
+        scene.grid.pts[nearestMesh].b = 0.0;
+        gridptList.insert(nearestMesh);
     }
     Refresh();
 }
@@ -1062,7 +1085,6 @@ void GLCanvas::onMouseMove(wxMouseEvent &event)
             p0.x = p0x;
             p0.y = p0y;
             p0.z = p0z;
-            std::cout << "p0:" << p0.x << "," << p0.y << ", " << p0.z << std::endl;
         } else {
             int vPort[4];
             double mv[16];
@@ -1078,15 +1100,16 @@ void GLCanvas::onMouseMove(wxMouseEvent &event)
             p1.x = p1x;
             p1.y = p1y;
             p1.z = p1z;
-            std::cout << "p1:" << p1.x << "," << p1.y << ", " << p1.z << std::endl;
 
-            std::set<Vertex*>::iterator vIter;
-            for(vIter = vertexList.begin(); vIter != vertexList.end(); vIter++)
-                (*vIter)->move(p1.x - p0.x, p1.y - p0.y, p1.z - p0.z);
+            //std::set<Vertex*>::iterator vIter;
+            //for(vIter = vertexList.begin(); vIter != vertexList.end(); vIter++)
+            //    (*vIter)->move((p1.x - p0.x)*0.25, (p1.y - p0.y)*0.25, (p1.z - p0.z)*0.25);
+            std::set<int>::iterator ptIter;
+            for(ptIter = gridptList.begin(); ptIter != gridptList.end(); ptIter++) {
+                scene.grid.pts[*ptIter].pos += (p1 - p0)*0.25;
+            }
             p0 = p1;
         }
-
-        //update deformation(mouse.x, mouse.y, windowSize.x, windowSize.y) 
     } else if ( event.LeftIsDown() ) {
         camera.updateRotation(mouse.x,mouse.y, windowSize.x, windowSize.y);
         

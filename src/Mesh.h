@@ -23,7 +23,7 @@ public:
     void translate(float dx, float dy, float dz);
     void scale(float dx, float dy, float dz);
     void rotate(float angle, float x, float y, float z);
-
+    
 
     int numFaces;
     int numVertices;
@@ -48,6 +48,7 @@ public:
     float sx, sy, sz;
     //Rotação
     Quat orientation;
+
 };
 
 #endif

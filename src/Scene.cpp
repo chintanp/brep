@@ -523,3 +523,50 @@ void Scene::initFFDGrid() {
         }
     }
 }
+
+
+long int fatorial(int x) {
+    long int ret = 1;
+    for(int i = x; i >= 2; i--)
+        ret *= i;
+    return ret;
+}
+
+float binomio(int a, int b) {
+    long int facta = fatorial(a);
+    long int factb = fatorial(b);
+    long int factaminusb = fatorial(a - b);
+
+    return facta/float(factb*factaminusb);
+}
+
+
+void Scene::updateVertices() {
+    std::list<Mesh*>::iterator mIter = meshes.begin();
+    for(; mIter != meshes.end(); mIter++) {
+        std::list<Vertex*>::iterator vIter = (*mIter)->vertices.begin();
+        for(; vIter != (*mIter)->vertices.end(); vIter++) {
+            int counter = 0;
+            Vec3 suma(0.0, 0.0, 0.0);
+            for(int i = 0; i < grid.ns; i++) {
+                float a = binomio(grid.ns - 1, i)*pow(1 - (*vIter)->s, grid.ns - i)*pow((*vIter)->s, i);
+                Vec3 sumb(0.0, 0.0, 0.0);
+                for(int j = 0; j < grid.nt; j++) {
+                    float b = binomio(grid.nt - 1, j)*pow(1 -(*vIter)->t, grid.nt - j)*pow((*vIter)->t, j);
+                    Vec3 sumc(0.0, 0.0, 0.0);
+                    for(int k = 0; k < grid.nu; k++){
+                        float c = binomio(grid.nu - 1, k)*pow(1 -(*vIter)->u, grid.nu - k)*pow((*vIter)->u, k);
+                        sumc += grid.pts[counter].pos*c;
+                        counter++;
+                    }
+                    sumb += sumc*b;
+                }
+                suma += sumb*a;
+            }
+            (*vIter)->x = suma.x;
+            (*vIter)->y = suma.y;
+            (*vIter)->z = suma.z;
+
+        } 
+    }
+}

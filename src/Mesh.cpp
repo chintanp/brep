@@ -101,23 +101,3 @@ void Mesh::rotate(float angle, float x, float y, float z) {
     q.fromAxisAngle(Vec3(x, y, z), angle);
     orientation = orientation*q;
 }
-
-/*void Mesh::initFFDGrid() {
-    //Estima o deslocamento para o ponto inicial e final do grid
-    std::list<Edge*>::iterator it = edges.begin();
-    Vec3 displacement = Vec3(((*it)->hed1->origin->x - (*it)->hed2->origin->x)*0.1,
-                             ((*it)->hed1->origin->y - (*it)->hed2->origin->y)*0.1,
-                             ((*it)->hed1->origin->z - (*it)->hed2->origin->z)*0.1);
-
-    //Estima o ponto p0 do grid como sendo o ponto mínimo da bounding box
-    //menos um  fração do tamanho de uma aresta qualquer
-    grid.p0 = Vec3(bb.pMin.x - displacement.length()*0.1, bb.pMin.y - displacement.length()*0.1
-                   bb.pMin.z - displacement.length()*0.1);
-    
-    grid.s = Vec3(1.0, 0.0, 0.0)*((bb.pMax.x - bb.pMin.x) + displacement.length()*0.1);
-    grid.t = Vec3(0.0, 1.0, 0.0)*((bb.pMax.y - bb.pMin.y) + displacement.length()*0.1);
-    grid.u = Vec3(0.0, 0.0, 1.0)*((bb.pMax.z - bb.pMin.z) + displacement.length()*0.1);
-
-    //criar pontos no grid
-    
-}*/

@@ -6,9 +6,7 @@
 #include <cmath>
 
 Scene::Scene() {
-    numMeshes = 0;
-    bbox.pMin = Vec3(9999999, 9999999, 99999999);
-    bbox.pMax = Vec3(-999999, -9999999, -9999999);
+    numMeshes = 0;    
 }
 
 Scene::~Scene() {
@@ -216,7 +214,7 @@ void Scene::mvfs(float x, float y, float z) {
     he->edge = NULL;
     //v->hed = he;
     meshes.push_back(m);
-    updateBoundingBox();
+    //updateBoundingBox();
 }
 
 void Scene::lmev(HalfEdge *he1, HalfEdge *he2, float x,
@@ -239,7 +237,7 @@ void Scene::lmev(HalfEdge *he1, HalfEdge *he2, float x,
     v->hed = he2->prev;
     he2->origin->hed = he2;
 
-    updateBoundingBox();
+    //updateBoundingBox();
 }
 
 void Scene::lmef(HalfEdge *h1, HalfEdge *h2) {
@@ -429,56 +427,6 @@ void Scene::rsweep(int idSolid, int idFace, int disc, float angle) {
     }
 }
 
-void Scene::renderBBox() {
-    
-    int counter = 0;
-    for(int i = 0; i < grid.ns*grid.nt*grid.nu; i++) {
-        glColor3f(grid.pts[i].r, grid.pts[i].g, grid.pts[i].b);
-        glPushName(i);
-        glBegin(GL_POINTS);
-            glVertex3f(grid.pts[i].pos.x, grid.pts[i].pos.y, grid.pts[i].pos.z);
-        glEnd();
-        glPopName();
-    }
-/*    glBegin(GL_LINES);
-        glVertex3f(bbox.pMin.x, bbox.pMin.y, bbox.pMin.z);
-        glVertex3f(bbox.pMax.x, bbox.pMin.y, bbox.pMin.z);
-        
-        glVertex3f(bbox.pMin.x, bbox.pMin.y, bbox.pMin.z);
-        glVertex3f(bbox.pMin.x, bbox.pMax.y, bbox.pMin.z);
-
-        glVertex3f(bbox.pMin.x, bbox.pMin.y, bbox.pMin.z);
-        glVertex3f(bbox.pMin.x, bbox.pMin.y, bbox.pMax.z);
-
-        glVertex3f(bbox.pMax.x, bbox.pMax.y, bbox.pMax.z);
-        glVertex3f(bbox.pMin.x, bbox.pMax.y, bbox.pMax.z);
-
-        glVertex3f(bbox.pMax.x, bbox.pMax.y, bbox.pMax.z);
-        glVertex3f(bbox.pMax.x, bbox.pMin.y, bbox.pMax.z);
-
-        glVertex3f(bbox.pMax.x, bbox.pMax.y, bbox.pMax.z);
-        glVertex3f(bbox.pMax.x, bbox.pMax.y, bbox.pMin.z);
-
-        glVertex3f(bbox.pMin.x, bbox.pMax.y, bbox.pMin.z);
-        glVertex3f(bbox.pMax.x, bbox.pMax.y, bbox.pMin.z);
-
-        glVertex3f(bbox.pMax.x, bbox.pMin.y, bbox.pMin.z);
-        glVertex3f(bbox.pMax.x, bbox.pMax.y, bbox.pMin.z);
-
-        glVertex3f(bbox.pMin.x, bbox.pMax.y, bbox.pMin.z);
-        glVertex3f(bbox.pMin.x, bbox.pMax.y, bbox.pMax.z);
-
-        glVertex3f(bbox.pMin.x, bbox.pMax.y, bbox.pMax.z);
-        glVertex3f(bbox.pMin.x, bbox.pMin.y, bbox.pMax.z);
-        
-        glVertex3f(bbox.pMin.x, bbox.pMin.y, bbox.pMax.z);
-        glVertex3f(bbox.pMax.x, bbox.pMin.y, bbox.pMax.z);
-
-        glVertex3f(bbox.pMax.x, bbox.pMin.y, bbox.pMin.z);
-        glVertex3f(bbox.pMax.x, bbox.pMin.y, bbox.pMax.z);
-    glEnd();*/
-}
-
 void Scene::updateBoundingBox() {
     std::list<Mesh*>::iterator mIter = meshes.begin();
     this->bbox = (*mIter)->bb;
@@ -498,75 +446,5 @@ void Scene::updateBoundingBox() {
             this->bbox.pMin.y = (*mIter)->bb.pMin.y;
         if((*mIter)->bb.pMax.y > this->bbox.pMax.y)
             this->bbox.pMax.y = (*mIter)->bb.pMax.y;
-    }
-}
-
-void Scene::initFFDGrid() {
-    grid.p0 = bbox.pMin; 
-    
-    grid.s = Vec3(1.0, 0.0, 0.0)*((bbox.pMax.x - bbox.pMin.x));
-    grid.t = Vec3(0.0, 1.0, 0.0)*((bbox.pMax.y - bbox.pMin.y));
-    grid.u = Vec3(0.0, 0.0, 1.0)*((bbox.pMax.z - bbox.pMin.z));
-
-    //criar pontos no grid
-    grid.init(4, 4, 4);
-    
-    //mapeia o ponto em coordenadas de mundo pras coordenadas do grid
-    std::list<Mesh*>::iterator mIter = meshes.begin();
-    for(; mIter != meshes.end(); mIter++) {
-        std::list<Vertex*>::iterator vIter = (*mIter)->vertices.begin();
-        for(; vIter != (*mIter)->vertices.end(); vIter++) {
-            Vec3 p = Vec3((*vIter)->x, (*vIter)->y, (*vIter)->z);
-            (*vIter)->s = dot(cross(grid.t, grid.u), p - grid.p0)/dot(cross(grid.t, grid.u), grid.s);
-            (*vIter)->t = dot(cross(grid.u, grid.s), p - grid.p0)/dot(cross(grid.u, grid.s), grid.t);
-            (*vIter)->u = dot(cross(grid.s, grid.t), p - grid.p0)/dot(cross(grid.s, grid.t), grid.u);
-        }
-    }
-}
-
-
-long int fatorial(int x) {
-    long int ret = 1;
-    for(int i = x; i >= 2; i--)
-        ret *= i;
-    return ret;
-}
-
-float binomio(int a, int b) {
-    long int facta = fatorial(a);
-    long int factb = fatorial(b);
-    long int factaminusb = fatorial(a - b);
-
-    return facta/float(factb*factaminusb);
-}
-
-
-void Scene::updateVertices() {
-    std::list<Mesh*>::iterator mIter = meshes.begin();
-    for(; mIter != meshes.end(); mIter++) {
-        std::list<Vertex*>::iterator vIter = (*mIter)->vertices.begin();
-        for(; vIter != (*mIter)->vertices.end(); vIter++) {
-            int counter = 0;
-            Vec3 suma(0.0, 0.0, 0.0);
-            for(int i = 0; i < grid.ns; i++) {
-                float a = binomio(grid.ns - 1, i)*pow(1 - (*vIter)->s, grid.ns - i)*pow((*vIter)->s, i);
-                Vec3 sumb(0.0, 0.0, 0.0);
-                for(int j = 0; j < grid.nt; j++) {
-                    float b = binomio(grid.nt - 1, j)*pow(1 -(*vIter)->t, grid.nt - j)*pow((*vIter)->t, j);
-                    Vec3 sumc(0.0, 0.0, 0.0);
-                    for(int k = 0; k < grid.nu; k++){
-                        float c = binomio(grid.nu - 1, k)*pow(1 -(*vIter)->u, grid.nu - k)*pow((*vIter)->u, k);
-                        sumc += grid.pts[counter].pos*c;
-                        counter++;
-                    }
-                    sumb += sumc*b;
-                }
-                suma += sumb*a;
-            }
-            (*vIter)->x = suma.x;
-            (*vIter)->y = suma.y;
-            (*vIter)->z = suma.z;
-
-        } 
     }
 }

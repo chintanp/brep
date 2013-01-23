@@ -38,8 +38,6 @@ wxGLCanvas(parent, id, pos, size, style, name,  attribList)
     startLineLoop = false;
     numPts = 0;
 
-    deforming = false;
-
     //MENU
     option_menu = new wxMenu();
     option_menu_mesh = new wxMenu();
@@ -451,8 +449,6 @@ void GLCanvas::addSphere(float pX, float pY, float pZ, float radius, int disc) {
         scene.smev(scene.numMeshes - 1, 0, idNum, radius*cos(angle), radius*sin(angle), 0.0);
     }
     scene.rsweep(scene.numMeshes -1 , 0, 2*disc, 2*M_PI);
-
-    scene.initFFDGrid();
 }
 
 void drawBlack(std::set<Mesh*> list)
@@ -698,7 +694,6 @@ void GLCanvas::render()
                 scene.render(FACES);
             scene.render(POINTS);
             scene.render(LINES);
-            scene.renderBBox();
         }
     } else { //DRAW
         renderEditBackground();
@@ -844,11 +839,10 @@ void GLCanvas::onMouseLeftUp(wxMouseEvent &event) {
     if(currentMode == EDIT && (selectVertex || selectEdge || selectFace || selectMesh))
     {
         if( event.ShiftDown() )
-            selectPicking(mouse.x, windowSize.y - mouse.y);
+        selectPicking(mouse.x, windowSize.y - mouse.y);
     }
     //else if (drawing)
     //    draw(mouse.x, windowSize.y - mouse.y);
-    deforming = false;
     Refresh();
 }
 
@@ -917,10 +911,8 @@ void GLCanvas::selectPicking(int x, int y) {
         scene.render(FACES);
     else if(selectEdge)
         scene.render(LINES);
-    else if(selectVertex) {
-        //scene.render(POINTS);
-        scene.renderBBox();
-    }
+    else if(selectVertex)
+        scene.render(POINTS);
 
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
@@ -1014,7 +1006,7 @@ void GLCanvas::selectPicking(int x, int y) {
         e->b = 0.0;
         edgeList.insert(e);
     } else if(selectVertex) {
-/*        Vertex *v = scene.getVertex(m->id, nearestItem);
+        Vertex *v = scene.getVertex(m->id, nearestItem);
 
         std::set<Vertex*>::iterator it;
         for (it = vertexList.begin(); it != vertexList.end(); ++it)
@@ -1032,25 +1024,7 @@ void GLCanvas::selectPicking(int x, int y) {
         v->r = 1.0;
         v->g = 0.0;
         v->b = 0.0;
-        vertexList.insert(v);*/ 
-        //id do ponto é nearestMesh
-        std::set<int>::iterator it;
-        for (it = gridptList.begin(); it != gridptList.end(); ++it)
-        {
-            if(*it == nearestMesh)
-            {
-                scene.grid.pts[nearestMesh].r = 0.0;
-                scene.grid.pts[nearestMesh].g = 0.0;
-                scene.grid.pts[nearestMesh].b = 1.0;
-                gridptList.erase(it);
-                Refresh();
-                return;
-            }
-        }
-        scene.grid.pts[nearestMesh].r = 0.0;
-        scene.grid.pts[nearestMesh].g = 1.0;
-        scene.grid.pts[nearestMesh].b = 0.0;
-        gridptList.insert(nearestMesh);
+        vertexList.insert(v);
     }
     Refresh();
 }
@@ -1064,67 +1038,16 @@ void GLCanvas::onMouseMove(wxMouseEvent &event)
     GetClientSize( &windowSize.x, &windowSize.y );
     static wxString msg;
 
-    if(event.ControlDown() && event.LeftIsDown()) {
-        if(!deforming) {
-            deforming = true;
-
-            int defxo = mouse.x;
-            int defyo = mouse.y;
-
-            //projeta ponto inicial em p0
-            int vPort[4];
-            double mv[16];
-            double proj[16];
-
-            glGetIntegerv(GL_VIEWPORT, vPort);
-            glGetDoublev(GL_MODELVIEW_MATRIX, mv);
-            glGetDoublev(GL_PROJECTION_MATRIX, proj);
-            
-            double p0x, p0y, p0z;
-            gluUnProject(mouse.x, windowSize.y - mouse.y, 0.0, mv, proj, vPort, &p0x, &p0y, &p0z);
-            p0.x = p0x;
-            p0.y = p0y;
-            p0.z = p0z;
-            std::cout << "p0 inicial: " << p0.x << ", " << p0.y << ", " << p0.z << std::endl;
-        } else {
-            int vPort[4];
-            double mv[16];
-            double proj[16];
-
-            glGetIntegerv(GL_VIEWPORT, vPort);
-            glGetDoublev(GL_MODELVIEW_MATRIX, mv);
-            glGetDoublev(GL_PROJECTION_MATRIX, proj);
-            
-            double p1x, p1y, p1z;
-            gluUnProject(mouse.x, windowSize.y - mouse.y, 0.0, mv, proj, vPort, &p1x, &p1y, &p1z);
-            Vec3 p1;
-            p1.x = p1x;
-            p1.y = p1y;
-            p1.z = p1z;
-
-            //std::set<Vertex*>::iterator vIter;
-            //for(vIter = vertexList.begin(); vIter != vertexList.end(); vIter++)
-            //    (*vIter)->move((p1.x - p0.x)*0.25, (p1.y - p0.y)*0.25, (p1.z - p0.z)*0.25);
-            std::set<int>::iterator ptIter;
-            for(ptIter = gridptList.begin(); ptIter != gridptList.end(); ptIter++)  {
-                std::cout << "tentando mover: " << *ptIter << std::endl;
-                scene.grid.pts[*ptIter].pos += (p1 - p0);
-            }
-            
-            p0 = p1;
-            scene.updateVertices();
-        }
-    } else if ( event.LeftIsDown() ) {
+    if ( event.LeftIsDown() )
+    {
         camera.updateRotation(mouse.x,mouse.y, windowSize.x, windowSize.y);
-        
+        Refresh();
+        event.Skip();
         //static std::string temp;
         //temp = manipulator->update( mouse.x, mouse.y, windowSize.x, windowSize.y );
         //msg = wxString::FromAscii( temp.c_str() );
         //parent->SetStatusText( msg, 1 );
     }
-
-    Refresh();
-    event.Skip();
     //else
     //{
     //    msg.Printf(_("Mouse Position: ( %d, %d )"), mouse.x, mouse.y );

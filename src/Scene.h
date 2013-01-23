@@ -4,7 +4,6 @@
 #include <list>
 #include "Mesh.h"
 #include "BoundingBox.h"
-#include "FFDGrid.h"
 
 enum RenderMode { MESHES, FACES, POINTS, LINES };
 
@@ -16,7 +15,6 @@ public:
     void clear();
 
     void render(RenderMode mode);
-    void renderBBox();
 
     bool isEmpty();
 
@@ -51,17 +49,11 @@ public:
 
     void updateBoundingBox();
 
-    void initFFDGrid();
-
-    void updateVertices();
-
     std::list<Mesh*> meshes;
 
     int numMeshes;
 
     BoundingBox bbox;
-
-    FFDGrid grid;
 };
 
 

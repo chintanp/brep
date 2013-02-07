@@ -68,7 +68,6 @@ private:
 	void drawBackground();
     void drawEditBackground();
     void shotPicking(int x, int y);
-	void processHits(GLint hits, GLuint buffer[]);
 	void loadProjection();
 
 	bool show_grid;

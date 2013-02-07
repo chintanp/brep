@@ -50,9 +50,6 @@ GLWidget::GLWidget(QWidget *parent)
     startBezier = false;
     numPts = 0;
 
-//    scene.addCube(-1, -1, -1, 2);
-//    scene.addCube(3, 3, 3, 1);
-
     setVertexSelect();
 
     setContextMenuPolicy(Qt::ActionsContextMenu);
@@ -543,7 +540,7 @@ void GLWidget::shotPicking(int x, int y)
 
     hits = glRenderMode(GL_RENDER);
 
-    std::cout << "hits: "  << hits << std::endl;
+//    std::cout << "hits: "  << hits << std::endl;
     int nearestMesh = buff[3];
     int nearestItem = buff[4];
     int nearestZ = buff[1];
@@ -554,17 +551,17 @@ void GLWidget::shotPicking(int x, int y)
             nearestItem = buff[5*i + 4];
         }
     }
-    for (int i = 0; i < hits; i++) {
-        std::cout << "hit: " << i << std::endl;
-        std::cout << "\tNumber: " << buff[5*i] << std::endl;
-        std::cout << "\tMin z: " << buff[5*i+1] << std::endl;
-        std::cout << "\tMax z: " << buff[5*i+2] << std::endl;
-        std::cout << "\tName mesh: " << buff[5*i+3] << std::endl;
-        std::cout << "\tName item: " << buff[5*i+4] << std::endl;
-    }
+//    for (int i = 0; i < hits; i++) {
+//        std::cout << "hit: " << i << std::endl;
+//        std::cout << "\tNumber: " << buff[5*i] << std::endl;
+//        std::cout << "\tMin z: " << buff[5*i+1] << std::endl;
+//        std::cout << "\tMax z: " << buff[5*i+2] << std::endl;
+//        std::cout << "\tName mesh: " << buff[5*i+3] << std::endl;
+//        std::cout << "\tName item: " << buff[5*i+4] << std::endl;
+//    }
 
-    std::cout << "mesh escolhido: " << nearestMesh << std::endl;
-    std::cout << "obj escolhido: " << nearestItem << std::endl;
+//    std::cout << "mesh escolhido: " << nearestMesh << std::endl;
+//    std::cout << "obj escolhido: " << nearestItem << std::endl;
 
     if (hits == 0)
         return;
@@ -650,52 +647,6 @@ void GLWidget::shotPicking(int x, int y)
         v->b = 0.0;
         vertexList.insert(v);
     }
-
-//	Q_UNUSED(event);
-
-//	GLuint selectBuf[1000];
-//	GLint hits;
-
-//    beginx = event->x();
-//	beginy = event->y();
-
-//	glSelectBuffer (1000, selectBuf);
-//	glRenderMode (GL_SELECT);
-
-//	selectionMode = true;
-//	glInitNames();
-//	glPushName(0);
-
-//	GLint viewport[4];
-//	glGetIntegerv (GL_VIEWPORT, viewport);
-
-//	glMatrixMode(GL_PROJECTION);
-//	glPushMatrix();
-//	glLoadIdentity();
-
-//	gluPickMatrix( (double)beginx, (double)(viewport[3] - beginy), 10, 10, viewport);
-//    loadProjection();
-
-//	paintGL();
-
-//	glMatrixMode(GL_PROJECTION);
-//	glPopMatrix();
-
-//	hits = glRenderMode (GL_RENDER);
-
-//	selectionMode = false;
-
-//    if(hits > 0)
-//		processHits(hits, selectBuf);
-}
-
-void GLWidget::processHits(GLint , GLuint buffer[])
-{
-    //PickingUnion un;
-    //un.data[0] = buffer[3];
-    //un.data[1] = buffer[4];
-
-    //((GLDrawble*)un.ptr)->handlePick();
 }
 
 void GLWidget::loadProjection()

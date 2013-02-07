@@ -1,10 +1,10 @@
 #include "GLWidget.h"
-#include "Scene.h"
 #include <QtGui>
 #include <iostream>
 #include "trackball.h"
 #include "dialogedit.h"
 #include "dialogrotate.h"
+
 #include <GL/glu.h>
 
 
@@ -47,6 +47,7 @@ GLWidget::GLWidget(QWidget *parent)
     selectVertex = true;
 
     startLineLoop = false;
+    startBezier = false;
     numPts = 0;
 
 //    scene.addCube(-1, -1, -1, 2);
@@ -190,6 +191,15 @@ void GLWidget::paintGL()
             drawScene.render(POINTS);
             drawScene.render(LINES);
         }
+
+        if(startBezier && numPts == 1)
+        {
+            glColor3f(1.0, 0, 0);
+            glBegin(GL_POINTS);
+                glVertex3f(curveP1[0], curveP1[1], 0.0);
+            glEnd();
+        }
+        curve.draw();
     }
 }
 
@@ -945,6 +955,21 @@ void GLWidget::draw(int x, int y)
                 numPts++;
             }
         }
+    }
+
+    if(startBezier)
+    {
+        if(numPts == 1)
+        {
+            curve = Bezier(curveP1[0], curveP1[1], 0.0, x, y, 0.0);
+            numPts=0;
+            //startBezier=false;
+            return;
+        }
+        curveP1[0] = x;
+        curveP1[1] = y;
+        numPts++;
+
     }
 }
 

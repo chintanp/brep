@@ -40,7 +40,10 @@ HEADERS += src/BoundingBox.h \
     src/interface/dialogsphere.h \
     src/interface/dialogsweeping.h \
     src/interface/dialogedit.h \
-    src/interface/dialogrotate.h
+    src/interface/dialogrotate.h \
+    src/bezier.h \
+    src/math/Point3D.h \
+    src/math/Point.h
 FORMS += src/interface/mainwindow.ui \
     src/interface/dialogcube.ui \
     src/interface/dialogcorner.ui \
@@ -69,5 +72,8 @@ SOURCES += \
     src/interface/dialogsphere.cpp \
     src/interface/dialogsweeping.cpp \
     src/interface/dialogedit.cpp \
-    src/interface/dialogrotate.cpp
+    src/interface/dialogrotate.cpp \
+    src/bezier.cpp \
+    src/math/Point3D.cpp \
+    src/math/Point.cpp
 RESOURCES += data/icon/icons.qrc

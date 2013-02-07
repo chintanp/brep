@@ -19,5 +19,6 @@
         <file>zoom.png</file>
         <file>zoom_in.png</file>
         <file>zoom_out.png</file>
+        <file>bezier.png</file>
     </qresource>
 </RCC>

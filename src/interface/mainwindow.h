@@ -20,6 +20,7 @@ private slots:
     void on_sweepingButton_released();
     void on_doneButton_released();
     void on_lineButton_released();
+    void on_bezierButton_released();
 
     void zoomIn();
     void zoomOut();

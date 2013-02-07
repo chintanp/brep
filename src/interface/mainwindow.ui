@@ -170,6 +170,27 @@
                 </property>
                </widget>
               </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_6">
+                <property name="text">
+                 <string>Bezier:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QToolButton" name="bezierButton">
+                <property name="text">
+                 <string>...</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="../../data/icon/icons.qrc">
+                  <normaloff>:/bezier.png</normaloff>:/bezier.png</iconset>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
              </layout>
             </item>
             <item>
@@ -255,15 +276,6 @@
     <string>Ctrl+W</string>
    </property>
   </action>
-  <action name="actionZoomIn">
-   <property name="icon">
-    <iconset resource="../../data/icon/icons.qrc">
-     <normaloff>:/zoom_in.png</normaloff>:/zoom_in.png</iconset>
-   </property>
-   <property name="text">
-    <string>ZoomIn</string>
-   </property>
-  </action>
   <action name="actionNew">
    <property name="icon">
     <iconset resource="../../data/icon/icons.qrc">
@@ -271,42 +283,6 @@
    </property>
    <property name="text">
     <string>New</string>
-   </property>
-  </action>
-  <action name="actionOpen">
-   <property name="icon">
-    <iconset resource="../../data/icon/icons.qrc">
-     <normaloff>:/open.png</normaloff>:/open.png</iconset>
-   </property>
-   <property name="text">
-    <string>Open</string>
-   </property>
-  </action>
-  <action name="actionSave">
-   <property name="icon">
-    <iconset resource="../../data/icon/icons.qrc">
-     <normaloff>:/save.png</normaloff>:/save.png</iconset>
-   </property>
-   <property name="text">
-    <string>Save</string>
-   </property>
-  </action>
-  <action name="actionZoomOut">
-   <property name="icon">
-    <iconset resource="../../data/icon/icons.qrc">
-     <normaloff>:/zoom_out.png</normaloff>:/zoom_out.png</iconset>
-   </property>
-   <property name="text">
-    <string>ZoomOut</string>
-   </property>
-  </action>
-  <action name="actionZoom">
-   <property name="icon">
-    <iconset resource="../../data/icon/icons.qrc">
-     <normaloff>:/zoom.png</normaloff>:/zoom.png</iconset>
-   </property>
-   <property name="text">
-    <string>Zoom</string>
    </property>
   </action>
   <action name="actionVertexMode">
@@ -400,90 +376,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionZoomIn</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>zoomIn()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>310</x>
-     <y>205</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>actionNew</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>newModel()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>310</x>
-     <y>205</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionOpen</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>open()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>310</x>
-     <y>205</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionSave</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>save()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>310</x>
-     <y>205</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionZoomOut</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>zoomOut()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>310</x>
-     <y>205</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionZoom</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>zoom()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

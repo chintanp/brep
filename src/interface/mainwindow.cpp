@@ -39,7 +39,15 @@ void MainWindow::on_doneButton_released()
 
 void MainWindow::on_lineButton_released()
 {
+    ui->bezierButton->setChecked(false);
     ui->glwidget->setStartLineLoop();
+    ui->glwidget->updateGL();
+}
+
+void MainWindow::on_bezierButton_released()
+{
+    ui->lineButton->setChecked(false);
+    ui->glwidget->setStartBezier();
     ui->glwidget->updateGL();
 }
 

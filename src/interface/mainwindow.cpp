@@ -14,8 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //ui->glwidget->scene;
-
+    meshmode();
 }
 
 MainWindow::~MainWindow()
@@ -28,6 +27,8 @@ void MainWindow::on_sweepingButton_released()
     DialogSweeping sweeping(this);
     if(sweeping.exec())
        ui->glwidget->sweep( sweeping.getX(), sweeping.getY(), sweeping.getZ() );
+
+    ui->glwidget->updateGL();
 }
 
 void MainWindow::on_doneButton_released()
@@ -39,6 +40,7 @@ void MainWindow::on_doneButton_released()
 void MainWindow::on_lineButton_released()
 {
     ui->glwidget->setStartLineLoop();
+    ui->glwidget->updateGL();
 }
 
 void MainWindow::zoomIn()
@@ -56,14 +58,8 @@ void MainWindow::zoom()
 
 void MainWindow::newModel()
 {
-}
-
-void MainWindow::open()
-{
-}
-
-void MainWindow::save()
-{
+    ui->glwidget->scene.clear();
+    ui->glwidget->updateGL();
 }
 
 void MainWindow::vertexmode()
@@ -101,11 +97,13 @@ void MainWindow::meshmode()
 void MainWindow::r2d2()
 {
     ui->glwidget->scene.addR2D2();
+    ui->glwidget->updateGL();
 }
 
 void MainWindow::on_tabWidget_currentChanged(int index)
 {
     ui->glwidget->switchMode();
+    ui->glwidget->updateGL();
 }
 
 void MainWindow::on_cubeButton_released()
@@ -114,6 +112,7 @@ void MainWindow::on_cubeButton_released()
     if(cube.exec())
        ui->glwidget->scene.addCube( cube.getX(), cube.getY(), cube.getZ(), cube.getSize() );
 
+    ui->glwidget->updateGL();
 }
 
 void MainWindow::on_cornerButton_released()
@@ -123,6 +122,8 @@ void MainWindow::on_cornerButton_released()
        ui->glwidget->scene.addCorner( corner.getMinX(), corner.getMinY(), corner.getMinZ(),
                                       corner.getMidX(), corner.getMidY(), corner.getMidZ(),
                                       corner.getMaxX(), corner.getMaxY(), corner.getMaxZ() );
+
+    ui->glwidget->updateGL();
 }
 
 void MainWindow::on_cylinderButton_released()
@@ -131,6 +132,8 @@ void MainWindow::on_cylinderButton_released()
     if(cylinder.exec())
         ui->glwidget->scene.addCylinder(cylinder.getX(), cylinder.getY(), cylinder.getZ(),
                                         cylinder.getR(), cylinder.getH(), cylinder.getDisc() );
+
+    ui->glwidget->updateGL();
 }
 
 void MainWindow::on_sphereButton_released()
@@ -138,4 +141,6 @@ void MainWindow::on_sphereButton_released()
     DialogSphere sphere(this);
     if(sphere.exec())
         ui->glwidget->scene.addSphere( sphere.getX(), sphere.getY(), sphere.getZ(), sphere.getR(), sphere.getDisc() );
+
+    ui->glwidget->updateGL();
 }

@@ -49,8 +49,8 @@ GLWidget::GLWidget(QWidget *parent)
     startLineLoop = false;
     numPts = 0;
 
-    scene.addCube(-1, -1, -1, 2);
-    scene.addCube(3, 3, 3, 1);
+//    scene.addCube(-1, -1, -1, 2);
+//    scene.addCube(3, 3, 3, 1);
 
     setVertexSelect();
 

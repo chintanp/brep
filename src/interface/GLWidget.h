@@ -3,6 +3,7 @@
 
 #include <QtOpenGL>
 #include "Scene.h"
+#include "bezier.h"
 #include <set>
 
 
@@ -27,6 +28,7 @@ public:
     void setEdgeSelect();
     void setVertexSelect();
     void setStartLineLoop() {startLineLoop=!startLineLoop;}
+    void setStartBezier() {startBezier=!startBezier;}
 
     void doneDrawing();
 
@@ -34,6 +36,8 @@ public:
 
     Scene scene;
     Scene drawScene;
+
+    Bezier curve;
 
 public slots:
     void showGrid(bool);
@@ -93,12 +97,15 @@ private:
     Mode currentMode;
     bool selectMesh, selectFace, selectEdge, selectVertex;
     bool startLineLoop;
+    bool startBezier;
     int numPts;
 
     std::set<Mesh*> meshList;
     std::set<Loop*> faceList;
     std::set<Edge*> edgeList;
     std::set<Vertex*> vertexList;
+
+    double curveP1[3];
 
     void draw(int x, int y);
 };

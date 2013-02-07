@@ -9,6 +9,14 @@ Vertex::Vertex(float x, float y, float z, Mesh *m)
     r = g = b = 0.0;
 }
 
+Vertex::Vertex(float x, float y, float z)
+{
+    this->x=x;
+    this->y=y;
+    this->z=z;
+    r = g = b = 0.0;
+}
+
 int Vertex::getId() {
     return id;
 }

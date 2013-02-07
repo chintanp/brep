@@ -25,8 +25,6 @@ private slots:
     void zoomOut();
     void zoom();
     void newModel();
-    void open();
-    void save();
     void vertexmode();
     void edgemode();
     void facemode();

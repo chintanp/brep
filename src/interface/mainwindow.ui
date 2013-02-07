@@ -239,12 +239,6 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionNew"/>
-   <addaction name="actionOpen"/>
-   <addaction name="actionSave"/>
-   <addaction name="separator"/>
-   <addaction name="actionZoomIn"/>
-   <addaction name="actionZoomOut"/>
-   <addaction name="actionZoom"/>
    <addaction name="separator"/>
    <addaction name="actionVertexMode"/>
    <addaction name="actionEdgeMode"/>
@@ -353,6 +347,9 @@
   </action>
   <action name="actionMeshMode">
    <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
     <bool>true</bool>
    </property>
    <property name="icon">

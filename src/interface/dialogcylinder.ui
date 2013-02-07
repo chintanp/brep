@@ -24,7 +24,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_X"/>
+      <widget class="QDoubleSpinBox" name="doubleSpinBox_X">
+       <property name="minimum">
+        <double>-99.000000000000000</double>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_2">
@@ -34,7 +38,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_Y"/>
+      <widget class="QDoubleSpinBox" name="doubleSpinBox_Y">
+       <property name="minimum">
+        <double>-99.000000000000000</double>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_3">
@@ -44,7 +52,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_Z"/>
+      <widget class="QDoubleSpinBox" name="doubleSpinBox_Z">
+       <property name="minimum">
+        <double>-99.000000000000000</double>
+       </property>
+      </widget>
      </item>
      <item>
       <spacer name="horizontalSpacer_2">
@@ -72,6 +84,9 @@
      </item>
      <item>
       <widget class="QDoubleSpinBox" name="doubleSpinBox_R">
+       <property name="minimum">
+        <double>1.000000000000000</double>
+       </property>
        <property name="value">
         <double>2.000000000000000</double>
        </property>
@@ -86,6 +101,9 @@
      </item>
      <item>
       <widget class="QDoubleSpinBox" name="doubleSpinBox_H">
+       <property name="minimum">
+        <double>1.000000000000000</double>
+       </property>
        <property name="value">
         <double>5.000000000000000</double>
        </property>
@@ -100,6 +118,9 @@
      </item>
      <item>
       <widget class="QSpinBox" name="spinBox_Disc">
+       <property name="minimum">
+        <number>1</number>
+       </property>
        <property name="value">
         <number>10</number>
        </property>

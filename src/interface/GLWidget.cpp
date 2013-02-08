@@ -59,6 +59,7 @@ GLWidget::GLWidget(QWidget *parent)
     QAction* action4 = new QAction("Rotate", this);
     QAction* action5 = new QAction("Scale", this);
     QAction* action6 = new QAction("Translate", this);
+    QAction* action7 = new QAction("Inface", this);
 
     addAction(action1);
     addAction(action2);
@@ -66,6 +67,7 @@ GLWidget::GLWidget(QWidget *parent)
     addAction(action4);
     addAction(action5);
     addAction(action6);
+    addAction(action7);
 
     connect(action1, SIGNAL(triggered()), this, SLOT(deleteMesh()) );
     connect(action2, SIGNAL(triggered()), this, SLOT(move()) );
@@ -73,6 +75,7 @@ GLWidget::GLWidget(QWidget *parent)
     connect(action4, SIGNAL(triggered()), this, SLOT(rotate()) );
     connect(action5, SIGNAL(triggered()), this, SLOT(scale()) );
     connect(action6, SIGNAL(triggered()), this, SLOT(translate()) );
+    connect(action7, SIGNAL(triggered()), this, SLOT(inface()) );
 }
 
 GLWidget::~GLWidget()
@@ -838,6 +841,52 @@ void GLWidget::translate()
         std::set<Mesh*>::iterator mIter;
         for(mIter = meshList.begin(); mIter != meshList.end(); mIter++)
             (*mIter)->translate(edit.getX(), edit.getY(), edit.getZ());
+    }
+}
+
+void GLWidget::inface()
+{
+    if(selectFace && currentMode==EDIT)
+    {
+        std::set<Loop*>::iterator fIter;
+        for(fIter = faceList.begin(); fIter != faceList.end(); fIter++)
+        {
+            scene.sweep( (*fIter)->face->solid->id, (*fIter)->face->id,
+                        -0.01*(*fIter)->normal.x, -0.01*(*fIter)->normal.y, -0.01*(*fIter)->normal.z);
+                         //-(*fIter)->normal.x, -(*fIter)->normal.y, -(*fIter)->normal.z);
+        }
+
+        //Para toda face selecionada, mover os vértices da face
+        std::set<Loop*>::iterator lIter;
+        for(lIter = faceList.begin(); lIter != faceList.end(); lIter++)
+        {
+            HalfEdge *h = (*lIter)->hed;
+            double centerx = 0.0;
+            double centery = 0.0;
+            double centerz = 0.0;
+            double i=0;
+
+            do
+            {
+                centerx += h->origin->x;
+                centery += h->origin->y;
+                centerz += h->origin->z;
+                i++;
+                h = h->next;
+            } while(h != (*lIter)->hed);
+
+            centerx /= i;
+            centery /= i;
+            centerz /= i;
+
+            h = (*lIter)->hed;
+
+            do
+            {
+                h->origin->setPosition((centerx+h->origin->x)/2.0, (centery+h->origin->y)/2.0, (centerz+h->origin->z)/2.0);
+                h = h->next;
+            } while(h != (*lIter)->hed);
+        }
     }
 }
 

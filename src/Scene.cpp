@@ -269,6 +269,9 @@ void Scene::lmef(HalfEdge *h1, HalfEdge *h2) {
     l->hed = nhe1;
     h2->loop->hed = nhe2;
 
+    //h1->loop->setNormal();
+    h2->loop->setNormal();
+
     l->setNormal();
 }
 

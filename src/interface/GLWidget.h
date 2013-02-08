@@ -61,6 +61,7 @@ protected Q_SLOTS:
     void rotate();
     void scale();
     void translate();
+    void inface();
 
 private:
 	void drawGrid();

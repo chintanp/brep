@@ -224,10 +224,12 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
             beginx = event->x();
             beginy = event->y();
 
-            if(event->modifiers() && Qt::ShiftModifier) {
+            if(event->modifiers() & Qt::ShiftModifier)
+                moving = true;
+            else if(event->modifiers() & Qt::CTRL)
+            {
                 shotPicking(event->x(), this->height() - event->y());
                 updateGL();
-                //moving = true;
             } else
                 spinning = true;
         }

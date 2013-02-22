@@ -57,6 +57,7 @@ protected:
 protected Q_SLOTS:
     void deleteMesh();
     void move();
+    void moveNormal();
     void neighborhood();
     void rotate();
     void scale();

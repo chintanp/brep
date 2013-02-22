@@ -4,6 +4,7 @@
 #include "trackball.h"
 #include "dialogedit.h"
 #include "dialogrotate.h"
+#include "dialognorma.h"
 
 #include <GL/glu.h>
 
@@ -52,25 +53,41 @@ GLWidget::GLWidget(QWidget *parent)
 
     setVertexSelect();
 
+    QMenu * menu = new QMenu(this);
+
     setContextMenuPolicy(Qt::ActionsContextMenu);
     QAction* action1 = new QAction("Delete Mesh", this);
-    QAction* action2 = new QAction("Move", this);
+    QAction* action2 = new QAction("Vector", this);
     QAction* action3 = new QAction("Neighborhood", this);
     QAction* action4 = new QAction("Rotate", this);
     QAction* action5 = new QAction("Scale", this);
     QAction* action6 = new QAction("Translate", this);
     QAction* action7 = new QAction("Inface", this);
+    QAction* action8 = new QAction("Normal", this);
+    QAction* action9 = new QAction(this);
+    action9->setSeparator(true);
+    QAction* action10 = new QAction("Move", this);
+    action10->setMenu(menu);
 
-    addAction(action1);
-    addAction(action2);
-    addAction(action3);
+    menu->addAction(action2);
+    menu->addAction(action8);
+
+
+
+
+    addAction(action10);
+    addAction(action6);
     addAction(action4);
     addAction(action5);
-    addAction(action6);
+    addAction(action9); //SEPARADOR
     addAction(action7);
+    addAction(action3);
+    addAction(action1);
+    addAction(action9);
 
     connect(action1, SIGNAL(triggered()), this, SLOT(deleteMesh()) );
     connect(action2, SIGNAL(triggered()), this, SLOT(move()) );
+    connect(action8, SIGNAL(triggered()), this, SLOT(moveNormal()) );
     connect(action3, SIGNAL(triggered()), this, SLOT(neighborhood()) );
     connect(action4, SIGNAL(triggered()), this, SLOT(rotate()) );
     connect(action5, SIGNAL(triggered()), this, SLOT(scale()) );
@@ -719,6 +736,31 @@ void GLWidget::move()
             std::set<Vertex*>::iterator vIter;
             for(vIter = tempVertexList.begin(); vIter != tempVertexList.end(); vIter++)
                 (*vIter)->move(edit.getX(), edit.getY(), edit.getZ());
+        }
+    }
+}
+
+void GLWidget::moveNormal()
+{
+    DialogNorma edit(this);
+    if(edit.exec())
+    {
+        if(selectFace)
+        {
+            //Para toda face selecionada, mover os vértices da face
+            std::set<Loop*>::iterator lIter;
+            std::set<Vertex*> tempVertexList;
+            for(lIter = faceList.begin(); lIter != faceList.end(); lIter++)
+            {
+                HalfEdge *h = (*lIter)->hed;
+                do {
+                    tempVertexList.insert(h->origin);
+                    //
+                    h->origin->move(-edit.getSize()*h->loop->normal.x , -edit.getSize()*h->loop->normal.y, -edit.getSize()*h->loop->normal.z);
+
+                    h = h->next;
+                } while(h != (*lIter)->hed);
+            }
         }
     }
 }
